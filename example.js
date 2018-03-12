@@ -1,0 +1,3 @@
+const expensive = require('./')
+
+expensive()

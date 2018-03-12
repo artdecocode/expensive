@@ -1,0 +1,24 @@
+{
+  "name": "expensive",
+  "version": "1.0.0",
+  "description": "A user-friendly client for namecheap.com for easy DNS management",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "zoroaster test/spec",
+    "test-watch": "zoroaster test/spec --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Sobesednik/expensive.git"
+  },
+  "keywords": ["expensive"],
+  "author": "Anton <anton@sobes.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sobesednik/expensive/issues"
+  },
+  "homepage": "https://github.com/Sobesednik/expensive#readme",
+  "devDependencies": {
+    "zoroaster": "0.5.3"
+  }
+}
