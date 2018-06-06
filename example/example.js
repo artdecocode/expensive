@@ -1,4 +1,5 @@
-import { auth, checkDomains } from '../src'
+import getConfig from '../src/lib/get-config'
+import checkDomains from '../src/lib/namecheap/domains/check'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
@@ -13,7 +14,7 @@ if (!domains.length) {
 
 (async () => {
   try {
-    const a = await auth({ packageName: 'example' }) // { ApiKey, UserName, ClientIp }
+    const a = await getConfig({ packageName: 'example' })
     console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
       ...a,

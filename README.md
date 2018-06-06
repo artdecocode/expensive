@@ -54,7 +54,8 @@ The package also supports a Node.js API. The authentication is completed in the 
 ```js
 /* example/example.js */
 /* yarn example/ */
-import { auth, checkDomains } from 'expensive'
+import getConfig from 'expensive/src/lib/get-config'
+import checkDomains from 'expensive/src/lib/namecheap/domains/check'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
@@ -69,7 +70,7 @@ if (!domains.length) {
 
 (async () => {
   try {
-    const a = await auth({ packageName: 'example' }) // { ApiKey, UserName, ClientIp }
+    const a = await getConfig({ packageName: 'example' })
     console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
       ...a,
