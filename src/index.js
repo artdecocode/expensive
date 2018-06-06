@@ -71,6 +71,7 @@ export const checkDomains = async ({
  * @typedef {Object} AfricaOpts
  * @property {function} [rcNameFunction] a function which returns the name of the rc file to store data in, e.g., packageName => `.${packageName}rc`,
  * @property {string} [homedir] where to store the rc file.
+ * @property {boolean} [force=false] force asking questions again to update the config
  *
  *
  * An authentication function which will read the package's rc file, or the global expensive rc file.
@@ -86,7 +87,7 @@ export const auth = async (config = {}) => {
     packageName, global = false, opts = {},
   } = config
   if (!global && !packageName) throw new Error('An implementing package name should be given if not using a global rc')
-  const p = global ? 'expensive' : `${packageName}-expensive`
+  const p = global && !packageName ? 'expensive' : `${packageName}-expensive`
   LOG('authenticating %s', p)
   const { ApiUser, ApiKey, ClientIp } = await africa(p, questions, opts)
   return { ApiUser, ApiKey, ClientIp }
