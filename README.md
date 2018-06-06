@@ -1,5 +1,7 @@
 # expensive
 
+[![npm version](https://badge.fury.io/js/expensive.svg)](https://badge.fury.io/js/expensive)
+
 ```sh
 npm i -g expensive
 ```
