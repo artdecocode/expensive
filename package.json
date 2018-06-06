@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "africa": "1.0.1",
+    "aws-sdk": "2.252.1",
     "erotic": "1.1.0",
     "erte": "1.1.4",
     "rqt": "1.1.0"

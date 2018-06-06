@@ -8,8 +8,14 @@ import { debuglog } from 'util'
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const [, , _d0, _d1] = process.argv
-const domain = _d1 ? _d1 : _d0
+const [,, domain] = process.argv
+
+if (!domain) {
+  const u = getUsage()
+  console.log(u)
+  console.log()
+  process.exit(1)
+}
 
 const isSingleWord = d => !/\./.test(d)
 
@@ -23,32 +29,24 @@ const startupyDomains = [
 
 const makeList = d => startupyDomains.map(s => `${d}${s}`)
 
-  // const usa = us.reduce((acc, length, i) => {
-  //   const command = commands[i]
-  //   const s = pad(command, i)
-  //   return [...acc, s]
-  // }, [])
+// const usa = us.reduce((acc, length, i) => {
+//   const command = commands[i]
+//   const s = pad(command, i)
+//   return [...acc, s]
+// }, [])
 
-const findTaken = (free, total) => {
-  const res = total.filter((t) => {
-    const f = free.indexOf(t) < 0
-    return f
-  })
-  return res
-}
+// const findTaken = (free, total) => {
+//   const res = total.filter((t) => {
+//     const f = free.indexOf(t) < 0
+//     return f
+//   })
+//   return res
+// }
 
 ;(async () => {
-  if (!domain) {
-    const u = getUsage()
-    console.log(u)
-    console.log()
-    process.exit(1)
-  }
   const single = isSingleWord(domain)
   const domains = single ? makeList(domain) : []
   const d = single ? undefined : domain
-  // const sd = single ? startupyDomains.map(d => `${domain}${d}`).join(', ') : { length: 1 }
-  // const { l } = sd
   try {
     const a = await auth({
       global: true,

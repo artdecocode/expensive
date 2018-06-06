@@ -91,8 +91,8 @@ export const auth = async (config = {}) => {
   if (!global && !packageName) throw new Error('An implementing package name should be given if not using a global rc')
   const p = global && !packageName ? 'expensive' : `${packageName}-expensive`
   LOG('authenticating %s', p)
-  const { ApiUser, ApiKey, ClientIp } = await africa(p, questions, opts)
-  return { ApiUser, ApiKey, ClientIp }
+  const { ApiUser, ApiKey, ClientIp, AWS_id, AWS_key } = await africa(p, questions, opts)
+  return { ApiUser, ApiKey, ClientIp, AWS_id, AWS_key }
 }
 
 /** @param {string} s */
