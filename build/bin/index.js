@@ -3,17 +3,15 @@
 /* eslint-disable no-console */
 "use strict";
 
-var _lib = require("../lib");
-
-var _check = _interopRequireDefault(require("../lib/namecheap/domains/check"));
-
-var _getConfig = _interopRequireDefault(require("../lib/get-config"));
-
 var _erte = require("erte");
+
+var _util = require("util");
 
 var _getUsage = _interopRequireDefault(require("./get-usage"));
 
-var _util = require("util");
+var _ = require("..");
+
+var _lib = require("../lib");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,7 +29,7 @@ if (!domain) {
 const checkSingleWord = async (word, auth) => {
   const domains = (0, _lib.makeStartupyList)(word);
   console.log('Checking %s domains: %s', domains.length, domains.join(', '));
-  const res = await (0, _check.default)({ ...auth,
+  const res = await (0, _.checkDomains)({ ...auth,
     domains
   });
   reportFree(domains, res);
@@ -52,7 +50,7 @@ const reportFree = (domains, freeDomains) => {
   const singleWord = (0, _lib.isSingleWord)(domain);
 
   try {
-    const auth = await (0, _getConfig.default)({
+    const auth = await (0, _.getConfig)({
       global: true
     });
 
@@ -62,7 +60,7 @@ const reportFree = (domains, freeDomains) => {
     }
 
     console.log('Checking domain %s', domain);
-    const res = await (0, _check.default)({ ...auth,
+    const res = await (0, _.checkDomains)({ ...auth,
       domain
     });
 
