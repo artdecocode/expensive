@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "e": "node example",
     "example/": "yarn e example/example.js",
-    "build": "babel src --out-dir build --source-maps --ignore-files src/bin/register.js"
+    "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
   },
   "files": [
     "build"
