@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
 import { c } from 'erte'
-import { debuglog } from 'util'
+import { debuglog, inspect } from 'util'
 import getUsage from './get-usage'
 import { getConfig, checkDomains } from '..'
 import { makeStartupyList, isSingleWord } from '../lib'
+import authenticate from '../lib/authenticate'
+import { askQuestions } from 'reloquent'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -69,8 +71,36 @@ const reportFree = (domains, freeDomains) => {
     } else {
       console.log('%s is taken', c(domain, 'red'))
     }
-  } catch ({ stack, message }) {
+  } catch ({ stack, message, props }) {
+    if (props) {
+      LOG(inspect(props, { colors: true }))
+      LOG(Errors[props.Number])
+    }
+
+    if (props && props.Number == '1011150') {
+      if (props.Number == '1011150') {
+        // attempt to authenticate
+        const answer = await askQuestions({
+          q: {
+            text: 'IP is not whitelisted. Authenticate and whitelist the IP (y/n)?',
+            async getDefault() {
+              return 'y'
+            },
+          },
+        }, null, 'q')
+        if (answer.trim() == 'y') {
+          console.log('ok will sing in')
+          const res = await authenticate()
+          debugger
+          return
+        }
+      }
+    }
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
 })()
+
+const Errors = {
+  1011150: 'Parameter RequestIP is invalid',
+}

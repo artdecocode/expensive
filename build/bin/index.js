@@ -13,6 +13,10 @@ var _ = require("..");
 
 var _lib = require("../lib");
 
+var _authenticate = _interopRequireDefault(require("../lib/authenticate"));
+
+var _reloquent = require("reloquent");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const LOG = (0, _util.debuglog)('expensive');
@@ -71,10 +75,45 @@ const reportFree = (domains, freeDomains) => {
     }
   } catch ({
     stack,
-    message
+    message,
+    props
   }) {
+    if (props) {
+      LOG((0, _util.inspect)(props, {
+        colors: true
+      }));
+      LOG(Errors[props.Number]);
+    }
+
+    if (props && props.Number == '1011150') {
+      if (props.Number == '1011150') {
+        // attempt to authenticate
+        const answer = await (0, _reloquent.askQuestions)({
+          q: {
+            text: 'IP is not whitelisted. Authenticate and whitelist the IP (y/n)?',
+
+            async getDefault() {
+              return 'y';
+            }
+
+          }
+        }, null, 'q');
+
+        if (answer.trim() == 'y') {
+          console.log('ok will sing in');
+          const res = await (0, _authenticate.default)();
+          debugger;
+          return;
+        }
+      }
+    }
+
     DEBUG ? LOG(stack) : console.error(message);
     process.exit(1);
   }
 })();
+
+const Errors = {
+  1011150: 'Parameter RequestIP is invalid'
+};
 //# sourceMappingURL=index.js.map
