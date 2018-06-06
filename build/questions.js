@@ -22,6 +22,18 @@ var _default = {
     validation: a => {
       if (!a) throw new Error('Please give the Client Ip and whitelist it.');
     }
+  },
+  AWS_id: {
+    text: 'aws_access_key_id',
+    validation: a => {
+      if (!a) console.warn('without aws key the route 53 updates won\'t work');
+    }
+  },
+  AWS_key: {
+    text: 'aws_secret_access_key',
+    validation: a => {
+      if (!a) console.warn('without aws key the route 53 updates won\'t work');
+    }
   }
 };
 exports.default = _default;

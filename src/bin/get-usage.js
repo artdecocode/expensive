@@ -1,6 +1,9 @@
+import { startupyDomains } from '../lib'
+
+const l = startupyDomains.join(', ')
 
 const u = {
-  domain: 'check a domain name in various startupy zones\n(.io, .cc, .co, .bz, .app)',
+  domain: `check a domain name in various startupy zones\n(${l})`,
   'domain.com': 'check a domain name',
   // 'domain1.com domain2.com': 'check multiple domain names',
 }
@@ -42,13 +45,6 @@ export default () => {
     })
     const res = [...acc, firstLine, ...otherLines]
     return res
-    // const v = vals.map(va => {
-    //   const p = pad(va, descriptionLength)
-    //   return p
-    // })
-    // const valu = v.join(`\n${emptyPad}\t`)
-    // const s = `${c}\t${valu}`
-    // return [...acc, s]
   }, [])
 
   const USA = usa.map(a => `\t${a}`)

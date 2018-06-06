@@ -1,94 +1,106 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-import { checkDomains, auth } from '..'
 import { c } from 'erte'
+import { debuglog, inspect } from 'util'
 import getUsage from './get-usage'
+import { getConfig, checkDomains } from '..'
+import { makeStartupyList, isSingleWord } from '../lib'
+import authenticate from '../lib/authenticate'
+import { askQuestions } from 'reloquent'
 
-import { debuglog } from 'util'
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const [, , _d0, _d1] = process.argv
-const domain = _d1 ? _d1 : _d0
+const [,, domain] = process.argv
 
-const isSingleWord = d => !/\./.test(d)
-
-const startupyDomains = [
-  '.co',
-  '.cc',
-  '.io',
-  '.bz',
-  '.app',
-]
-
-const makeList = d => startupyDomains.map(s => `${d}${s}`)
-
-  // const usa = us.reduce((acc, length, i) => {
-  //   const command = commands[i]
-  //   const s = pad(command, i)
-  //   return [...acc, s]
-  // }, [])
-
-const findTaken = (free, total) => {
-  const res = total.filter((t) => {
-    const f = free.indexOf(t) < 0
-    return f
-  })
-  return res
+if (!domain) {
+  const u = getUsage()
+  console.log(u)
+  console.log()
+  process.exit(1)
 }
 
-;(async () => {
-  if (!domain) {
-    const u = getUsage()
-    console.log(u)
-    console.log()
-    process.exit(1)
-  }
-  const single = isSingleWord(domain)
-  const domains = single ? makeList(domain) : []
-  const d = single ? undefined : domain
-  // const sd = single ? startupyDomains.map(d => `${domain}${d}`).join(', ') : { length: 1 }
-  // const { l } = sd
+const checkSingleWord = async (word, auth) => {
+  const domains = makeStartupyList(word)
+  console.log('Checking %s domains: %s', domains.length, domains.join(', '))
+  const res = await checkDomains({
+    ...auth,
+    domains,
+  })
+  reportFree(domains, res)
+}
+
+const reportFree = (domains, freeDomains) => {
+  const [free,, total] = domains.reduce(([f, t, tt], dd) => {
+    const isFree = freeDomains.some(d => d == dd)
+
+    const it = isFree ? c(dd, 'green') : c(dd, 'red')
+
+    return [
+      isFree ? [...f, it] : f,
+      isFree ? t : [...t, it],
+      [...tt, it],
+    ]
+  }, [[], [], []])
+
+  const percent = (free.length / total.length) * 100
+
+  console.log('%s', total.join(', '))
+  console.log('%s% are free', percent)
+}
+
+(async () => {
+  const singleWord = isSingleWord(domain)
+
   try {
-    const a = await auth({
+    const auth = await getConfig({
       global: true,
     })
-    if (single) {
-      console.log('Checking %s domains: %s', domains.length, domains.join(', '))
-    } else if (domain) {
-      console.log('Checking domain %s', domain)
+    if (singleWord) {
+      await checkSingleWord(domain, auth)
+      return
     }
+
+    console.log('Checking domain %s', domain)
     const res = await checkDomains({
-      ...a,
-      domain: d,
-      domains,
+      ...auth,
+      domain,
     })
-    if (single) {
-      let green = 0
-      let red = 0
-      domains.forEach(dd => {
-        const s = []
-        let t
-        if (res.indexOf(dd) >= 0) {
-          t = c(dd, 'green')
-          green++
-        } else {
-          t = c(dd, 'red')
-          red++
-        }
-        s.push(t)
-        console.log('%s', s.join(' '))
-      })
-      console.log('%s% are free', (green / (green + red)) * 100)
+    if (res.length) {
+      console.log('%s is free', c(domain, 'green'))
     } else {
-      if (res.length) {
-        console.log('%s is free', c(domain, 'green'))
-      } else {
-        console.log('%s is taken', c(domain, 'red'))
+      console.log('%s is taken', c(domain, 'red'))
+    }
+  } catch ({ stack, message, props }) {
+    if (props) {
+      LOG(inspect(props, { colors: true }))
+      LOG(Errors[props.Number])
+    }
+
+    if (props && props.Number == '1011150') {
+      if (props.Number == '1011150') {
+        // attempt to authenticate
+        const answer = await askQuestions({
+          q: {
+            text: 'IP is not whitelisted. Authenticate and whitelist the IP (y/n)?',
+            async getDefault() {
+              return 'y'
+            },
+          },
+        }, null, 'q')
+        if (answer.trim() == 'y') {
+          console.log('ok will sing in')
+          const res = await authenticate()
+          debugger
+          return
+        }
       }
     }
-  } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
 })()
+
+const Errors = {
+  1011150: 'Parameter RequestIP is invalid',
+}

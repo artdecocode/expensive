@@ -48,45 +48,86 @@ expensive testt
 ![output for testt query](doc/testt.png)
 
 ## API
+<!--
+The package also supports a Node.js API. The authentication is completed in the same way as the CLI, that is by reading the `.expensiverc` file or presenting questions. If `global` parameter is not set to true, and the `packageName` is not given, the function will throw. You must provide either a `packageName` or set `global` to true so that the `~/.expensiverc` can be read. N-O-N-E-T-H-E-L-E-S-S it is a good idea to provide a `packageName` so that a personal config in form of `.${packageName}-expensiverc` is generated. -->
 
-The package also supports a Node.js API. The authentication is completed in the same way as the CLI, that is by reading the `.expensiverc` file. If `global` parameter is not set to true, and the `packageName` is not given, the function will throw. You must provide either a `packageName` or set `global` to true so that the `~/.expensiverc` can be read. N-O-N-E-T-H-E-L-E-S-S it is a good idea to provide a `packageName` so that a personal config in form of `.${packageName}-expensiverc` is generated.
+### `getConfig`
+
+This will read the `rc` file (or ask questions to create one) for the given details. If `global` is set to true, the `HOME/.expensiverc` is looked up, and if you provide the `packageName`, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file.
+
+- `packageName`
+- `global`
+- `opts`
+
+The rc file will only contain the following details required for API calls:
+
+```sh
+{
+  "ApiUser": "namecheap_user",
+  "ApiKey": "api_key_from_tools",
+  "ClientIp": "10.10.10.10"
+}
+```
+
+### `checkDomains`
+
+This method returns a list of free domains for the request. Either domains, or a single domain must be passed. The method also expects to see Auth details from the config object), and these can be passed by using the destructuring.
+
+- `domains` an array of domains
+- `domain` a single domain
+
 
 ```js
 /* example/example.js */
 /* yarn example/ */
-import { auth, checkDomains } from 'expensive'
-import { basename } from 'path'
+import { getConfig, checkDomains } from 'expensive'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const b = basename(__filename)
-const dd = process.argv.find((a) => {
-  return a.endsWith(b)
-})
-const i = process.argv.indexOf(dd)
-const j = i + 1
-const domains = process.argv.slice(j)
+const domains = process.argv.slice(3)
 
 if (!domains.length) {
   console.log('Please enter a domain or domains')
-  process.exit(1)
+  process.exit()
 }
 
 (async () => {
   try {
-    const a = await auth({ packageName: 'example' }) // { ApiKey, UserName, ClientIp }
+    const auth = await getConfig({ packageName: 'example' })
+    console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
-      ...a,
+      ...auth,
       domains,
     })
-    console.log(res)
+    if (res.length) {
+      console.log('The following are free: %s', res.join(', '))
+    } else {
+      console.log('All domains are taken')
+    }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
 })()
+```
+
+```sh
+yarn example/ test.co testt.co testtt.co
+```
+
+```sh
+# yarn expansions
+yarn run v1.7.0
+yarn e example/example.js test.co testt.co testtt.co
+node example example/example.js test.co testt.co testtt.co
+```
+
+```fs
+Checking test.co, testt.co, testtt.co
+The following are free: testtt.co
+✨  Done in 3.04s.
 ```
 
 ---
