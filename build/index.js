@@ -9,11 +9,13 @@ var _africa = _interopRequireDefault(require("africa"));
 
 var _rqt = _interopRequireDefault(require("rqt"));
 
+var _erotic = _interopRequireDefault(require("erotic"));
+
 var _querystring = _interopRequireDefault(require("querystring"));
 
-var _util = require("util");
-
 var _questions = _interopRequireDefault(require("./questions"));
+
+var _util = require("util");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59,21 +61,35 @@ const checkDomains = async ({
   const val = validateDomains(domains);
   if (!val) throw new Error('all domains must be strings');
   if (domain && typeof domain != 'string') throw new Error('domain must be a string');
-  const d = [...domains, ...(domain ? [domain] : [])]; // const d = Array.isArray(domains) ? domains : [domain]
-
-  const qs = _querystring.default.stringify({
+  const d = [...domains, ...(domain ? [domain] : [])];
+  const res = await query({
     ApiUser,
     ApiKey,
-    ClientIp,
-    UserName: ApiUser,
-    Command: DOMAINS_CHECK,
+    ClientIp
+  }, DOMAINS_CHECK, {
     DomainList: d.join(',')
   });
+  const re = /DomainCheckResult Domain="(.+?)" Available="(true|false)"/gm;
+  let e;
+  const results = [];
 
-  const url = `https://api.namecheap.com/xml.response?${qs}`;
-  LOG(url);
-  const res = await (0, _rqt.default)(url);
-  return res;
+  while (e = re.exec(res)) {
+    // eslint-disable-line
+    const [, name, f] = e;
+    const free = f == 'true';
+    results.push({
+      name,
+      free
+    });
+  }
+
+  const f = results.filter(({
+    free
+  }) => free);
+  const m = f.map(({
+    name
+  }) => name);
+  return m;
 };
 /**
  * @typedef {Object} AfricaOpts
@@ -113,6 +129,94 @@ const auth = async (config = {}) => {
     ClientIp
   };
 };
+/** @param {string} s */
+
 
 exports.auth = auth;
+
+const isXml = s => s.startsWith('<?xml version="1.0" encoding="utf-8"?>');
+
+const query = async ({
+  ApiUser,
+  ApiKey,
+  ClientIp
+}, Command, Options = {}) => {
+  const cb = (0, _erotic.default)(true);
+  if (!Command) throw new Error('Command must be passed');
+
+  const qs = _querystring.default.stringify({
+    ApiUser,
+    ApiKey,
+    UserName: ApiUser,
+    ClientIp,
+    Command,
+    ...Options
+  });
+
+  const url = `https://api.namecheap.com/xml.response?${qs}`;
+  LOG(url);
+  const res = await (0, _rqt.default)(url);
+  const xml = isXml(res);
+  if (!xml) throw new Error('non-xml response');
+  const re = /<Errors>([\s\S.]+?)<\/Errors>/;
+  const e = re.exec(res);
+
+  if (e) {
+    const [, ...er] = e;
+    const errors = er.map(r => r.trim()).map(r => {
+      const re1 = /<Error(.*?)>(.+?)<\/Error>/;
+      const e1 = re1.exec(r);
+
+      if (!e1) {
+        LOG(e1);
+        return `Could not parse the error: ${r}`;
+      }
+
+      const [, xmlProps, title] = e1;
+      const props = xmlProps.trim().split(' ').reduce((acc, p) => {
+        const e2 = /(.+?)="(.+?)"/.exec(p);
+
+        if (!e2) {
+          LOG(e2);
+          return 'could not parse the property';
+        }
+
+        const [, prop, value] = e2;
+        const d = {
+          [prop]: value
+        };
+        return { ...acc,
+          ...d
+        };
+      }, {});
+      return {
+        title,
+        props
+      };
+    });
+    let ero;
+
+    if (errors.length == 1) {
+      const [{
+        title,
+        props
+      }] = errors;
+      ero = new Error(title);
+      ero.props = props;
+    } else {
+      const t = errors.map(({
+        title
+      }) => title).join('; ');
+      ero = new Error(t);
+      ero.props = errors.map(({
+        props
+      }) => props);
+    }
+
+    const transparentError = cb(ero);
+    throw transparentError;
+  }
+
+  return res;
+};
 //# sourceMappingURL=index.js.map
