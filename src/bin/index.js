@@ -63,29 +63,49 @@ const findTaken = (free, total) => {
       domain: d,
       domains,
     })
-    const d1 = res.length
-    if (d1 & !domain) {
+    if (single) {
+      let green = 0
+      let red = 0
       domains.forEach(dd => {
         const s = []
         let t
-        if (res.indexOf(dd)) {
+        if (res.indexOf(dd) >= 0) {
           t = c(dd, 'green')
+          green++
         } else {
           t = c(dd, 'red')
+          red++
         }
         s.push(t)
         console.log('%s', s.join(' '))
       })
-      console.log('%s% are free', (res.length / Math.max(domains.length, res.length)) * 100)
-    } else if (single) {
-      console.log('None of the zones are available.')
-    } else if (domain) {
-      if (d1) {
+      console.log('%s% are free', (green / (green + red)) * 100)
+    } else {
+      if (res.length) {
         console.log('%s is free', c(domain, 'green'))
       } else {
         console.log('%s is taken', c(domain, 'red'))
       }
     }
+    // if (d1 && !single) {
+    //   domains.forEach(dd => {
+    //     const s = []
+    //     let t
+    //     if (res.indexOf(dd)) {
+    //       t = c(dd, 'green')
+    //     } else {
+    //       t = c(dd, 'red')
+    //     }
+    //     s.push(t)
+    //     console.log('%s', s.join(' '))
+    //   })
+    //   console.log('%s% are free', (res.length / Math.max(domains.length, res.length)) * 100)
+    // } else if (single) {
+    //   console.log('None of the zones are available.')
+    // } else if (domain) {
+    //   if (d1) {
+    //   } else {
+    //   }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)

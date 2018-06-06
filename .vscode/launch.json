@@ -14,7 +14,7 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "docks123123.com"
+        "testtt"
       ],
       "console": "integratedTerminal"
     }
