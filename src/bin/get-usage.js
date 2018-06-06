@@ -2,7 +2,7 @@
 const u = {
   domain: 'check a domain name in various startupy zones\n(.io, .cc, .co, .bz, .app)',
   'domain.com': 'check a domain name',
-  'domain1.com domain2.com': 'check multiple domain names',
+  // 'domain1.com domain2.com': 'check multiple domain names',
 }
 const commands = Object.keys(u)
 const descriptions = Object.values(u)
