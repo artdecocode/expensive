@@ -9,6 +9,7 @@
     "test-build": "BABEL_ENV=test-build yarn t test/spec",
     "test-all": "yarn-s test test-build",
     "test-watch": "yarn test --watch",
+    "start": "node src/bin/register",
     "lint": "eslint .",
     "e": "node example",
     "example/": "yarn e example/example.js",
@@ -38,5 +39,9 @@
     "eslint-config-artdeco": "1.0.0",
     "yarn-s": "1.1.0",
     "zoroaster": "2.1.0"
+  },
+  "dependencies": {
+    "africa": "1.0.1",
+    "rqt": "1.1.0"
   }
 }

@@ -1,13 +1,14 @@
-import { auth, checkDomains } from '../src'
-
+import { checkDomains, auth } from '..'
 const [,,,domain = 'google.com'] = process.argv
 
 ;(async () => {
-  // ip?
-  const a = await auth() // { ApiKey, UserName, ClientIp }
+  const a = await auth({
+    global: true,
+  })
   const res = await checkDomains({
     ...a,
     domain,
   })
   console.log(res)
 })()
+
