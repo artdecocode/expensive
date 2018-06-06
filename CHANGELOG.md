@@ -2,5 +2,5 @@
 
 ### 1.0.0
 
-- Create `expensive2` with [`mnp`][https://mnpjs.org]
+- Create `expensive` with [`mnp`][https://mnpjs.org]
 - [repository]: `src`, `test`

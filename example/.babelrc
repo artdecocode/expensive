@@ -3,7 +3,7 @@
     [
       "transform-rename-import",
       {
-        "original": "expensive2",
+        "original": "expensive",
         "replacement": "../src"
       }
     ]

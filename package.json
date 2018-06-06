@@ -1,5 +1,5 @@
 {
-  "name": "expensive2",
+  "name": "expensive",
   "version": "1.0.0",
   "description": "Namecheap.com API client to register and manage domains from CLI.",
   "main": "build",
@@ -16,17 +16,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/artdecocode/expensive2.git"
+    "url": "git://github.com/artdecocode/expensive.git"
   },
   "keywords": [
-    "expensive2"
+    "expensive"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/artdecocode/expensive2/issues"
+    "url": "https://github.com/artdecocode/expensive/issues"
   },
-  "homepage": "https://github.com/artdecocode/expensive2#readme",
+  "homepage": "https://github.com/artdecocode/expensive#readme",
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.49",
     "@babel/core": "7.0.0-beta.49",

@@ -1,5 +1,5 @@
-import expensive2 from 'expensive2'
+import expensive from 'expensive'
 
 (async () => {
-  await expensive2()
+  await expensive()
 })()
