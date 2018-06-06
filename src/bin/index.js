@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-import { debuglog } from 'util'
 import { checkDomains, auth } from '..'
+import { c } from 'erte'
 import getUsage from './get-usage'
 
+import { debuglog } from 'util'
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const [, , d0, d1] = process.argv
-
-const domain = d1 ? d1 : d0
+const [, , _d0, _d1] = process.argv
+const domain = _d1 ? _d1 : _d0
 
 const isSingleWord = d => !/\./.test(d)
 
@@ -64,15 +64,27 @@ const findTaken = (free, total) => {
       domains,
     })
     const d1 = res.length
-    if (d1) {
-      const d2 = domains.length
-      console.log('%d/%d are free: %s', d1, d2, res.join(', '))
-      const taken = findTaken(res, domains)
-      console.log('%d/%d are taken: %s', d2-d1, d2, taken.join(', '))
+    if (d1 & !domain) {
+      domains.forEach(dd => {
+        const s = []
+        let t
+        if (res.indexOf(dd)) {
+          t = c(dd, 'green')
+        } else {
+          t = c(dd, 'red')
+        }
+        s.push(t)
+        console.log('%s', s.join(' '))
+      })
+      console.log('%s% are free', (res.length / Math.max(domains.length, res.length)) * 100)
     } else if (single) {
       console.log('None of the zones are available.')
     } else if (domain) {
-      console.log('Domain %s is not available', domain)
+      if (d1) {
+        console.log('%s is free', c(domain, 'green'))
+      } else {
+        console.log('%s is taken', c(domain, 'red'))
+      }
     }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
