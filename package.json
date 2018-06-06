@@ -10,6 +10,7 @@
     "test-all": "yarn-s test test-build",
     "test-watch": "yarn test --watch",
     "start": "node src/bin/register",
+    "s": "node build/bin",
     "lint": "eslint .",
     "e": "node example",
     "example/": "yarn e example/example.js",
