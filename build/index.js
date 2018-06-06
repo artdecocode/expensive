@@ -44,19 +44,20 @@ const validateDomains = arr => arr.reduce((acc, current) => {
  * @property {string} ApiKey api key from the tools
  * @property {string} ClientIp white-listed client ip
  * @property {string[]} [domains] a list of domains to check
- * @property {string} domain a single domain to check
+ * @property {string} domain a single domain to check.
  *
- * @param {Config} param0 config
+ * @param {Config} config the configuration
  */
 
 
-const checkDomains = async ({
-  ApiUser,
-  ApiKey,
-  ClientIp,
-  domains = [],
-  domain
-}) => {
+const checkDomains = async config => {
+  const {
+    ApiUser,
+    ApiKey,
+    ClientIp,
+    domains = [],
+    domain
+  } = config;
   if (!Array.isArray(domains)) throw new Error('domains must be a list');
   const val = validateDomains(domains);
   if (!val) throw new Error('all domains must be strings');
