@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable no-console */
 import { debuglog } from 'util'
 import { checkDomains, auth } from '..'
@@ -9,7 +10,6 @@ const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 const [, , d0, d1] = process.argv
 
 const domain = d1 ? d1 : d0
-
 
 const isSingleWord = d => !/\./.test(d)
 

@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+/* eslint-disable no-console */
 "use strict";
 
 var _util = require("util");
@@ -8,7 +11,6 @@ var _getUsage = _interopRequireDefault(require("./get-usage"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint-disable no-console */
 const LOG = (0, _util.debuglog)('expensive');
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG);
 const [,, d0, d1] = process.argv;

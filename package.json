@@ -19,7 +19,7 @@
     "build"
   ],
   "bin": {
-    "expensive": "build/bin"
+    "expensive": "build/bin/index.js"
   },
   "repository": {
     "type": "git",
