@@ -91,26 +91,7 @@ const findTaken = (free, total) => {
       } else {
         console.log('%s is taken', (0, _erte.c)(domain, 'red'));
       }
-    } // if (d1 && !single) {
-    //   domains.forEach(dd => {
-    //     const s = []
-    //     let t
-    //     if (res.indexOf(dd)) {
-    //       t = c(dd, 'green')
-    //     } else {
-    //       t = c(dd, 'red')
-    //     }
-    //     s.push(t)
-    //     console.log('%s', s.join(' '))
-    //   })
-    //   console.log('%s% are free', (res.length / Math.max(domains.length, res.length)) * 100)
-    // } else if (single) {
-    //   console.log('None of the zones are available.')
-    // } else if (domain) {
-    //   if (d1) {
-    //   } else {
-    //   }
-
+    }
   } catch ({
     stack,
     message
