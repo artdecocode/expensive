@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-import { makeStartupyList, isSingleWord } from '../lib'
-import checkDomains from '../lib/namecheap/domains/check'
-import getConfig from '../lib/get-config'
 import { c } from 'erte'
-import getUsage from './get-usage'
-
 import { debuglog } from 'util'
+import getUsage from './get-usage'
+import { getConfig, checkDomains } from '..'
+import { makeStartupyList, isSingleWord } from '../lib'
+
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 

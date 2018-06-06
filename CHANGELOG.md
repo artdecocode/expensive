@@ -1,3 +1,10 @@
+## 7 June 2018
+
+### 1.1.0
+
+- [feature ]
+- [code] refactor code
+
 ## 6 June 2018
 
 ### 1.0.0
