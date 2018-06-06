@@ -1,8 +1,9 @@
 import africa from 'africa'
 import rqt from 'rqt'
+import erotic from 'erotic'
 import querystring from 'querystring'
-import { debuglog } from 'util'
 import questions from './questions'
+import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
 
@@ -36,7 +37,7 @@ const validateDomains = (arr) => arr.reduce((acc, current) => {
  *
  * @param {Config} param0 config
  */
-export const checkDomains = async({
+export const checkDomains = async ({
   ApiUser,
   ApiKey,
   ClientIp,
@@ -48,19 +49,22 @@ export const checkDomains = async({
   if (!val) throw new Error('all domains must be strings')
   if (domain && typeof domain != 'string') throw new Error('domain must be a string')
   const d = [...domains, ...(domain ? [domain] : [])]
-  // const d = Array.isArray(domains) ? domains : [domain]
-  const qs = querystring.stringify({
-    ApiUser,
-    ApiKey,
-    ClientIp,
-    UserName: ApiUser,
-    Command: DOMAINS_CHECK,
-    DomainList: d.join(','),
-  })
-  const url = `https://api.namecheap.com/xml.response?${qs}`
-  LOG(url)
-  const res = await rqt(url)
-  return res
+
+  const res = await query({
+    ApiUser, ApiKey, ClientIp,
+  }, DOMAINS_CHECK, { DomainList: d.join(',') })
+
+  const re = /DomainCheckResult Domain="(.+?)" Available="(true|false)"/gm
+  let e
+  const results = []
+  while(e = re.exec(res)) { // eslint-disable-line
+    const [, name, f] = e
+    const free = f == 'true'
+    results.push({ name, free })
+  }
+  const f = results.filter(({ free }) => free)
+  const m = f.map(({ name }) => name)
+  return m
 }
 
 /**
@@ -86,4 +90,69 @@ export const auth = async (config = {}) => {
   LOG('authenticating %s', p)
   const { ApiUser, ApiKey, ClientIp } = await africa(p, questions, opts)
   return { ApiUser, ApiKey, ClientIp }
+}
+
+/** @param {string} s */
+const isXml = s => s.startsWith('<?xml version="1.0" encoding="utf-8"?>')
+
+const query = async ({
+  ApiUser,
+  ApiKey,
+  ClientIp,
+}, Command, Options = {}) => {
+  const cb = erotic(true)
+  if (!Command) throw new Error('Command must be passed')
+  const qs = querystring.stringify({
+    ApiUser,
+    ApiKey,
+    UserName: ApiUser,
+    ClientIp,
+    Command,
+    ...Options,
+  })
+  const url = `https://api.namecheap.com/xml.response?${qs}`
+  LOG(url)
+  const res = await rqt(url)
+  const xml = isXml(res)
+  if (!xml) throw new Error('non-xml response')
+  const re = /<Errors>([\s\S.]+?)<\/Errors>/
+  const e = re.exec(res)
+  if (e) {
+    const [,...er] = e
+    const errors = er
+      .map(r => r.trim())
+      .map(r => {
+        const re1 = /<Error(.*?)>(.+?)<\/Error>/
+        const e1 = re1.exec(r)
+        if (!e1) {
+          LOG(e1)
+          return `Could not parse the error: ${r}`
+        }
+        const [, xmlProps, title] = e1
+        const props = xmlProps.trim().split(' ').reduce((acc, p) => {
+          const e2 = /(.+?)="(.+?)"/.exec(p)
+          if (!e2) {
+            LOG(e2)
+            return 'could not parse the property'
+          }
+          const [, prop, value] = e2
+          const d = { [prop]: value }
+          return { ...acc, ...d }
+        }, {})
+        return { title, props }
+      })
+    let ero
+    if (errors.length == 1) {
+      const [{ title, props }] = errors
+      ero = new Error(title)
+      ero.props = props
+    } else {
+      const t = errors.map(({ title }) => title).join('; ')
+      ero = new Error(t)
+      ero.props = errors.map(({ props }) => props)
+    }
+    const transparentError = cb(ero)
+    throw transparentError
+  }
+  return res
 }

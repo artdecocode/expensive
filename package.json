@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "africa": "1.0.1",
+    "erotic": "1.1.0",
     "rqt": "1.1.0"
   }
 }
