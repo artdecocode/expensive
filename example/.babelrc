@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "transform-rename-import",
+      {
+        "original": "expensive2",
+        "replacement": "../src"
+      }
+    ]
+  ],
+  "extends": "../.babelrc"
+}

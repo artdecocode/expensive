@@ -1,3 +1,0 @@
-const expensive = require('./')
-
-expensive()

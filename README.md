@@ -1,19 +1,21 @@
-# expensive
+# expensive2
 
-`expensive` is a new Node.js npm package.
+`expensive2` is a new Node.js npm package.
 
-## `expensive():void`
+Namecheap.com API client to register and manage domains from CLI.
+
+## `expensive2():void`
 
 Call this function to get a result you want.
 
 ```js
-const expensive = require('expensive')
+const expensive2 = require('expensive2')
 
-expensive()
+expensive2()
 ```
 
 ---
 
-(c) [Sobesednik][1] 2018
+(c) [artdecocode][1] 2018
 
-[1]: https://mnpjs.org
+[1]: https://artdeco.bz

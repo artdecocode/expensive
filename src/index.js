@@ -1,8 +1,6 @@
 /**
- * Invoke package's main function
+ * This is the main package file.
  */
-function expensive() {
-    console.log('expensive called')
+export default async function expensive2() {
+  console.log('expensive2 called')
 }
-
-module.exports = expensive

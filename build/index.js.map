@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.js"],"names":["expensive2","console","log"],"mappings":";;;;;;;AAAA;;;AAGe,eAAeA,YAAf,GAA8B;AAC3CC,UAAQC,GAAR,CAAY,uBAAZ;AACD","sourcesContent":["/**\n * This is the main package file.\n */\nexport default async function expensive2() {\n  console.log('expensive2 called')\n}\n"],"file":"index.js"}

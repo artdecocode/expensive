@@ -1,17 +1,19 @@
-const { equal, assert } = require('zoroaster/assert')
-const context = require('../context')
-const expensive = require('../..')
+import { equal } from 'zoroaster/assert'
+import Context from '../context'
+import expensive2 from '../../src'
 
-const expensiveTestSuite = {
-    context,
-    'should be a function'() {
-        equal(typeof expensive, 'function')
-    },
-    'should call package without error'() {
-        assert.doesNotThrow(() => {
-            expensive()
-        })
-    },
+/** @type {Object.<string, (c: Context)>} */
+const T = {
+  context: Context,
+  'is a function'() {
+    equal(typeof expensive2, 'function')
+  },
+  async 'calls package without error'() {
+    await expensive2()
+  },
+  async 'calls test context method'({ example }) {
+    await example()
+  },
 }
 
-module.exports = expensiveTestSuite
+export default T
