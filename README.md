@@ -55,38 +55,53 @@ The package also supports a Node.js API. The authentication is completed in the 
 /* example/example.js */
 /* yarn example/ */
 import { auth, checkDomains } from 'expensive'
-import { basename } from 'path'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const b = basename(__filename)
-const dd = process.argv.find((a) => {
-  return a.endsWith(b)
-})
-const i = process.argv.indexOf(dd)
-const j = i + 1
-const domains = process.argv.slice(j)
+const domains = process.argv.slice(3)
 
 if (!domains.length) {
   console.log('Please enter a domain or domains')
-  process.exit(1)
+  process.exit()
 }
 
 (async () => {
   try {
     const a = await auth({ packageName: 'example' }) // { ApiKey, UserName, ClientIp }
+    console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
       ...a,
       domains,
     })
-    console.log(res)
+    if (res.length) {
+      console.log('The following are free: %s', res.join(', '))
+    } else {
+      console.log('All domains are taken')
+    }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
 })()
+```
+
+```sh
+yarn example/ test.co testt.co testtt.co
+```
+
+```sh
+# yarn expansions
+yarn run v1.7.0
+yarn e example/example.js test.co testt.co testtt.co
+node example example/example.js test.co testt.co testtt.co
+```
+
+```fs
+Checking test.co, testt.co, testtt.co
+The following are free: testtt.co
+✨  Done in 3.04s.
 ```
 
 ---

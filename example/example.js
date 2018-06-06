@@ -1,17 +1,10 @@
-import { basename } from 'path'
 import { auth, checkDomains } from '../src'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const b = basename(__filename)
-const dd = process.argv.find((a) => {
-  return a.endsWith(b)
-})
-const i = process.argv.indexOf(dd)
-const j = i + 1
-const domains = process.argv.slice(j)
+const domains = process.argv.slice(3)
 
 if (!domains.length) {
   console.log('Please enter a domain or domains')
@@ -21,11 +14,16 @@ if (!domains.length) {
 (async () => {
   try {
     const a = await auth({ packageName: 'example' }) // { ApiKey, UserName, ClientIp }
+    console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
       ...a,
       domains,
     })
-    console.log(res)
+    if (res.length) {
+      console.log('The following are free: %s', res.join(', '))
+    } else {
+      console.log('All domains are taken')
+    }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
