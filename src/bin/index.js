@@ -49,7 +49,7 @@ const reportFree = (domains, freeDomains) => {
   console.log('%s% are free', percent)
 }
 
-(async () => {
+const run = async () => {
   const singleWord = isSingleWord(domain)
   let phone
   let user
@@ -81,13 +81,19 @@ const reportFree = (domains, freeDomains) => {
     }
 
     if (props && props.Number == '1011150') {
-      await handleRequestIP(message, { phone, user })
+      const authComplete = await handleRequestIP(message, { phone, user })
+      if (authComplete === true) {
+        await run()
+      } else {
+        console.log(authComplete)
+      }
+      return
     }
 
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
-})()
+}
 
 const handleRequestIP = async (message, { phone, user }) => {
   const _ip = /Invalid request IP: (.+)/.exec(message)
@@ -96,14 +102,19 @@ const handleRequestIP = async (message, { phone, user }) => {
   const password = await askSingle({
     text: `Enter password to white-list ${ip}`,
   })
-  await authenticate({
+  const res = await authenticate({
     user,
     password,
     ip,
     phone,
   })
+  return res
 }
 
 const Errors = {
   1011150: 'Parameter RequestIP is invalid',
 }
+
+;(async () => {
+  await run()
+})()

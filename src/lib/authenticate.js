@@ -4,7 +4,6 @@ import { equal } from 'assert'
 import { launch } from 'chrome-launcher'
 import CDP from 'chrome-remote-interface'
 import Chrome from 'chrome-remote-interface/lib/chrome' // eslint-disable-line no-unused-vars
-import { writeFileSync } from 'fs'
 import { parse } from 'url'
 import { askSingle } from 'reloquent'
 import { c } from 'erte'
@@ -79,6 +78,7 @@ const authenticate = async ({
 
   /** @type {Chrome} */
   let client
+  let res
   try {
     client = await CDP({
       port,
@@ -110,6 +110,8 @@ const authenticate = async ({
     await login(Runtime, { user, password })
     await Page.loadEventFired()
 
+    await checkAuth(Runtime)
+
     await selectPhone(Runtime, phone)
     await Page.loadEventFired()
 
@@ -120,11 +122,10 @@ const authenticate = async ({
     await Page.loadEventFired()
 
     await addIpAddress(Runtime, Input, { ip, password })
-
-    const { data } = await Page.captureScreenshot()
-    writeFileSync('screenshot.png', Buffer.from(data, 'base64'))
+    res = true
   } catch (err) {
     LOG(err)
+    res = err.message
   } finally {
     if (client) {
       await client.close()
@@ -133,20 +134,38 @@ const authenticate = async ({
 
   await chrome.kill()
   console.log('Chrome killed')
+  return res
 }
 
-// const res = await evaluate(Runtime, `
-//       (() => {
-//         try {
-//           var el = document.querySelector('.gb-alerts-sticky').children[0]
-//           var re = new RegExp(el.innerHTML)
-//           return re.test('added successfully')
-//         } catch (err) {
-//           return false
-//         }
-//       })()
-//     `)
-//     ok(res, 'Could not find the success notification alert')
+const checkLimit = async (Runtime) => {
+  const isLimitReached = await evaluate(Runtime, `
+    (() => {
+      try {
+        var el = document.querySelector('.alert.error')
+        var re = new RegExp('You have reached')
+        return re.test(el.innerHTML)
+      } catch (err) {
+        return false
+      }
+    })()
+  `)
+  if (isLimitReached) throw new Error('You have reached the limit on the number of times you can request two-factor verification code through text message (SMS). You can request a code again only after 60 minutes.')
+}
+
+const checkAuth = async (Runtime) => {
+  const doesNotMatch = await evaluate(Runtime, `
+    (() => {
+      try {
+        var el = document.querySelector('.loginForm .alert.error')
+        var re = new RegExp('The password does not match')
+        return re.test(el.innerHTML)
+      } catch (err) {
+        return false
+      }
+    })()
+  `)
+  if (doesNotMatch) throw new Error('The password does not match the user account or the account does not exist.')
+}
 
 const addIpAddress = async (Runtime, Input, { ip, password }) => {
   const name = `Expensive on ${new Date().toLocaleString()}`.replace(/:/g, '-')
@@ -316,6 +335,7 @@ const enterCode = async (Runtime) => {
   })
   const r = /Your \d-digit code begins with (\d)/.exec(info.result.value)
   if (!r) {
+    await checkLimit(Runtime)
     throw new Error('Could not enter the code') // return
   }
 
