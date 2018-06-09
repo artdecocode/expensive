@@ -5,7 +5,6 @@ import { launch } from 'chrome-launcher'
 import CDP from 'chrome-remote-interface'
 import Chrome from 'chrome-remote-interface/lib/chrome' // eslint-disable-line no-unused-vars
 import { writeFileSync } from 'fs'
-import { resolve } from 'path'
 import { parse } from 'url'
 import { askSingle } from 'reloquent'
 import { c } from 'erte'
@@ -60,7 +59,6 @@ const isBlocked = (url) => {
   // return !!hb
 }
 
-const userDataDir = resolve(__dirname, '../../chrome')
 const numberRe = /(.+?)(\d\d\d)$/
 
 const authenticate = async ({
@@ -85,7 +83,7 @@ const authenticate = async ({
     client = await CDP({
       port,
     })
-    const { Network, Page, DOM, Runtime } = client
+    const { Network, Page, DOM, Runtime, Input } = client
 
     Network.requestIntercepted(({ interceptionId, request }) => {
       const blocked = isBlocked(request.url)
@@ -121,10 +119,8 @@ const authenticate = async ({
     await Page.navigate({ url: 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips' })
     await Page.loadEventFired()
 
-    await addIpAddress(Runtime, { ip, password })
-    await Page.loadEventFired()
+    await addIpAddress(Runtime, Input, { ip, password })
 
-    await new Promise(q => setTimeout(q, 2000))
     const { data } = await Page.captureScreenshot()
     writeFileSync('screenshot.png', Buffer.from(data, 'base64'))
   } catch (err) {
@@ -139,12 +135,35 @@ const authenticate = async ({
   console.log('Chrome killed')
 }
 
-const addIpAddress = async (Runtime, { ip, password }) => {
-  const name = `Expensive on ${new Date().toLocaleString()}`
+// const res = await evaluate(Runtime, `
+//       (() => {
+//         try {
+//           var el = document.querySelector('.gb-alerts-sticky').children[0]
+//           var re = new RegExp(el.innerHTML)
+//           return re.test('added successfully')
+//         } catch (err) {
+//           return false
+//         }
+//       })()
+//     `)
+//     ok(res, 'Could not find the success notification alert')
+
+const addIpAddress = async (Runtime, Input, { ip, password }) => {
+  const name = `Expensive on ${new Date().toLocaleString()}`.replace(/:/g, '-')
   await click(Runtime, 'button')
-  await setValue(Runtime, '#ip-name', name)
-  await setValue(Runtime, '#ip-address', ip)
-  await evaluate(Runtime, `document.querySelectorAll('input[type="password"]')[1].value = "${password}"`)
+  await new Promise(r => setTimeout(r, 1000)) // wait for
+  await focus(Runtime, '#ip-name')
+  for (let i = 0; i < name.length; i++) {
+    await Input.dispatchKeyEvent({ type: 'char', text: name[i] })
+  }
+  await focus(Runtime, '#ip-address')
+  for (let i = 0; i < ip.length; i++) {
+    await Input.dispatchKeyEvent({ type: 'char', text: ip[i] })
+  }
+  await evaluate(Runtime, 'document.querySelectorAll(\'input[type="password"]\')[1].focus()')
+  for (let i = 0; i < password.length; i++) {
+    await Input.dispatchKeyEvent({ type: 'char', text: password[i] })
+  }
   await evaluate(Runtime, 'document.querySelectorAll(\'button.gb-btn--primary\')[1].click()')
 }
 
@@ -238,24 +257,24 @@ enter last 3 digits`
   })
 }
 
-const awaitSelector = (selector, interval = 100, timeout = 2000) => `
-  new Promise((resolve, reject) => {
-    var ms = ${interval}
-    var i = 0
-    var t = setInterval(() => {
-      i += ms
-      if (i > ${timeout}) {
-        clearTimeout(t)
-        return reject(new Error('Timeout of ${timeout}ms reached'))
-      }
-      var el = document.querySelector('${selector}')
-      if (el) {
-        clearTimeout(t)
-        resolve(el)
-      }
-    }, ms)
-  })
-`
+// const awaitSelector = (selector, interval = 100, timeout = 2000) => `
+//   new Promise((resolve, reject) => {
+//     var ms = ${interval}
+//     var i = 0
+//     var t = setInterval(() => {
+//       i += ms
+//       if (i > ${timeout}) {
+//         clearTimeout(t)
+//         return reject(new Error('Timeout of ${timeout}ms reached'))
+//       }
+//       var el = document.querySelector('${selector}')
+//       if (el) {
+//         clearTimeout(t)
+//         resolve(el)
+//       }
+//     }, ms)
+//   })
+// `
 
 // const awaitElement = async (Runtime, selector) => {
 //   const { exceptionDetails } = await Runtime.evaluate({
@@ -281,6 +300,11 @@ const click = async (Runtime, selector) => {
   const res = await evaluate(Runtime, expression)
   return res
 }
+const focus = async (Runtime, selector) => {
+  const expression = `document.querySelector('${selector}').focus()`
+  const res = await evaluate(Runtime, expression)
+  return res
+}
 
 const enterCode = async (Runtime) => {
   const val = await getValue(Runtime, 'input[type="submit"]')
@@ -291,25 +315,14 @@ const enterCode = async (Runtime) => {
     expression: `document.querySelector('.info').innerText`, // eslint-disable-line
   })
   const r = /Your \d-digit code begins with (\d)/.exec(info.result.value)
-  let b = r ? r[1] : ''
-
-  if (!b) {
-    //     const elRes = await Runtime.evaluate({
-    //       expression: `
-    //   var el = document.querySelector('p.error-message.info > a[runat="server"]')
-    //   el.click()
-    //   return el
-    // `, // eslint-disable-line
-    //     })
-    //     console.log(elRes)
+  if (!r) {
     throw new Error('Could not enter the code') // return
   }
 
+  const [, b] = r
+
   const code = await askSingle({
-    text: `security code: ${b}`,
-    postProcess(a) {
-      return `${b}${a}`
-    },
+    text: `Security code (begins with ${b})`,
   })
 
   await setValue(Runtime, 'input[placeholder="Verification Code"]', code)
