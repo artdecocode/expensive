@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/expensive.svg)](https://badge.fury.io/js/expensive)
 
 ```sh
+# install node with nvm https://github.com/creationix/nvm
 npm i -g expensive
 ```
 
