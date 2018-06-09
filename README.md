@@ -132,6 +132,6 @@ The following are free: testtt.co
 
 ---
 
-(c) [artdecocode][1] 2018
+(c) [Art Deco Code][1] 2018
 
 [1]: https://artdeco.bz

@@ -11,6 +11,9 @@ export default {
     text: 'client ip https://www.google.co.uk/search?q=my+ip: ',
     validation: a => { if (!a) throw new Error('Please give the Client Ip and whitelist it.') },
   },
+  DefaultPhone: {
+    text: 'last 3 digit of phone to use for 2 factor auth: ',
+  },
   AWS_id: {
     text: 'aws_access_key_id',
     validation: a => { if (!a) console.warn('without aws key the route 53 updates won\'t work' ) },
