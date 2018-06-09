@@ -6,21 +6,31 @@
 npm i -g expensive
 ```
 
-`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register, create Route 53 record zone and assign name servers via CLI. The package significantly reduces the chore associated with performing all these routine things when creating new websites.
+`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
 
 The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
 
-## Settings Initialisation
+## Settings
 
 Upon the first run the program will ask a series of questions:
 
 ```
 username: <namecheap-username>
 api key https://ap.www.namecheap.com/settings/tools/apiaccess/: <api key accessed at the given page>
-client ip https://www.google.co.uk/search?q=my+ip: <the ip>
+client ip [10.10.10.10]: <the ip>
 ```
 
-After they've been answered, the program will remember the answers and store them in `.expensiverc` file the the home directory, and use this data for all subsequent calls to the API.
+After they've been answered, the program will remember the answers and store them in `.expensiverc` file the the home directory, and use this data for all subsequent calls to the API. These are also available to other programs which want to use the API.
+
+There are additional questions which are required for specific features:
+
+```
+Last 3 digit of phone to use for 2 factor auth: <055>
+AWS access key id: <aws-key-id>
+AWS secret access key: <aws-key>
+```
+
+These are stored in the `.expensive-client.rc` and are not shared with other software.
 
 ## `CLI`
 
@@ -41,7 +51,6 @@ expensive test
 Checking 5 domains: test.co, test.cc, test.io, test.bz, test.app
 None of the zones are available.
 ```
-
 
 ```sh
 expensive testt
@@ -71,13 +80,14 @@ The rc file will only contain the following details required for API calls:
 }
 ```
 
+Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
+
 ### `checkDomains`
 
-This method returns a list of free domains for the request. Either domains, or a single domain must be passed. The method also expects to see Auth details from the config object), and these can be passed by using the destructuring.
+This method returns a list of free domains for the request. Either domains, or a single domain must be passed. The method also expects to see Auth details (from the config object), and these can be passed by using the destructuring.
 
 - `domains` an array of domains
 - `domain` a single domain
-
 
 ```js
 /* example/example.js */
@@ -97,16 +107,19 @@ if (!domains.length) {
 
 (async () => {
   try {
-    const auth = await getConfig({ packageName: 'example' })
+    // use `.expensive-example.rc` file to get configuration data
+    // pass `global` to read `.expensiverc` instead
+    const Auth = await getConfig({ packageName: 'example' })
+
     console.log('Checking %s', domains.join(', '))
     const res = await checkDomains({
-      ...auth,
+      ...Auth,
       domains,
     })
     if (res.length) {
       console.log('The following are free: %s', res.join(', '))
     } else {
-      console.log('All domains are taken')
+      console.log('All domains are taken.')
     }
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)

@@ -1,3 +1,5 @@
+import rqt from 'rqt'
+
 export default {
   ApiUser: {
     text: 'username: ',
@@ -8,18 +10,25 @@ export default {
     validation: a => { if (!a) throw new Error('Please provide the namecheap api key.') },
   },
   ClientIp: {
-    text: 'client ip https://www.google.co.uk/search?q=my+ip: ',
-    validation: a => { if (!a) throw new Error('Please give the Client Ip and whitelist it.') },
+    text: 'client ip',
+    // validation: a => { if (!a) throw new Error('Please give the Client Ip and whitelist it.') },
+    async getDefault() {
+      const ip = await rqt('https://api.ipify.org')
+      return ip
+    },
   },
-  DefaultPhone: {
-    text: 'last 3 digit of phone to use for 2 factor auth: ',
+}
+
+export const privateQuestions = {
+  phone: {
+    text: 'Last 3 digit of phone to use for 2 factor auth: ',
   },
-  AWS_id: {
-    text: 'aws_access_key_id',
+  aws_id: {
+    text: 'AWS access key id: ',
     validation: a => { if (!a) console.warn('without aws key the route 53 updates won\'t work' ) },
   },
-  AWS_key: {
-    text: 'aws_secret_access_key',
+  aws_key: {
+    text: 'AWS secret access key: ',
     validation: a => { if (!a) console.warn('without aws key the route 53 updates won\'t work' ) },
   },
 }

@@ -2,16 +2,32 @@
 /* eslint-disable no-console */
 import { c } from 'erte'
 import { debuglog, inspect } from 'util'
+import { askSingle } from 'reloquent'
+import argufy from 'argufy'
 import getUsage from './get-usage'
 import { getConfig, checkDomains } from '..'
+import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
 import authenticate from '../lib/authenticate'
-import { askSingle } from 'reloquent'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const [, , domain] = process.argv
+const {
+  domain,
+  help,
+} = argufy({
+  domain: {
+    command: true,
+  },
+  help: 'h',
+}, process.argv)
+
+if (help) {
+  const u = getUsage()
+  console.log(u)
+  process.exit()
+}
 
 if (!domain) {
   const u = getUsage()
@@ -54,10 +70,11 @@ const run = async () => {
   let phone
   let user
   try {
-    const { DefaultPhone, ...auth } = await getConfig({
+    const { ...auth } = await getConfig({
       global: true,
     })
-    phone = DefaultPhone
+    const { aws_id, aws_key, phone: p } = await getPrivateConfig()
+    phone = p
     user = auth.ApiUser
     if (singleWord) {
       await checkSingleWord(domain, auth)
@@ -84,6 +101,8 @@ const run = async () => {
       const authComplete = await handleRequestIP(message, { phone, user })
       if (authComplete === true) {
         await run()
+        // update the configuration to reflect the IP
+        // modify `africa` to be able to update the configuration
       } else {
         console.log(authComplete)
       }

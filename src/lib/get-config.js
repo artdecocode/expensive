@@ -31,11 +31,8 @@ const getConfig = async (config = {}) => {
     ApiUser,
     ApiKey,
     ClientIp,
-    AWS_id,
-    AWS_key,
-    DefaultPhone,
   } = await africa(p, questions, opts)
-  return { ApiUser, ApiKey, ClientIp, AWS_id, AWS_key, DefaultPhone }
+  return { ApiUser, ApiKey, ClientIp }
 }
 
 export default getConfig
@@ -45,7 +42,5 @@ export default getConfig
  * @property {string} ApiUser namecheap user
  * @property {string} ApiKey namecheap api key
  * @property {string} ClientIp client ip
- * @property {string} AWS_id aws key id
- * @property {string} AWS_key aws access key
- * @property {string} DefaultPhone Last 3 digits of the phone number
  */
+
