@@ -7,11 +7,11 @@ exports.default = void 0;
 
 var _rqt = _interopRequireDefault(require("rqt"));
 
-var _erotic = _interopRequireDefault(require("erotic"));
-
 var _querystring = require("querystring");
 
 var _util = require("util");
+
+var _erotic = _interopRequireDefault(require("erotic"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25,7 +25,7 @@ const query = async ({
   ApiKey,
   ClientIp
 }, Command, Options = {}) => {
-  const cb = (0, _erotic.default)(true);
+  const cb = (0, _erotic.default)();
   if (!Command) throw new Error('Command must be passed');
   const qs = (0, _querystring.stringify)({
     ApiUser,

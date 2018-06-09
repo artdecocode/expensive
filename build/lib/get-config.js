@@ -45,14 +45,16 @@ const getConfig = async (config = {}) => {
     ApiKey,
     ClientIp,
     AWS_id,
-    AWS_key
+    AWS_key,
+    DefaultPhone
   } = await (0, _africa.default)(p, _questions.default, opts);
   return {
     ApiUser,
     ApiKey,
     ClientIp,
     AWS_id,
-    AWS_key
+    AWS_key,
+    DefaultPhone
   };
 };
 
@@ -64,6 +66,7 @@ var _default = getConfig;
  * @property {string} ClientIp client ip
  * @property {string} AWS_id aws key id
  * @property {string} AWS_key aws access key
+ * @property {string} DefaultPhone Last 3 digits of the phone number
  */
 
 exports.default = _default;

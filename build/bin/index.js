@@ -50,13 +50,20 @@ const reportFree = (domains, freeDomains) => {
   console.log('%s% are free', percent);
 };
 
-(async () => {
+const run = async () => {
   const singleWord = (0, _lib.isSingleWord)(domain);
+  let phone;
+  let user;
 
   try {
-    const auth = await (0, _.getConfig)({
+    const {
+      DefaultPhone,
+      ...auth
+    } = await (0, _.getConfig)({
       global: true
     });
+    phone = DefaultPhone;
+    user = auth.ApiUser;
 
     if (singleWord) {
       await checkSingleWord(domain, auth);
@@ -86,34 +93,50 @@ const reportFree = (domains, freeDomains) => {
     }
 
     if (props && props.Number == '1011150') {
-      if (props.Number == '1011150') {
-        // attempt to authenticate
-        const answer = await (0, _reloquent.askQuestions)({
-          q: {
-            text: 'IP is not whitelisted. Authenticate and whitelist the IP (y/n)?',
+      const authComplete = await handleRequestIP(message, {
+        phone,
+        user
+      });
 
-            async getDefault() {
-              return 'y';
-            }
-
-          }
-        }, null, 'q');
-
-        if (answer.trim() == 'y') {
-          console.log('ok will sing in');
-          const res = await (0, _authenticate.default)();
-          debugger;
-          return;
-        }
+      if (authComplete === true) {
+        await run();
+      } else {
+        console.log(authComplete);
       }
+
+      return;
     }
 
     DEBUG ? LOG(stack) : console.error(message);
     process.exit(1);
   }
-})();
+};
+
+const handleRequestIP = async (message, {
+  phone,
+  user
+}) => {
+  const _ip = /Invalid request IP: (.+)/.exec(message);
+
+  if (!_ip) throw new Error('Could not extract IP from the error message');
+  const [, ip] = _ip;
+  const password = await (0, _reloquent.askSingle)({
+    text: `Enter password to white-list ${ip}`
+  });
+  const res = await (0, _authenticate.default)({
+    user,
+    password,
+    ip,
+    phone
+  });
+  return res;
+};
 
 const Errors = {
   1011150: 'Parameter RequestIP is invalid'
 };
+
+(async () => {
+  await run();
+})();
 //# sourceMappingURL=index.js.map
