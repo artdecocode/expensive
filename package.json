@@ -28,6 +28,9 @@
     "url": "git://github.com/artdecocode/expensive.git"
   },
   "keywords": [
+    "namecheap",
+    "domains",
+    "api",
     "expensive"
   ],
   "author": "Anton <anton@adc.sh>",
@@ -50,6 +53,7 @@
   },
   "dependencies": {
     "africa": "1.0.1",
+    "argufy": "1.0.0",
     "aws-sdk": "2.252.1",
     "chrome-launcher": "0.10.2",
     "chrome-remote-interface": "0.25.6",
@@ -57,6 +61,7 @@
     "erte": "1.1.4",
     "promto": "1.0.1",
     "reloquent": "1.0.0",
-    "rqt": "1.1.0"
+    "rqt": "1.1.0",
+    "usually": "1.0.0"
   }
 }

@@ -281,6 +281,10 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+argufy@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.0.0.tgz#7e39cdc9ec1a15a2339ef8d211d5bf45f3341f97"
+
 arr-diff@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-2.0.0.tgz#8f3b827f955a8bd669697e4a4256ac3ceae356cf"
@@ -2390,6 +2394,10 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.0.tgz#14716bf03fdfefd03040aef58d8b4b85f3a7c544"
   dependencies:
     kind-of "^6.0.2"
+
+usually@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/usually/-/usually-1.0.0.tgz#3ace5b09471ddf35cccca85971ca178b5255d4b0"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
