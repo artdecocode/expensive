@@ -1,6 +1,6 @@
 {
   "name": "expensive",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Namecheap.com API client to register and manage domains from CLI.",
   "main": "build",
   "scripts": {
