@@ -9,7 +9,8 @@
     "test-build": "BABEL_ENV=test-build yarn t test/spec",
     "test-all": "yarn-s test test-build",
     "test-watch": "yarn test --watch",
-    "start": "node src/bin/register",
+    "start": "node build/bin",
+    "dev": "NODE_DEBUG=expensive node src/bin/register",
     "s": "node build/bin",
     "lint": "eslint .",
     "e": "node example",
@@ -50,9 +51,12 @@
   "dependencies": {
     "africa": "1.0.1",
     "aws-sdk": "2.252.1",
-    "erotic": "1.1.0",
+    "chrome-launcher": "0.10.2",
+    "chrome-remote-interface": "0.25.6",
+    "erotic": "1.2.1",
     "erte": "1.1.4",
-    "reloquent": "0.2.0",
+    "promto": "1.0.1",
+    "reloquent": "1.0.0",
     "rqt": "1.1.0"
   }
 }

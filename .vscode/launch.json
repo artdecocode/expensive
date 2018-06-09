@@ -14,9 +14,12 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        // "testtt"
+        "testt"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
     }
   ]
 }

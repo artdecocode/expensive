@@ -6,12 +6,12 @@ import getUsage from './get-usage'
 import { getConfig, checkDomains } from '..'
 import { makeStartupyList, isSingleWord } from '../lib'
 import authenticate from '../lib/authenticate'
-import { askQuestions } from 'reloquent'
+import { askSingle } from 'reloquent'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
-const [,, domain] = process.argv
+const [, , domain] = process.argv
 
 if (!domain) {
   const u = getUsage()
@@ -31,7 +31,7 @@ const checkSingleWord = async (word, auth) => {
 }
 
 const reportFree = (domains, freeDomains) => {
-  const [free,, total] = domains.reduce(([f, t, tt], dd) => {
+  const [free, , total] = domains.reduce(([f, t, tt], dd) => {
     const isFree = freeDomains.some(d => d == dd)
 
     const it = isFree ? c(dd, 'green') : c(dd, 'red')
@@ -49,13 +49,16 @@ const reportFree = (domains, freeDomains) => {
   console.log('%s% are free', percent)
 }
 
-(async () => {
+const run = async () => {
   const singleWord = isSingleWord(domain)
-
+  let phone
+  let user
   try {
-    const auth = await getConfig({
+    const { DefaultPhone, ...auth } = await getConfig({
       global: true,
     })
+    phone = DefaultPhone
+    user = auth.ApiUser
     if (singleWord) {
       await checkSingleWord(domain, auth)
       return
@@ -78,29 +81,40 @@ const reportFree = (domains, freeDomains) => {
     }
 
     if (props && props.Number == '1011150') {
-      if (props.Number == '1011150') {
-        // attempt to authenticate
-        const answer = await askQuestions({
-          q: {
-            text: 'IP is not whitelisted. Authenticate and whitelist the IP (y/n)?',
-            async getDefault() {
-              return 'y'
-            },
-          },
-        }, null, 'q')
-        if (answer.trim() == 'y') {
-          console.log('ok will sing in')
-          const res = await authenticate()
-          debugger
-          return
-        }
+      const authComplete = await handleRequestIP(message, { phone, user })
+      if (authComplete === true) {
+        await run()
+      } else {
+        console.log(authComplete)
       }
+      return
     }
+
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
-})()
+}
+
+const handleRequestIP = async (message, { phone, user }) => {
+  const _ip = /Invalid request IP: (.+)/.exec(message)
+  if (!_ip) throw new Error('Could not extract IP from the error message')
+  const [, ip] = _ip
+  const password = await askSingle({
+    text: `Enter password to white-list ${ip}`,
+  })
+  const res = await authenticate({
+    user,
+    password,
+    ip,
+    phone,
+  })
+  return res
+}
 
 const Errors = {
   1011150: 'Parameter RequestIP is invalid',
 }
+
+;(async () => {
+  await run()
+})()

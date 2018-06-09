@@ -6,7 +6,9 @@
 npm i -g expensive
 ```
 
-`expensive` is a Namecheap.com API client to check domain availability, register, create Route 53 record zone and assign name servers via CLI. The package significantly reduces the chore associated with doing all these routine things.
+`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register, create Route 53 record zone and assign name servers via CLI. The package significantly reduces the chore associated with performing all these routine things when creating new websites.
+
+The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
 
 ## Settings Initialisation
 
@@ -132,6 +134,6 @@ The following are free: testtt.co
 
 ---
 
-(c) [artdecocode][1] 2018
+(c) [Art Deco Code][1] 2018
 
 [1]: https://artdeco.bz

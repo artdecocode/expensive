@@ -1,7 +1,8 @@
 import rqt from 'rqt'
-import erotic from 'erotic'
 import { stringify } from 'querystring'
 import { debuglog } from 'util'
+import erotic from 'erotic'
+
 const LOG = debuglog('expensive')
 
 /** @param {string} s */
@@ -12,7 +13,7 @@ const query = async ({
   ApiKey,
   ClientIp,
 }, Command, Options = {}) => {
-  const cb = erotic(true)
+  const cb = erotic()
   if (!Command) throw new Error('Command must be passed')
   const qs = stringify({
     ApiUser,
