@@ -7,21 +7,39 @@ var _erte = require("erte");
 
 var _util = require("util");
 
+var _reloquent = require("reloquent");
+
+var _argufy = _interopRequireDefault(require("argufy"));
+
 var _getUsage = _interopRequireDefault(require("./get-usage"));
 
 var _ = require("..");
+
+var _privateConfig = _interopRequireDefault(require("../lib/private-config"));
 
 var _lib = require("../lib");
 
 var _authenticate = _interopRequireDefault(require("../lib/authenticate"));
 
-var _reloquent = require("reloquent");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const LOG = (0, _util.debuglog)('expensive');
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG);
-const [,, domain] = process.argv;
+const {
+  domain,
+  help
+} = (0, _argufy.default)({
+  domain: {
+    command: true
+  },
+  help: 'h'
+}, process.argv);
+
+if (help) {
+  const u = (0, _getUsage.default)();
+  console.log(u);
+  process.exit();
+}
 
 if (!domain) {
   const u = (0, _getUsage.default)();
@@ -56,13 +74,16 @@ const run = async () => {
   let user;
 
   try {
-    const {
-      DefaultPhone,
-      ...auth
+    const { ...auth
     } = await (0, _.getConfig)({
       global: true
     });
-    phone = DefaultPhone;
+    const {
+      aws_id,
+      aws_key,
+      phone: p
+    } = await (0, _privateConfig.default)();
+    phone = p;
     user = auth.ApiUser;
 
     if (singleWord) {
@@ -99,7 +120,8 @@ const run = async () => {
       });
 
       if (authComplete === true) {
-        await run();
+        await run(); // update the configuration to reflect the IP
+        // modify `africa` to be able to update the configuration
       } else {
         console.log(authComplete);
       }
