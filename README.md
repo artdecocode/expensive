@@ -20,7 +20,7 @@ api key https://ap.www.namecheap.com/settings/tools/apiaccess/: <api key accesse
 client ip [10.10.10.10]: <the ip>
 ```
 
-After they've been answered, the program will remember the answers and store them in `.expensiverc` file the the home directory, and use this data for all subsequent calls to the API. These are also available to other programs which want to use the API.
+After they've been answered, `expensive` will remember the answers and store them in `.expensiverc` file in the home directory, and use this data for all subsequent calls to the API. These are also available to other programs which want to use the API and can be read with `getConfig` when using the package programmatically (see below).
 
 There are additional questions which are required for specific features:
 
@@ -32,15 +32,19 @@ AWS secret access key: <aws-key>
 
 These are stored in the `.expensive-client.rc` and are not shared with other software.
 
+The last 3 digits will be used to automatically login and white-list an IP address, and aws keys are used for Route 53 access.
+
 ## `CLI`
 
 The usage is as follows:
 
 ```fs
-expensive
-  domain          check a domain name in various startupy zones
-                  (.io, .cc, .co, .bz, .app)
-  domain.com      check a domain name
+  expensive [command]
+
+        domain          check a domain name in various tech zones
+                        (.co, .cc, .io, .bz, .app)
+        domain.com      check a domain name
+        -h, --help      print usage information
 ```
 
 ```sh
@@ -62,15 +66,17 @@ expensive testt
 <!--
 The package also supports a Node.js API. The authentication is completed in the same way as the CLI, that is by reading the `.expensiverc` file or presenting questions. If `global` parameter is not set to true, and the `packageName` is not given, the function will throw. You must provide either a `packageName` or set `global` to true so that the `~/.expensiverc` can be read. N-O-N-E-T-H-E-L-E-S-S it is a good idea to provide a `packageName` so that a personal config in form of `.${packageName}-expensiverc` is generated. -->
 
-### `getConfig`
+On top of a CLI application, the package provides means to query _namecheap_ API.
 
-This will read the `rc` file (or ask questions to create one) for the given details. If `global` is set to true, the `HOME/.expensiverc` is looked up, and if you provide the `packageName`, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file.
+### `getConfig(options: Object)`
 
-- `packageName`
-- `global`
-- `opts`
+Reads the `rc` file (or ask questions to create one) for given details: if `global` is set to true, the `HOME/.expensiverc` is looked up, and if `packageName` is provided, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file with the API key, or have separate configurations.
 
-The rc file will only contain the following details required for API calls:
+- `packageName`: name of the package implementing `expensive`, or
+- `global`: a boolean to indicate that the global `.expensiverc` should be used
+- `opts`: other options accepted by [`africa`](https://npmjs.org/package/africa).
+
+The `rc` file will only contain the following details required for API calls:
 
 ```sh
 {
