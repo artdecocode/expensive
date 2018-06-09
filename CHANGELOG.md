@@ -1,9 +1,8 @@
-## 7 June 2018
+## 9 June 2018
 
 ### 1.1.0
 
-- [feature ]
-- [code] refactor code
+- [feature] authenticate with chrome and white-list domains
 
 ## 6 June 2018
 
