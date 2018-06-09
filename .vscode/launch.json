@@ -14,7 +14,7 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "test.co"
+        "testt"
       ],
       "console": "integratedTerminal",
       "skipFiles": [
