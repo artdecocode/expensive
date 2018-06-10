@@ -152,6 +152,34 @@ The following are free: testtt.co
 ✨  Done in 3.04s.
 ```
 
+## Security
+
+When white-listing the IP addresses via the Chrome automation script, `expensive` will use the username stored in the config file, and ask for the password. The password is not stored anywhere apart from the program's memory and then used for authorisation on the `namecheap.com` website, and as a confirmation password when adding a new white-listed IP address.
+
+You can install the package from github after you're happy with the source code, using the following command:
+
+```sh
+npm i -g artdecocode/expensive#1.2.0
+```
+
+This will fetch the package from GitHub, and not registry. If it was possible to see the git sha sum of the commit in `yarn info package` then it would not have been necessary, because one can compare source code against the commit number. By installing from GitHub directly, one can know what they install.
+
+<!-- You should inspect the source code of this package and possibly install from the source code and not npm with the following command.
+
+```sh
+npm i -g artdecocode/expensive#v1.1.0
+``` -->
+
+## Errors and Troubleshooting
+
+`expensive` will display an error text when an error happens during its execution.
+
+### `getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`
+
+This error means that there's no internet access.
+
+Check that the computer is connected to the internet.
+
 ---
 
 (c) [Art Deco Code][1] 2018
