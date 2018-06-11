@@ -10,6 +10,10 @@ import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
 import authenticate from '../lib/authenticate'
 import { launch } from 'chrome-launcher'
+// import { homedir } from 'os'
+// import { resolve } from 'path'
+import africa from 'africa'
+import questions from '../questions'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -17,11 +21,13 @@ const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 const {
   domain,
   help,
+  init,
 } = argufy({
   domain: {
     command: true,
   },
   help: 'h',
+  init: { short: 'I', boolean: true },
 }, process.argv)
 
 if (help) {
@@ -30,12 +36,12 @@ if (help) {
   process.exit()
 }
 
-if (!domain) {
-  const u = getUsage()
-  console.log(u)
-  console.log()
-  process.exit(1)
-}
+// if (domain) {
+//   const u = getUsage()
+//   console.log(u)
+//   console.log()
+//   process.exit(1)
+// }
 
 const checkSingleWord = async (word, auth) => {
   const domains = makeStartupyList(word)
@@ -146,6 +152,10 @@ const Errors = {
   1011150: 'Parameter RequestIP is invalid',
 }
 
-;(async () => {
-  await run()
+; (async () => {
+  if (init) {
+    await africa('expensive', questions, { force: true })
+  } else {
+    await run()
+  }
 })()
