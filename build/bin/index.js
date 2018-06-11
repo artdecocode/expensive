@@ -21,6 +21,8 @@ var _lib = require("../lib");
 
 var _authenticate = _interopRequireDefault(require("../lib/authenticate"));
 
+var _chromeLauncher = require("chrome-launcher");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const LOG = (0, _util.debuglog)('expensive');
@@ -142,14 +144,20 @@ const handleRequestIP = async (message, {
 
   if (!_ip) throw new Error('Could not extract IP from the error message');
   const [, ip] = _ip;
-  const password = await (0, _reloquent.askSingle)({
+  const [password, chrome] = await Promise.all([(0, _reloquent.askSingle)({
     text: `Enter password to white-list ${ip}`
-  });
+  }), (0, _chromeLauncher.launch)({
+    startingUrl: 'https://www.namecheap.com/myaccount/login.aspx',
+    chromeFlags: [// userDataDir,
+      // '--headless', '--disable-gpu', '--window-size=1000,2000'
+    ]
+  })]);
   const res = await (0, _authenticate.default)({
     user,
     password,
     ip,
-    phone
+    phone,
+    chrome
   });
   return res;
 };
