@@ -14,6 +14,8 @@
     "s": "node build/bin",
     "lint": "eslint .",
     "e": "node example",
+    "man": "man man/doc.1",
+    "m": "man man/doc.1",
     "example/": "yarn e example/example.js",
     "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
   },
@@ -53,7 +55,7 @@
     "zoroaster": "2.1.0"
   },
   "dependencies": {
-    "africa": "1.0.1",
+    "africa": "1.1.0",
     "argufy": "1.0.0",
     "aws-sdk": "2.252.1",
     "chrome-launcher": "0.10.2",
