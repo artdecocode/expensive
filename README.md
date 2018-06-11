@@ -17,9 +17,9 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Reporting](#reporting)
 - [Route 53](#route-53)
 - [CLI](#cli)
-- [API](#cli)
-  * [`getConfig(options: Object): Config`](#getConfigoptions-Object-Config)
-  * [`checkDomains(options: Object): Array`](#checkDomainsoptions-Object-Array)
+- [API](#api)
+  * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
+  * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
 
 ## Settings
 
