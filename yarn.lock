@@ -281,9 +281,9 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-argufy@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.0.0.tgz#7e39cdc9ec1a15a2339ef8d211d5bf45f3341f97"
+argufy@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.0.1.tgz#ba172005436d559351f009b0a64cf4df774803d0"
 
 arr-diff@^2.0.0:
   version "2.0.0"
@@ -359,9 +359,9 @@ atob@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.1.tgz#ae2d5a729477f289d60dd7f96a6314a22dd6c22a"
 
-aws-sdk@2.252.1:
-  version "2.252.1"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.252.1.tgz#4ce45b16dc408883e20a564bd86270c67f25bb60"
+aws-sdk@2.254.1:
+  version "2.254.1"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.254.1.tgz#70d0a97bac0d5e8ceaf36ddb6b3651f01da4790e"
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -1982,12 +1982,6 @@ regex-not@^1.0.0, regex-not@^1.0.2:
 regexpp@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/regexpp/-/regexpp-1.1.0.tgz#0e3516dd0b7904f413d2d4193dce4618c3a689ab"
-
-reloquent@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/reloquent/-/reloquent-1.0.0.tgz#a119ffab79b6e8cedb0dac974474ce02782e9925"
-  dependencies:
-    promto "1.0.1"
 
 reloquent@1.0.1:
   version "1.0.1"
