@@ -9,6 +9,7 @@ import { getConfig, checkDomains } from '..'
 import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
 import authenticate from '../lib/authenticate'
+import { launch } from 'chrome-launcher'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -118,14 +119,25 @@ const handleRequestIP = async (message, { phone, user }) => {
   const _ip = /Invalid request IP: (.+)/.exec(message)
   if (!_ip) throw new Error('Could not extract IP from the error message')
   const [, ip] = _ip
-  const password = await askSingle({
-    text: `Enter password to white-list ${ip}`,
-  })
+  const [password, chrome] = await Promise.all([
+    askSingle({
+      text: `Enter password to white-list ${ip}`,
+    }),
+    launch({
+      startingUrl: 'https://www.namecheap.com/myaccount/login.aspx',
+      chromeFlags: [
+        // userDataDir,
+        // '--headless', '--disable-gpu', '--window-size=1000,2000'
+      ],
+    }),
+  ])
+
   const res = await authenticate({
     user,
     password,
     ip,
     phone,
+    chrome,
   })
   return res
 }

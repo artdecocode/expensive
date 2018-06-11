@@ -67,7 +67,7 @@ expensive testt
 <!--
 The package also supports a Node.js API. The authentication is completed in the same way as the CLI, that is by reading the `.expensiverc` file or presenting questions. If `global` parameter is not set to true, and the `packageName` is not given, the function will throw. You must provide either a `packageName` or set `global` to true so that the `~/.expensiverc` can be read. N-O-N-E-T-H-E-L-E-S-S it is a good idea to provide a `packageName` so that a personal config in form of `.${packageName}-expensiverc` is generated. -->
 
-On top of a CLI application, the package provides means to query _namecheap_ API.
+On top of the CLI application, the package provides means to query _namecheap_ API.
 
 ### `getConfig(options: Object)`
 
@@ -159,7 +159,7 @@ When white-listing the IP addresses via the Chrome automation script, `expensive
 You can install the package from github after you're happy with the source code, using the following command:
 
 ```sh
-npm i -g artdecocode/expensive#1.2.0
+npm i -g artdecocode/expensive#v1.2.0
 ```
 
 This will fetch the package from GitHub, and not registry. If it was possible to see the git sha sum of the commit in `yarn info package` then it would not have been necessary, because one can compare source code against the commit number. By installing from GitHub directly, one can know what they install.
