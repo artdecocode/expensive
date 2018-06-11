@@ -1,8 +1,8 @@
 ## 11 June 2018
 
-## 1.2.1
+## 1.2.2
 
-- [docs] update readme
+- [docs] add man page, update readme
 
 ## 1.2.1
 

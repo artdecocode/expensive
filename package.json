@@ -23,6 +23,7 @@
   "bin": {
     "expensive": "build/bin/index.js"
   },
+  "man": "./man/doc.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/artdecocode/expensive.git"
