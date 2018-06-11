@@ -22,13 +22,24 @@ const {
   domain,
   help,
   init,
+  version,
 } = argufy({
   domain: {
     command: true,
   },
-  help: 'h',
+  version: {
+    short: 'v',
+    boolean: true,
+  },
+  help: { short: 'h', boolean: true },
   init: { short: 'I', boolean: true },
 }, process.argv)
+
+if (version) {
+  const { version: v } = require('../../package.json')
+  console.log(v)
+  process.exit()
+}
 
 if (help) {
   const u = getUsage()
