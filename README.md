@@ -20,6 +20,9 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
   * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
+- [Security](#security)
+- [Errors and Troubleshooting](#errors-and-troubleshooting)
+  * [`getaddrinfo ENOTFOUND api.namecheap.com`](#getaddrinfo-enotfound-apinamecheapcom-apinamecheapcom443)
 
 ## Settings
 
