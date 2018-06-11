@@ -2,7 +2,6 @@
 
 [![npm version](https://badge.fury.io/js/expensive.svg)](https://badge.fury.io/js/expensive)
 
-
 `expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
 
 ```sh
@@ -11,6 +10,16 @@ npm i -g expensive
 ```
 
 The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
+
+## Table Of Contents
+
+- [Settings](#settings)
+- [Reporting](#reporting)
+- [Route 53](#route-53)
+- [CLI](#cli)
+- [API](#cli)
+  * [`getConfig(options: Object): Config`](#getConfigoptions-Object-Config)
+  * [`checkDomains(options: Object): Array`](#checkDomainsoptions-Object-Array)
 
 ## Settings
 
@@ -114,7 +123,7 @@ The package also supports a Node.js API. The authentication is completed in the 
 
 On top of the CLI application, the package provides means to query _namecheap_ API.
 
-### `getConfig(options: Object)`
+### `getConfig(options: Object): Config`
 
 Reads the `rc` file (or ask questions to create one) for given details: if `global` is set to true, the `HOME/.expensiverc` is looked up, and if `packageName` is provided, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file with the API key, or have separate configurations.
 
@@ -134,7 +143,7 @@ The `rc` file will only contain the following details required for API calls:
 
 Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
 
-### `checkDomains`
+### `checkDomains(options: Object): Array`
 
 This method returns a list of free domains for the request. Either domains, or a single domain must be passed. The method also expects to see Auth details (from the config object), and these can be passed by using the destructuring.
 
