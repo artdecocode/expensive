@@ -7,7 +7,7 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl rih
-.Op Fl -help
+.Op Fl -help|init
 [\fIdomain.com\fP]
 .Sh DESCRIPTION
 The
@@ -29,6 +29,8 @@ Register a new domain.
 Create a new hosted zone for the domain and assign its name servers.
 .It Fl -help
 Display the usage information and exit.
+.It Fl -init
+Initialise the configuration files.
 .It Ar domain.com
 A domain for which to apply the above operations
 .El
