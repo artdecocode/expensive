@@ -2,12 +2,13 @@
 
 [![npm version](https://badge.fury.io/js/expensive.svg)](https://badge.fury.io/js/expensive)
 
+
+`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
+
 ```sh
 # install node with nvm https://github.com/creationix/nvm
 npm i -g expensive
 ```
-
-`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
 
 The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
 
@@ -15,7 +16,7 @@ The CLI client can also perform web-based authentication via Chrome's automation
 
 Upon the first run the program will ask a series of questions:
 
-```
+```fs
 username: <namecheap-username>
 api key https://ap.www.namecheap.com/settings/tools/apiaccess/: <api key accessed at the given page>
 client ip [10.10.10.10]: <the ip>
@@ -33,7 +34,38 @@ AWS secret access key: <aws-key>
 
 These are stored in the `.expensive-client.rc` and are not shared with other software.
 
-The last 3 digits will be used to automatically login and white-list an IP address, and aws keys are used for Route 53 access.
+The last 3 digits will be used to automatically login and white-list an IP address, and AWS keys are used for Route 53 access.
+
+## Reporting
+
+To see the status of all domains printed in the console, use the info extension (`-i`). If google position ranking is set up with `-g domai.ne`, then the information utility will print the rank for the conditioned keyword. Visits are accessed from [demimonde.cc](https://demimonde.cc) which is an elastic search gathering engine.
+
+```sh
+expensive -i
+```
+
+| domain       | expire in | dns         | visits | google |
+|--------------|-----------|-------------|--------|--------|
+| example1.com | 189 days  | dns.dns.com | 550    | 3      |
+|              |           |             |        |        |
+|              |           |             |        |        |
+
+## Health Check
+
+Run a health check against a domain. This will make Chrome visit the page and check that it loads.
+
+```sh
+expensive -h example.com
+```
+
+## Route 53
+
+Creation of the hosted zones is implemented with Route 53 API. A new hosted zone can be created for a domain, and its name servers set via namecheap API.
+
+```sh
+expensive example.com -r
+# create a hosted zone and assign name servers
+```
 
 ## `CLI`
 
