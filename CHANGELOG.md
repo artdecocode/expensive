@@ -2,6 +2,7 @@
 
 ## 1.2.0
 
+- [code] White-list IP with a `fetch` request rather than key simulation automation.
 - [doc] Add a note about security and installing from GitHub, describe offline error.
 
 ## 9 June 2018
