@@ -14,8 +14,8 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "demimonde.cc",
-        "-H"
+        "grovy.io",
+        "-i"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

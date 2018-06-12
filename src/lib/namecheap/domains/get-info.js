@@ -2,48 +2,71 @@ import query from '../../../lib/query'
 
 const GET_INFO = 'namecheap.domains.getinfo'
 
-const execRe = (re, s) => {
-  const [, arg] = re.exec(s) || []
-  return arg
+const execRes = (re, s) => {
+  const res = re.exec(s)
+  if (!res) return res
+  const [, ...args] = res
+  return args
+}
+
+const propsRe = /(\w+)="(.*?)"/g
+const extractProps = (s) => {
+  let t
+  const r = []
+  while((t = propsRe.exec(s)) !== null) {
+    const [, key, value] = t
+    r.push({
+      key,
+      value,
+    })
+  }
+  return r.reduce((acc, { key, value }) => ({
+    ...acc,
+    [key]: value,
+  }), {})
+}
+
+const extractTag = (tag, string) => {
+  const re = new RegExp(`<${tag}(.*?)/?>(?:([\\s\\S]+?)</${tag}>)?`, 'g')
+  const r = []
+
+  let t
+  while ((t = execRes(re, string)) !== null) {
+    if (!t.length) continue
+    const [p, c = ''] = t
+    const props = extractProps(p)
+    const item = {
+      props,
+      content: c.trim(),
+    }
+    r.push(item)
+  }
+  return r
 }
 
 /**
- * @typedef {Object} Config
- * @property {string} ApiUser username
- * @property {string} ApiKey api key from the tools
- * @property {string} ClientIp white-listed client ip
- * @property {string} domain a domain name to view info for.
- *
- * @param {Config} config the configuration
- * @returns {string[]} an array with free domains
+ * @param {string} domain a domain name to view info for.
  */
 const getInfo = async (domain, Auth = {}) => {
   const res = await query({
     ...Auth,
   }, GET_INFO, { DomainName: domain })
 
-  const created = execRe(/<CreatedDate>(.+?)<\/CreatedDate>/, res)
-  const expired = execRe(/<ExpiredDate>(.+?)<\/ExpiredDate>/, res)
-  const whois = execRe(/<Whoisguard Enabled="(True|False)"/, res)
-  debugger
-  // const re = /DomainCheckResult Domain="(.+?)" Available="(true|false)"/gm
-  // let e
-  // const results = []
-  // while(e = re.exec(res)) { // eslint-disable-line
-  //   const [, name, f] = e
-  //   const free = f == 'true'
-  //   results.push({ name, free })
-  // }
-  // const f = results.filter(({ free }) => free)
-  // const m = f.map(({ name }) => name)
-  // return m
+  const [{ content: DomainDetails }] = extractTag('DomainDetails', res)
+  const [{ content: Created }] = extractTag('CreatedDate', DomainDetails)
+  const [{ content: Expired }] = extractTag('ExpiredDate', DomainDetails)
+  const [{ content: Whoisguard, props: WhoisProps }] = extractTag('Whoisguard', res)
+  const [{ props: EmailDetails } = {}] = extractTag('EmailDetails', Whoisguard)
+  const [{ content: DnsDetails, props: DnsProps }] = extractTag('DnsDetails', res)
+  const Nameservers = extractTag('Nameserver', DnsDetails).map(({ content }) => content)
+  return {
+    Created,
+    Expired,
+    WhoisEnabled: WhoisProps.Enabled,
+    Nameservers,
+    EmailDetails,
+    DnsProps,
+  }
 }
 
 export default getInfo
-
-// DnsDetails ProviderType="CUSTOM" IsUsingOurDNS="false" HostCount="2" EmailType="FWD" DynamicDNSStatus="false" IsFailover="false"
-// Whoisguard Enabled="True"
-
-//
-// <CreatedDate>06/05/2018</CreatedDate>
-// <ExpiredDate>06/05/2019</ExpiredDate>

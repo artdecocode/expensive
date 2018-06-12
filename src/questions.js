@@ -21,14 +21,14 @@ export default {
 
 export const privateQuestions = {
   phone: {
-    text: 'Last 3 digit of phone to use for 2 factor auth: ',
+    text: 'Last 3 digit of phone to use for 2 factor auth',
   },
   aws_id: {
-    text: 'AWS access key id: ',
+    text: 'AWS access key id',
     validation: a => { if (!a) console.warn('without aws key the route 53 updates won\'t work' ) },
   },
   aws_key: {
-    text: 'AWS secret access key: ',
+    text: 'AWS secret access key',
     validation: a => { if (!a) console.warn('without aws key the route 53 updates won\'t work' ) },
   },
 }

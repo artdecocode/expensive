@@ -9,7 +9,7 @@ import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
 import handleRequestIP from '../lib/authenticate/handle-request-ip'
 import africa from 'africa'
-import questions from '../questions'
+import questions, { privateQuestions } from '../questions'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -83,6 +83,22 @@ const reportFree = (domains, freeDomains) => {
   console.log('%s% are free', percent)
 }
 
+const printInfo = ({
+  Created,
+  Expired,
+  WhoisEnabled,
+  Nameservers,
+  EmailDetails,
+  DnsProps,
+}) => {
+  console.log('Created:\t%s', Created)
+  console.log('Expires on:\t%s', Expired)
+  console.log('Whois enabled:\t%s', WhoisEnabled)
+  if (Nameservers) console.log('Nameservers:\t%s', Nameservers.join(', '))
+  if (EmailDetails) console.log('Whois email:\t%s', EmailDetails.ForwardedTo)
+  if (DnsProps) console.log('DNS:\t\t%s', c(DnsProps.ProviderType, DnsProps.ProviderType == 'FREE' ? 'red' : 'green'))
+}
+
 const run = async () => {
   const singleWord = isSingleWord(domain)
   let phone
@@ -96,7 +112,8 @@ const run = async () => {
     user = Auth.ApiUser
 
     if (info) {
-      await getInfo(domain, Auth)
+      const i = await getInfo(domain, Auth)
+      printInfo(i)
       return
     }
 
@@ -149,6 +166,7 @@ const Errors = {
 ; (async () => {
   if (init) {
     await africa('expensive', questions, { force: true })
+    await africa('expensive-client', privateQuestions, { force: true })
     return
   }
   await run()
