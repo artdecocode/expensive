@@ -17,6 +17,7 @@
     "man": "man man/doc.1",
     "m": "man man/doc.1",
     "doc": "doc -t README-source.md -r -o README.md",
+    "record": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/example.js",
     "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
   },

@@ -85,10 +85,10 @@ expensive example.com -r
 
 ## CLI
 
-The usage is as follows:
+The program can be used from a terminal.
 
 ```fs
-  expensive [command]
+  expensive -Ihv [domain.co]
 
         domain          check a domain name in various tech zones
                         (.co, .cc, .io, .bz, .app)
@@ -97,14 +97,34 @@ The usage is as follows:
         -v, --version   print package's version
 ```
 
+### Domain Check
+
 <table>
 <tr><td>
   <img alt="testing a domain in tech zones" src="doc/tech.gif" />
 </td></tr>
 <tr><td>
-  Recorded with <a href="https://appshot.io">appshot</a>.
+  <!-- Recorded with <a href="https://appshot.io">appshot</a>. -->
+  To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
+```sh
+expensive testt
+```
 </td></tr>
 </table>
+
+<table>
+<tr><td>
+  <img alt="testing a single domain" src="doc/single.gif" />
+</td></tr>
+<tr><td>
+  <!-- Recorded with <a href="https://appshot.io">appshot</a>. -->
+  To check a single domain, pass the domain name, e.g.,
+```sh
+expensive testt.co
+```
+</td></tr>
+</table>
+
 
 ### `-i`, `--info`: Domain Information
 
