@@ -97,9 +97,14 @@ The usage is as follows:
         -v, --version   print package's version
 ```
 
-<table><tr><td>
+<table>
+<tr><td>
   <img alt="testing a domain in tech zones" src="doc/tech.gif" />
-</td></tr></table>
+</td></tr>
+<tr><td>
+  Recorded with <a href="https://appshot.io">appshot</a>.
+</td></tr>
+</table>
 
 ### `-i`, `--info`: Domain Information
 
@@ -271,3 +276,4 @@ Check that the computer is connected to the internet.
 (c) [Art Deco Code][1] 2018
 
 [1]: https://artdeco.bz
+[2]: https://appshot.io
