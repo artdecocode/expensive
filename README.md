@@ -80,8 +80,7 @@ The program can be used from a terminal.
 To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 
 <details>
-  <summary>`expensive testt`</summary>
-
+  <summary><code>expensive testt</code></summary>
   <table>
   <tr><td>
     <img alt="Checking a domain in tech zones." src="doc/tech.gif" />
@@ -94,8 +93,7 @@ To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 To check a single domain, pass the domain name, e.g.,
 
 <details>
-  <summary>`expensive testt.co`</summary>
-
+  <summary><code>expensive testt.co</code></summary>
   <table>
   <tr><td>
     <img alt="Checking a single domain." src="doc/single.gif" />
