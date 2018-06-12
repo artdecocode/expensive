@@ -17,11 +17,14 @@ var _reloquent = require("reloquent");
 
 var _lib = require("./lib");
 
+var _fs = require("fs");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* eslint-disable no-console */
 // eslint-disable-line no-unused-vars
 const LOG = (0, _util.debuglog)('expensive');
+const url = 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips';
 
 const authenticate = async ({
   user,
@@ -39,6 +42,7 @@ const authenticate = async ({
 
   let client;
   let res;
+  let Page;
 
   try {
     client = await (0, _chromeRemoteInterface.default)({
@@ -46,11 +50,13 @@ const authenticate = async ({
     });
     const {
       Network,
-      Page,
       DOM,
       Runtime,
       Input
     } = client;
+    ({
+      Page
+    } = client);
     Network.requestIntercepted(({
       interceptionId,
       request
@@ -58,7 +64,7 @@ const authenticate = async ({
       const blocked = (0, _lib.isBlocked)(request.url);
 
       if (!blocked) {
-        console.log(request.url);
+        LOG(request.url);
       }
 
       Network.continueInterceptedRequest({
@@ -70,9 +76,17 @@ const authenticate = async ({
     await Network.enable();
     await Page.enable();
     await DOM.enable();
-    await Runtime.enable(); // await Network.setRequestInterception({ patterns: [{ urlPattern: '*' }] })
-    // await Network.setCacheDisabled({ cacheDisabled: true })
+    await Runtime.enable();
+    await Network.setRequestInterception({
+      patterns: [{
+        urlPattern: '*'
+      }]
+    }); // await Network.setCacheDisabled({ cacheDisabled: true })
 
+    await Page.navigate({
+      url: `https://www.namecheap.com/myaccount/login-signup.aspx?ReturnUrl=${encodeURIComponent(url)}`
+    });
+    await Page.loadEventFired();
     await login(Runtime, {
       user,
       password
@@ -83,10 +97,8 @@ const authenticate = async ({
     await Page.loadEventFired();
     await enterCode(Runtime);
     await Page.loadEventFired();
-    await Page.navigate({
-      url: 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips'
-    });
-    await Page.loadEventFired();
+    const a = await (0, _lib.evaluate)(Runtime, 'location.href');
+    (0, _assert.equal)(a, url, `Unexpected url: ${a}`);
     await addIpAddress(Runtime, Input, {
       ip,
       password
@@ -97,6 +109,8 @@ const authenticate = async ({
     res = err.message;
   } finally {
     if (client) {
+      // const { data } = await Page.captureScreenshot()
+      // writeFileSync('debug.png', Buffer.from(data, 'base64'))
       await client.close();
     }
   }
@@ -199,15 +213,9 @@ const login = async (Runtime, {
   user,
   password
 }) => {
-  await Runtime.evaluate({
-    expression: `document.querySelector("input.nc_username").value = "${user}"`
-  });
-  await Runtime.evaluate({
-    expression: `document.querySelector("input.nc_password").value = "${password}"`
-  });
-  await Runtime.evaluate({
-    expression: 'document.querySelector("input.nc_login_submit").click()'
-  });
+  await (0, _lib.setValue)(Runtime, 'input.nc_username', user);
+  await (0, _lib.setValue)(Runtime, 'input.nc_password', password);
+  await (0, _lib.click)(Runtime, 'input.nc_login_submit');
 };
 
 const selectPhone = async (Runtime, phone) => {

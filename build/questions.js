@@ -11,13 +11,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var _default = {
   ApiUser: {
-    text: 'username: ',
+    text: 'username',
     validation: a => {
       if (!a) throw new Error('Please enter the namecheap username.');
     }
   },
   ApiKey: {
-    text: 'api key https://ap.www.namecheap.com/settings/tools/apiaccess/: ',
+    text: 'api key https://ap.www.namecheap.com/settings/tools/apiaccess/',
     validation: a => {
       if (!a) throw new Error('Please provide the namecheap api key.');
     }
@@ -36,16 +36,16 @@ var _default = {
 exports.default = _default;
 const privateQuestions = {
   phone: {
-    text: 'Last 3 digit of phone to use for 2 factor auth: '
+    text: 'Last 3 digit of phone to use for 2 factor auth'
   },
   aws_id: {
-    text: 'AWS access key id: ',
+    text: 'AWS access key id',
     validation: a => {
       if (!a) console.warn('without aws key the route 53 updates won\'t work');
     }
   },
   aws_key: {
-    text: 'AWS secret access key: ',
+    text: 'AWS secret access key',
     validation: a => {
       if (!a) console.warn('without aws key the route 53 updates won\'t work');
     }

@@ -9,6 +9,12 @@ Object.defineProperty(exports, "checkDomains", {
     return _check.default;
   }
 });
+Object.defineProperty(exports, "getInfo", {
+  enumerable: true,
+  get: function () {
+    return _getInfo.default;
+  }
+});
 Object.defineProperty(exports, "getConfig", {
   enumerable: true,
   get: function () {
@@ -17,6 +23,8 @@ Object.defineProperty(exports, "getConfig", {
 });
 
 var _check = _interopRequireDefault(require("./lib/namecheap/domains/check"));
+
+var _getInfo = _interopRequireDefault(require("./lib/namecheap/domains/get-info"));
 
 var _getConfig = _interopRequireDefault(require("./lib/get-config"));
 

@@ -115,7 +115,7 @@ const isBlocked = url => {
 };
 
 exports.isBlocked = isBlocked;
-const blockedExtensions = ['css', 'png', 'svg', 'woff', 'ttf', 'GetCartTotalAndItemCount', 'Domains/.+', 'ExpiringSoon/.+'];
+const blockedExtensions = ['css', 'png', 'svg', 'woff', 'ttf', 'assets/css', 'cart'];
 const s = blockedExtensions.join('|');
 const re = new RegExp(`(${s})$`);
 const numberRe = /(.+?)(\d\d\d)$/;
