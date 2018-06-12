@@ -19,6 +19,8 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Route 53](#route-53)
 - [CLI](#cli)
   * [Domain Check](#domain-check)
+    * [Tech Zones](#tech-zones)
+    * [Single Domains](#single-domains)
   * [`-i`, `--info`: Domain Information](#-i---info-domain-information)
   * [`-d`, `--dns`: Manage DNS](#-d---dns-manage-dns)
   * [`-r`, `--register`: Register Domain](#-r---register-register-domain)
@@ -104,30 +106,46 @@ The program can be used from a terminal.
 
 ### Domain Check
 
-<table>
-<tr><td>
-  <img alt="testing a domain in tech zones" src="doc/tech.gif" />
-</td></tr>
-<tr><td>
-    To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
+To perform whether a domain is free or taken, simply pass the domain name.
+
+#### Tech Zones
+
+To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
+
 ```sh
 expensive testt
 ```
-</td></tr>
-</table>
 
-<table>
-<tr><td>
-  <img alt="testing a single domain" src="doc/single.gif" />
-</td></tr>
-<tr><td>
-    To check a single domain, pass the domain name, e.g.,
+<details>
+  <summary>Preview tech zones check</summary>
+  <table>
+  <tr><td>
+    <img alt="testing a domain in tech zones" src="doc/tech.gif" />
+  </td></tr>
+  <tr><td>
+  </td></tr>
+  </table>
+</details>
+
+#### Single Domains
+
+To check a single domain, pass the domain name, e.g.,
+
 ```sh
 expensive testt.co
 ```
-</td></tr>
-</table>
 
+
+<details>
+  <summary>Preview single domain check</summary>
+  <table>
+  <tr><td>
+    <img alt="testing a single domain" src="doc/single.gif" />
+  </td></tr>
+  <tr><td>
+      </td></tr>
+  </table>
+</details>
 
 ### `-i`, `--info`: Domain Information
 
