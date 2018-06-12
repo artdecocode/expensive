@@ -2,14 +2,13 @@
 /* eslint-disable no-console */
 import { c } from 'erte'
 import { debuglog, inspect } from 'util'
-import { askSingle } from 'reloquent'
 import argufy from 'argufy'
 import getUsage from './get-usage'
 import { getConfig, checkDomains } from '..'
 import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
-import authenticate from '../lib/authenticate'
-import { launch } from 'chrome-launcher'
+import handleRequestIP from '../lib/authenticate/handle-request-ip'
+
 // import { homedir } from 'os'
 // import { resolve } from 'path'
 import africa from 'africa'
@@ -23,6 +22,7 @@ const {
   help,
   init,
   version,
+  headless,
 } = argufy({
   domain: {
     command: true,
@@ -33,6 +33,7 @@ const {
   },
   help: { short: 'h', boolean: true },
   init: { short: 'I', boolean: true },
+  headless: { short: 'H', boolean: true },
 }, process.argv)
 
 if (version) {
@@ -116,7 +117,7 @@ const run = async () => {
     }
 
     if (props && props.Number == '1011150') {
-      const authComplete = await handleRequestIP(message, { phone, user })
+      const authComplete = await handleRequestIP(message, { phone, user, headless })
       if (authComplete === true) {
         await run()
         // update the configuration to reflect the IP
@@ -130,33 +131,6 @@ const run = async () => {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
   }
-}
-
-const handleRequestIP = async (message, { phone, user }) => {
-  const _ip = /Invalid request IP: (.+)/.exec(message)
-  if (!_ip) throw new Error('Could not extract IP from the error message')
-  const [, ip] = _ip
-  const [password, chrome] = await Promise.all([
-    askSingle({
-      text: `Enter password to white-list ${ip}`,
-    }),
-    launch({
-      startingUrl: 'https://www.namecheap.com/myaccount/login.aspx',
-      chromeFlags: [
-        // userDataDir,
-        // '--headless', '--disable-gpu', '--window-size=1000,2000'
-      ],
-    }),
-  ])
-
-  const res = await authenticate({
-    user,
-    password,
-    ip,
-    phone,
-    chrome,
-  })
-  return res
 }
 
 const Errors = {
