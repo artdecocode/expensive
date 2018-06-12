@@ -15,7 +15,7 @@ The CLI client can also perform web-based authentication via Chrome's automation
 
 %TOC%
 
-## Settings
+## Configuration
 
 Upon the first run the program will ask a series of questions:
 
@@ -107,7 +107,7 @@ To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
   <summary><code>expensive testt</code></summary>
   <table>
   <tr><td>
-    <img alt="testing a domain in tech zones" src="doc/tech.gif" />
+    <img alt="Checking a domain in tech zones." src="doc/tech.gif" />
   </td></tr>
   </table>
 </details>
@@ -120,7 +120,7 @@ To check a single domain, pass the domain name, e.g.,
   <summary><code>expensive testt.co</code></summary>
   <table>
   <tr><td>
-    <img alt="testing a single domain" src="doc/single.gif" />
+    <img alt="Checking a single domain." src="doc/single.gif" />
   </td></tr>
   </table>
 </details>
@@ -133,50 +133,91 @@ View the domain information. If domain is registered with `namecheap`, it will p
   <summary><code>expensive -i example.co</code></summary>
   <table>
   <tr><td>
-    <img alt="viewing information for a single domain" src="doc/info.gif" />
+    <img alt="Viewing information for a single domain." src="doc/info.gif" />
   </td></tr>
   </table>
 </details>
 
-### `-d`, `--dns`: Manage DNS
+### Set DNS
 
-```sh
-expensive -d example.co [10.10.10.10,11.11.11.11]
-```
+To or assign DNS values for a given domain, the `-d` (or `--dns`) command can be used. All items should be separated with a comma.
 
-Manage DNS records for the domain.
+<details>
+  <summary><code>expensive example.co -d 10.10.10.10,11.11.11.11</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Assigning new DNS values." src="doc/dns.gif" />
+  </td></tr>
+  </table>
+</details>
 
-### `-r`, `--register`: Register Domain
+### Set Route 53
 
-```sh
-expensive -r testt.co
-```
+To automatically create a new hosted zone on `Route 53`, and assign its nameservers to the domain, the `-r53` option can be passed.
 
-Register a domain name.
+<details>
+  <summary><code>expensive example.co -r53</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Creating and assigning a route 53 zone." src="doc/route-53.gif" />
+  </td></tr>
+  </table>
+</details>
 
-### `-I`, `--init`: Initialise Configuration
+### Register Domain
 
-```sh
-expensive -I
-```
+Domain registration from the command-line is made easy by `expensive`. Pass `-r` flag to buy a domain name.
 
-Force updating of the configuration (`HOMEDIR/.expensiverc` and `HOMEDIR/.expensive-clientrc`) files. The new values will override the existing ones.
+<details>
+  <summary><code>expensive example.co -r</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Buying a domain name." src="doc/register.gif" />
+  </td></tr>
+  </table>
+</details>
 
-### `-v`, `--version`: Print Version
+### Initialise Configuration
 
-```sh
-expensive -v
-```
+To update the stored configuration values (e.g., to change an `API` key), run the `-I` (or `--init`) command. See [Configuration](#configuration) for more detail.
 
-Display the version information.
+<details>
+  <summary><code>expensive -I</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Updating configuration." src="doc/init.gif" />
+  </td></tr>
+  </table>
+</details>
 
-### `-h`, `--help`: Print Usage
+<!-- Force updating of the configuration (`HOMEDIR/.expensiverc` and `HOMEDIR/.expensive-clientrc`) files. The new values will override the existing ones. -->
 
-```sh
-expensive -v
-```
+### Print Version
 
-Print the help information.
+Version number can be displayed with `-v` (or `--version`).
+
+<details>
+  <summary><code>expensive -v</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Viewing the version." src="doc/version.gif" />
+  </td></tr>
+  </table>
+</details>
+
+### Display Usage
+
+Prints the help information.
+
+<details>
+  <summary><code>expensive -h</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Displaying the usage." src="doc/usage.gif" />
+  </td></tr>
+  </table>
+</details>
+
 
 ## API
 <!--
