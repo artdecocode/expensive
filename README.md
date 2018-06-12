@@ -18,10 +18,9 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Reporting](#reporting)
 - [Route 53](#route-53)
 - [CLI](#cli)
-  * [Domain Check](#domain-check)
-    * [Tech Zones](#tech-zones)
-    * [Single Domains](#single-domains)
-  * [`-i`, `--info`: Domain Information](#-i---info-domain-information)
+  * [Check Tech Zones](#check-tech-zones)
+  * [Check Single Domains](#check-single-domains)
+  * [Show Domain Information](#show-domain-information)
   * [`-d`, `--dns`: Manage DNS](#-d---dns-manage-dns)
   * [`-r`, `--register`: Register Domain](#-r---register-register-domain)
   * [`-I`, `--init`: Initialise Configuration](#-i---init-initialise-configuration)
@@ -104,11 +103,7 @@ The program can be used from a terminal.
         -v, --version   print package's version
 ```
 
-### Domain Check
-
-To perform whether a domain is free or taken, simply pass the domain name.
-
-#### Tech Zones
+### Check Tech Zones
 
 To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 
@@ -121,7 +116,7 @@ To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
   </table>
 </details>
 
-#### Single Domains
+### Check Single Domains
 
 To check a single domain, pass the domain name, e.g.,
 
@@ -134,13 +129,18 @@ To check a single domain, pass the domain name, e.g.,
   </table>
 </details>
 
-### `-i`, `--info`: Domain Information
-
-```sh
-expensive -i example.co
-```
+### Show Domain Information
 
 View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
+
+<details>
+  <summary><code>expensive -i example.co</code></summary>
+  <table>
+  <tr><td>
+    <img alt="viewing information for a single domain" src="doc/info.gif" />
+  </td></tr>
+  </table>
+</details>
 
 ### `-d`, `--dns`: Manage DNS
 

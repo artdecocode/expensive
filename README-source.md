@@ -97,11 +97,9 @@ The program can be used from a terminal.
         -v, --version   print package's version
 ```
 
-### Domain Check
+### Check Tech Zones
 
-To perform whether a domain is free or taken, simply pass the domain name.
-
-#### Tech Zones
+<!-- To perform whether a domain is free or taken, simply pass the domain name. -->
 
 To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 
@@ -114,7 +112,7 @@ To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
   </table>
 </details>
 
-#### Single Domains
+### Check Single Domains
 
 To check a single domain, pass the domain name, e.g.,
 
@@ -127,13 +125,18 @@ To check a single domain, pass the domain name, e.g.,
   </table>
 </details>
 
-### `-i`, `--info`: Domain Information
-
-```sh
-expensive -i example.co
-```
+### Show Domain Information
 
 View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
+
+<details>
+  <summary><code>expensive -i example.co</code></summary>
+  <table>
+  <tr><td>
+    <img alt="viewing information for a single domain" src="doc/info.gif" />
+  </td></tr>
+  </table>
+</details>
 
 ### `-d`, `--dns`: Manage DNS
 
