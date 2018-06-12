@@ -101,20 +101,7 @@ The usage is as follows:
         -v, --version   print package's version
 ```
 
-```sh
-expensive test
-```
-
-```fs
-Checking 5 domains: test.co, test.cc, test.io, test.bz, test.app
-None of the zones are available.
-```
-
-```sh
-expensive testt
-```
-
-![output for testt query](doc/testt.png)
+![testing a domain in tech zones](doc/tech.gif)
 
 ### `-i`, `--info`: Domain Information
 
