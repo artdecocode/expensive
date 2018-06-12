@@ -15,8 +15,6 @@ The CLI client can also perform web-based authentication via Chrome's automation
 
 - [Table Of Contents](#table-of-contents)
 - [Settings](#settings)
-- [Reporting](#reporting)
-- [Route 53](#route-53)
 - [CLI](#cli)
   * [Check Tech Zones](#check-tech-zones)
   * [Check Single Domains](#check-single-domains)
@@ -57,39 +55,7 @@ These are stored in the `.expensive-client.rc` and are not shared with other sof
 
 The last 3 digits will be used to automatically login and white-list an IP address, and AWS keys are used for Route 53 access.
 
-## Reporting
-
-To see the status of a single or all domains printed in the console, use the info extension (`-i`).
-
- ```sh
-expensive -i example1.com
-```
-
-| domain       | expire in | dns         | visits | google |
-|--------------|-----------|-------------|--------|--------|
-| example1.com | 189 days  | dns.dns.com | 550    | 3      |
-|              |           |             |        |        |
-
-```sh
-expensive --info
-```
-
-| domain       | expire in | dns         | visits | google |
-|--------------|-----------|-------------|--------|--------|
-| example1.com | 189 days  | dns.dns.com | 550    | 3      |
-| example2.com |  61 days  |  namecheap  | -      | -      |
-|              |           |             |        |        |
-
-## Route 53
-
-Creation of the hosted zones is implemented with Route 53 API. A new hosted zone can be created for a domain, and its name servers set via namecheap API.
-
-```sh
-expensive example.com -r
-# create a hosted zone and assign name servers
-```
-
-## CLI
+ ## CLI
 
 The program can be used from a terminal.
 

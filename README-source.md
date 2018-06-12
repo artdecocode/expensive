@@ -39,32 +39,32 @@ These are stored in the `.expensive-client.rc` and are not shared with other sof
 
 The last 3 digits will be used to automatically login and white-list an IP address, and AWS keys are used for Route 53 access.
 
-## Reporting
+<!-- ## Reporting -->
 
-To see the status of a single or all domains printed in the console, use the info extension (`-i`).
+<!-- To see the status of a single or all domains printed in the console, use the info extension (`-i`). -->
 
  <!-- If google position ranking is set up with `-g example.ne`, then the information utility will print the rank for the configured keyword.  -->
 
 <!-- Visits are accessed from [demimonde.cc](https://demimonde.cc) which is an elastic search gathering engine. -->
 
-```sh
+<!-- ```sh
 expensive -i example1.com
-```
+``` -->
 
-| domain       | expire in | dns         | visits | google |
+<!-- | domain       | expire in | dns         | visits | google |
 |--------------|-----------|-------------|--------|--------|
 | example1.com | 189 days  | dns.dns.com | 550    | 3      |
-|              |           |             |        |        |
+|              |           |             |        |        | -->
 
-```sh
+<!-- ```sh
 expensive --info
-```
+``` -->
 
-| domain       | expire in | dns         | visits | google |
+<!-- | domain       | expire in | dns         | visits | google |
 |--------------|-----------|-------------|--------|--------|
 | example1.com | 189 days  | dns.dns.com | 550    | 3      |
 | example2.com |  61 days  |  namecheap  | -      | -      |
-|              |           |             |        |        |
+|              |           |             |        |        | -->
 
 <!-- ## Health Check
 
@@ -74,14 +74,14 @@ Run a health check against a domain. This will make Chrome visit the page and ch
 expensive -h example.com
 ``` -->
 
-## Route 53
+<!-- ### Route 53
 
 Creation of the hosted zones is implemented with Route 53 API. A new hosted zone can be created for a domain, and its name servers set via namecheap API.
 
 ```sh
 expensive example.com -r
 # create a hosted zone and assign name servers
-```
+``` -->
 
 ## CLI
 
