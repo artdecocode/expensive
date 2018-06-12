@@ -83,7 +83,7 @@ expensive example.com -r
 # create a hosted zone and assign name servers
 ```
 
-## `CLI`
+## CLI
 
 The usage is as follows:
 
@@ -112,7 +112,7 @@ expensive testt
 
 ![output for testt query](doc/testt.png)
 
-## `-i`, `--info`: Domain Information
+### `-i`, `--info`: Domain Information
 
 ```sh
 expensive -i example.co
@@ -120,7 +120,7 @@ expensive -i example.co
 
 View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
 
-## `-d`, `--dns`: Manage DNS
+### `-d`, `--dns`: Manage DNS
 
 ```sh
 expensive -d example.co [10.10.10.10,11.11.11.11]
@@ -128,7 +128,7 @@ expensive -d example.co [10.10.10.10,11.11.11.11]
 
 Manage DNS records for the domain.
 
-## `-r`, `--register`: Register Domain
+### `-r`, `--register`: Register Domain
 
 ```sh
 expensive -r testt.co
@@ -136,7 +136,7 @@ expensive -r testt.co
 
 Register a domain name.
 
-## `-I`, `--init`: Initialise Configuration
+### `-I`, `--init`: Initialise Configuration
 
 ```sh
 expensive -I
@@ -144,7 +144,7 @@ expensive -I
 
 Force updating of the configuration (`HOMEDIR/.expensiverc` and `HOMEDIR/.expensive-clientrc`) files. The new values will override the existing ones.
 
-## `-v`, `--version`: Print Version
+### `-v`, `--version`: Print Version
 
 ```sh
 expensive -v
@@ -152,7 +152,7 @@ expensive -v
 
 Display the version information.
 
-## `-h`, `--help`: Print Usage
+### `-h`, `--help`: Print Usage
 
 ```sh
 expensive -v
