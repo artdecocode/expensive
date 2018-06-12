@@ -101,7 +101,9 @@ The usage is as follows:
         -v, --version   print package's version
 ```
 
-![testing a domain in tech zones](doc/tech.gif)
+<table><tr><td>
+  <img alt="testing a domain in tech zones" src="doc/tech.gif" />
+</td></tr></table>
 
 ### `-i`, `--info`: Domain Information
 
