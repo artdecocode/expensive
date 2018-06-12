@@ -105,17 +105,11 @@ To perform whether a domain is free or taken, simply pass the domain name.
 
 To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 
-```sh
-expensive testt
-```
-
 <details>
-  <summary>Preview tech zones check</summary>
+  <summary><code>expensive testt</code></summary>
   <table>
   <tr><td>
     <img alt="testing a domain in tech zones" src="doc/tech.gif" />
-  </td></tr>
-  <tr><td>
   </td></tr>
   </table>
 </details>
@@ -124,19 +118,11 @@ expensive testt
 
 To check a single domain, pass the domain name, e.g.,
 
-```sh
-expensive testt.co
-```
-
-
 <details>
-  <summary>Preview single domain check</summary>
+  <summary><code>expensive testt.co</code></summary>
   <table>
   <tr><td>
     <img alt="testing a single domain" src="doc/single.gif" />
-  </td></tr>
-  <tr><td>
-    <!-- Recorded with <a href="https://appshot.io">appshot</a>. -->
   </td></tr>
   </table>
 </details>
