@@ -10,9 +10,10 @@ export default () => {
       'domain.com': 'check a domain name',
       '-h, --help': 'print usage information',
       '-v, --version': 'print package\'s version',
+      '-I, --init': 'interactively initialise the configuration',
     },
-    description: 'A CLI application to access namecheap.com via API.',
-    line: 'expensive [command]',
+    description: 'A CLI application to access namecheap.com domain name registrar API.\nSee man expensive for more information.',
+    line: 'expensive -Ihv [domain.co]',
   })
   return u
 }

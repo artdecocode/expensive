@@ -17,6 +17,9 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Reporting](#reporting)
 - [Route 53](#route-53)
 - [CLI](#cli)
+  * [`-h: help`](#getconfigoptions-object-config)
+  * [`-v: version`](#getconfigoptions-object-config)
+  * [`-I: initialise`](#getconfigoptions-object-config)
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
   * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
@@ -103,6 +106,7 @@ The usage is as follows:
                         (.co, .cc, .io, .bz, .app)
         domain.com      check a domain name
         -h, --help      print usage information
+        -v, --version   print package's version
 ```
 
 ```sh
@@ -119,6 +123,22 @@ expensive testt
 ```
 
 ![output for testt query](doc/testt.png)
+
+## `-I`, `--init`: Initialise Configuration
+
+```sh
+expensive -I
+```
+
+Force updating of the configuration (`HOMEDIR/.expensiverc` and `HOMEDIR/.expensive-clientrc`) files. The new values will override the existing ones.
+
+## `-v`, `--version`: Print Version
+
+```sh
+expensive -v
+```
+
+Display the version information.
 
 ## API
 <!--
