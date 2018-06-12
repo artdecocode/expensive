@@ -13,23 +13,7 @@ The CLI client can also perform web-based authentication via Chrome's automation
 
 ## Table Of Contents
 
-- [Table Of Contents](#table-of-contents)
-- [Settings](#settings)
-- [Reporting](#reporting)
-- [Route 53](#route-53)
-- [`CLI`](#cli)
-- [`-i`, `--info`: Domain Information](#-i---info-domain-information)
-- [`-d`, `--dns`: Manage DNS](#-d---dns-manage-dns)
-- [`-r`, `--register`: Register Domain](#-r---register-register-domain)
-- [`-I`, `--init`: Initialise Configuration](#-i---init-initialise-configuration)
-- [`-v`, `--version`: Print Version](#-v---version-print-version)
-- [`-h`, `--help`: Print Usage](#-h---help-print-usage)
-- [API](#api)
-  * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
-  * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
-- [Security](#security)
-- [Errors and Troubleshooting](#errors-and-troubleshooting)
-  * [`getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`](#getaddrinfo-enotfound-apinamecheapcom-apinamecheapcom443)
+%TOC%
 
 ## Settings
 
@@ -59,7 +43,11 @@ The last 3 digits will be used to automatically login and white-list an IP addre
 
 To see the status of a single or all domains printed in the console, use the info extension (`-i`).
 
- ```sh
+ <!-- If google position ranking is set up with `-g example.ne`, then the information utility will print the rank for the configured keyword.  -->
+
+<!-- Visits are accessed from [demimonde.cc](https://demimonde.cc) which is an elastic search gathering engine. -->
+
+```sh
 expensive -i example1.com
 ```
 
@@ -77,6 +65,14 @@ expensive --info
 | example1.com | 189 days  | dns.dns.com | 550    | 3      |
 | example2.com |  61 days  |  namecheap  | -      | -      |
 |              |           |             |        |        |
+
+<!-- ## Health Check
+
+Run a health check against a domain. This will make Chrome visit the page and check that it loads.
+
+```sh
+expensive -h example.com
+``` -->
 
 ## Route 53
 
@@ -165,6 +161,9 @@ expensive -v
 Print the help information.
 
 ## API
+<!--
+The package also supports a Node.js API. The authentication is completed in the same way as the CLI, that is by reading the `.expensiverc` file or presenting questions. If `global` parameter is not set to true, and the `packageName` is not given, the function will throw. You must provide either a `packageName` or set `global` to true so that the `~/.expensiverc` can be read. N-O-N-E-T-H-E-L-E-S-S it is a good idea to provide a `packageName` so that a personal config in form of `.${packageName}-expensiverc` is generated. -->
+
 On top of the CLI application, the package provides means to query _namecheap_ API.
 
 ### `getConfig(options: Object): Config`
@@ -261,6 +260,12 @@ npm i -g artdecocode/expensive#v1.2.0
 ```
 
 This will fetch the package from GitHub, and not registry. If it was possible to see the git sha sum of the commit in `yarn info package` then it would not have been necessary, because one can compare source code against the commit number. By installing from GitHub directly, one can know what they install.
+
+<!-- You should inspect the source code of this package and possibly install from the source code and not npm with the following command.
+
+```sh
+npm i -g artdecocode/expensive#v1.1.0
+``` -->
 
 ## Errors and Troubleshooting
 

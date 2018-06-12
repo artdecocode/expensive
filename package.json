@@ -16,6 +16,7 @@
     "e": "node example",
     "man": "man man/doc.1",
     "m": "man man/doc.1",
+    "doc": "doc -t README-source.md -r -o README.md",
     "example/": "yarn e example/example.js",
     "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
   },
@@ -60,6 +61,7 @@
     "aws-sdk": "2.254.1",
     "chrome-launcher": "0.10.2",
     "chrome-remote-interface": "0.25.6",
+    "documentary": "1.0.0",
     "erotic": "1.2.1",
     "erte": "1.1.4",
     "promto": "1.0.1",

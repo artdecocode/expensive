@@ -285,6 +285,10 @@ argufy@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.0.1.tgz#ba172005436d559351f009b0a64cf4df774803d0"
 
+argufy@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.0.2.tgz#d37a62765194395bbc1119e751f209c78db5bb8d"
+
 arr-diff@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-2.0.0.tgz#8f3b827f955a8bd669697e4a4256ac3ceae356cf"
@@ -744,6 +748,17 @@ doctrine@^2.1.0:
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
   dependencies:
     esutils "^2.0.2"
+
+documentary@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.0.0.tgz#107e09041dfa288e56e018f3786fe14e8d2b4835"
+  dependencies:
+    argufy "1.0.2"
+    catchment "2.0.1"
+    chrome-launcher "0.10.2"
+    chrome-remote-interface "0.25.6"
+    restream "2.0.1"
+    spawncommand "2.0.1"
 
 dreamopt@~0.6.0:
   version "0.6.0"
@@ -2028,6 +2043,10 @@ restore-cursor@^2.0.0:
   dependencies:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
+
+restream@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/restream/-/restream-2.0.1.tgz#6e8ceb8d3444ca4be74b6a4a446a8798fca82aa0"
 
 ret@~0.1.10:
   version "0.1.15"
