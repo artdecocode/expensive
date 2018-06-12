@@ -17,9 +17,9 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Reporting](#reporting)
 - [Route 53](#route-53)
 - [CLI](#cli)
-  * [`-h: help`](#getconfigoptions-object-config)
-  * [`-v: version`](#getconfigoptions-object-config)
-  * [`-I: initialise`](#getconfigoptions-object-config)
+  * [`-I`, `--init`: Initialise Configuration`](#-i---init-initialise-configuration)
+  * [`-v`, `--version`: Print Version](#-v---version-print-version)
+  * [`-h`: help`](#getconfigoptions-object-config)
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
   * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
@@ -124,6 +124,31 @@ expensive testt
 
 ![output for testt query](doc/testt.png)
 
+## `-i`, `--info`: Domain Information
+
+```sh
+expensive -i example.co
+```
+
+View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
+
+
+## `-d`, `--dns`: Manage DNS
+
+```sh
+expensive -d example.co [10.10.10.10,11.11.11.11]
+```
+
+Manage DNS records for the domain.
+
+## `-r`, `--register`: Register Domain
+
+```sh
+expensive -r testt.co
+```
+
+Register a domain name.
+
 ## `-I`, `--init`: Initialise Configuration
 
 ```sh
@@ -139,6 +164,14 @@ expensive -v
 ```
 
 Display the version information.
+
+## `-h`, `--help`: Print Usage
+
+```sh
+expensive -v
+```
+
+Print the help information.
 
 ## API
 <!--
