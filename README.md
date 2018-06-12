@@ -61,13 +61,18 @@ The last 3 digits will be used to automatically login and white-list an IP addre
 The program can be used from a terminal.
 
 ```fs
-  expensive -Ihv [domain.co]
+  expensive [domain|domain.com] -irIHhv -r53
 
-        domain          check a domain name in various tech zones
+    domain              check a domain name in various tech zones
                         (.co, .cc, .io, .bz, .app)
-        domain.com      check a domain name
-        -h, --help      print usage information
-        -v, --version   print package's version
+    domain.com          check a domain name
+    -i, --info          display info on domain
+    -r, --register      register a domain
+    -r53, --route53     assign a hosted zone
+    -I, --init          interactively initialise the configuration
+    -h, --help          print usage information
+    -v, --version       print package's version
+    -H, --headless      use headless Chrome for auth
 ```
 
 ### Check Tech Zones
@@ -75,7 +80,8 @@ The program can be used from a terminal.
 To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 
 <details>
-  <summary><code>expensive testt</code></summary>
+  <summary>`expensive testt`</summary>
+
   <table>
   <tr><td>
     <img alt="Checking a domain in tech zones." src="doc/tech.gif" />
@@ -88,7 +94,8 @@ To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
 To check a single domain, pass the domain name, e.g.,
 
 <details>
-  <summary><code>expensive testt.co</code></summary>
+  <summary>`expensive testt.co`</summary>
+
   <table>
   <tr><td>
     <img alt="Checking a single domain." src="doc/single.gif" />
@@ -101,7 +108,7 @@ To check a single domain, pass the domain name, e.g.,
 View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
 
 <details>
-  <summary><code>expensive -i example.co</code></summary>
+  <summary><code>expensive example.co -i</code></summary>
   <table>
   <tr><td>
     <img alt="Viewing information for a single domain." src="doc/info.gif" />
