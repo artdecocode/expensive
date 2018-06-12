@@ -89,9 +89,11 @@ const blockedExtensions = [
   'svg',
   'woff',
   'ttf',
-  'GetCartTotalAndItemCount',
-  'Domains/.+',
-  'ExpiringSoon/.+',
+  'assets/css',
+  'cart',
+  // 'GetCartTotalAndItemCount',
+  // 'Domains/.+',
+  // 'ExpiringSoon/.+',
   // 'SiteServices/.+',
 ]
 const s = blockedExtensions.join('|')

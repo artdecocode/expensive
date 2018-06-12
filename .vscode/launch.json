@@ -14,7 +14,8 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "-I"
+        "demimonde.cc",
+        "-H"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

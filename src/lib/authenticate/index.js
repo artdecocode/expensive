@@ -5,8 +5,11 @@ import CDP from 'chrome-remote-interface'
 import Chrome from 'chrome-remote-interface/lib/chrome' // eslint-disable-line no-unused-vars
 import { askSingle } from 'reloquent'
 import { mapPhoneOptions, checkAuth, isBlocked, click, evaluate, getValue, setValue, checkLimit } from './lib'
+import { writeFileSync } from 'fs'
 
 const LOG = debuglog('expensive')
+
+const url = 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips'
 
 const authenticate = async ({
   user,
@@ -21,16 +24,18 @@ const authenticate = async ({
   /** @type {Chrome} */
   let client
   let res
+  let Page
   try {
     client = await CDP({
       port,
     })
-    const { Network, Page, DOM, Runtime, Input } = client
+    const { Network, DOM, Runtime, Input } = client
+    ;({ Page } = client)
 
     Network.requestIntercepted(({ interceptionId, request }) => {
       const blocked = isBlocked(request.url)
       if (!blocked) {
-        console.log(request.url)
+        LOG(request.url)
       }
       Network.continueInterceptedRequest({
         interceptionId,
@@ -43,9 +48,11 @@ const authenticate = async ({
     await DOM.enable()
     await Runtime.enable()
 
-    // await Network.setRequestInterception({ patterns: [{ urlPattern: '*' }] })
+    await Network.setRequestInterception({ patterns: [{ urlPattern: '*' }] })
     // await Network.setCacheDisabled({ cacheDisabled: true })
 
+    await Page.navigate({ url: `https://www.namecheap.com/myaccount/login-signup.aspx?ReturnUrl=${encodeURIComponent(url)}` })
+    await Page.loadEventFired()
     await login(Runtime, { user, password })
     await Page.loadEventFired()
 
@@ -57,8 +64,8 @@ const authenticate = async ({
     await enterCode(Runtime)
     await Page.loadEventFired()
 
-    await Page.navigate({ url: 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips' })
-    await Page.loadEventFired()
+    const a = await evaluate(Runtime, 'location.href')
+    equal(a, url, `Unexpected url: ${a}`)
 
     await addIpAddress(Runtime, Input, { ip, password })
     res = true
@@ -67,6 +74,8 @@ const authenticate = async ({
     res = err.message
   } finally {
     if (client) {
+      // const { data } = await Page.captureScreenshot()
+      // writeFileSync('debug.png', Buffer.from(data, 'base64'))
       await client.close()
     }
   }
@@ -154,15 +163,9 @@ const addIpAddress = async (Runtime, Input, { ip, password }) => {
 }
 
 const login = async (Runtime, { user, password }) => {
-  await Runtime.evaluate({
-    expression: `document.querySelector("input.nc_username").value = "${user}"`,
-  })
-  await Runtime.evaluate({
-    expression: `document.querySelector("input.nc_password").value = "${password}"`,
-  })
-  await Runtime.evaluate({
-    expression: 'document.querySelector("input.nc_login_submit").click()',
-  })
+  await setValue(Runtime, 'input.nc_username', user)
+  await setValue(Runtime, 'input.nc_password', password)
+  await click(Runtime, 'input.nc_login_submit')
 }
 
 const selectPhone = async (Runtime, phone) => {

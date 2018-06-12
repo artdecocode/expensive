@@ -4,13 +4,10 @@ import { c } from 'erte'
 import { debuglog, inspect } from 'util'
 import argufy from 'argufy'
 import getUsage from './get-usage'
-import { getConfig, checkDomains } from '..'
+import { getConfig, checkDomains, getInfo } from '..'
 import getPrivateConfig from '../lib/private-config'
 import { makeStartupyList, isSingleWord } from '../lib'
 import handleRequestIP from '../lib/authenticate/handle-request-ip'
-
-// import { homedir } from 'os'
-// import { resolve } from 'path'
 import africa from 'africa'
 import questions from '../questions'
 
@@ -22,7 +19,8 @@ const {
   help,
   init,
   version,
-  headless,
+  head,
+  info,
 } = argufy({
   domain: {
     command: true,
@@ -33,7 +31,8 @@ const {
   },
   help: { short: 'h', boolean: true },
   init: { short: 'I', boolean: true },
-  headless: { short: 'H', boolean: true },
+  head: { short: 'H', boolean: true },
+  info: { short: 'i', boolean: true },
 }, process.argv)
 
 if (version) {
@@ -89,26 +88,35 @@ const run = async () => {
   let phone
   let user
   try {
-    const { ...auth } = await getConfig({
+    const Auth = await getConfig({
       global: true,
     })
     const { aws_id, aws_key, phone: p } = await getPrivateConfig()
     phone = p
-    user = auth.ApiUser
+    user = Auth.ApiUser
+
+    if (info) {
+      await getInfo(domain, Auth)
+      return
+    }
+
     if (singleWord) {
-      await checkSingleWord(domain, auth)
+      await checkSingleWord(domain, Auth)
       return
     }
 
     console.log('Checking domain %s', domain)
     const res = await checkDomains({
-      ...auth,
+      ...Auth,
       domain,
     })
     if (res.length) {
       console.log('%s is free', c(domain, 'green'))
     } else {
       console.log('%s is taken', c(domain, 'red'))
+      if (info) {
+        console.log('fetching detail about the domain')
+      }
     }
   } catch ({ stack, message, props }) {
     if (props) {
@@ -117,7 +125,7 @@ const run = async () => {
     }
 
     if (props && props.Number == '1011150') {
-      const authComplete = await handleRequestIP(message, { phone, user, headless })
+      const authComplete = await handleRequestIP(message, { phone, user, head })
       if (authComplete === true) {
         await run()
         // update the configuration to reflect the IP
@@ -135,12 +143,13 @@ const run = async () => {
 
 const Errors = {
   1011150: 'Parameter RequestIP is invalid',
+  2030166: 'Domain is invalid',
 }
 
 ; (async () => {
   if (init) {
     await africa('expensive', questions, { force: true })
-  } else {
-    await run()
+    return
   }
+  await run()
 })()
