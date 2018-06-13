@@ -14,8 +14,6 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "grovy.io",
-        "-i"
       ],
       "console": "integratedTerminal",
       "skipFiles": [
