@@ -4,8 +4,9 @@ import { debuglog, inspect } from 'util'
 import argufy from 'argufy'
 import africa from 'africa'
 import getUsage from './get-usage'
-import list from './list'
-import check from './check'
+import List from './list'
+import Check from './check'
+import Register from './reg'
 import { getConfig, getInfo } from '..'
 import getPrivateConfig from '../lib/private-config'
 import printInfo from '../lib/print/info'
@@ -27,6 +28,7 @@ const {
   filter,
   type,
   pageSize,
+  register,
 } = argufy({
   domain: {
     command: true,
@@ -39,11 +41,14 @@ const {
   init: { short: 'I', boolean: true },
   head: { short: 'H', boolean: true },
   info: { short: 'i', boolean: true },
+  // <INFO>
   sort: 's', // add validation to argufy
   desc: { short: 'd', boolean: true },
   filter: { short: 'f' },
   pageSize: { short: 'p' },
   type: 't', // add description to argufy, so that usage can be passed to usually
+  // </INFO>
+  register: { short: 'r', boolean: true },
 }, process.argv)
 
 if (version) {
@@ -71,17 +76,22 @@ const run = async () => {
     user = Auth.ApiUser
 
     if (!domain) {
-      await list(Auth, { sort, desc, filter, type, pageSize })
+      await List(Auth, { sort, desc, filter, type, pageSize })
       return
     }
 
     if (info) {
-      const i = await getInfo(domain, Auth)
+      const i = await getInfo(Auth, { domain })
       printInfo(i)
       return
     }
 
-    await check(Auth, {
+    if (register) {
+      await Register(Auth, { domain })
+      return
+    }
+
+    await Check(Auth, {
       domain,
     })
   } catch ({ stack, message, props }) {

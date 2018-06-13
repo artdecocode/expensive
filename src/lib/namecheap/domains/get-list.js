@@ -24,7 +24,7 @@ const getSort = (sort, desc) => {
 /**
  * @param {string} domain a domain name to view info for.
  */
-const getInfo = async (Auth = {}, {
+const getList = async (Auth = {}, {
   page,
   // size,
   sort,
@@ -56,4 +56,4 @@ const getInfo = async (Auth = {}, {
   }
 }
 
-export default getInfo
+export default getList

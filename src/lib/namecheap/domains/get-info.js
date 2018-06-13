@@ -6,7 +6,9 @@ const GET_INFO = 'namecheap.domains.getinfo'
 /**
  * @param {string} domain a domain name to view info for.
  */
-const getInfo = async (domain, Auth = {}) => {
+const getInfo = async (Auth = {}, {
+  domain,
+}) => {
   const res = await query({
     ...Auth,
   }, GET_INFO, { DomainName: domain })
