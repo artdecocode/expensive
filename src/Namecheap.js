@@ -1,5 +1,8 @@
 import check from './lib/namecheap/domains/check'
-import getList from './lib/namecheap/domains/get-list'
+import getDomainsList from './lib/namecheap/domains/get-list'
+import getDomainInfo from './lib/namecheap/domains/get-info'
+import getAddressList from './lib/namecheap/users/address/get-list'
+import getAddressInfo from './lib/namecheap/users/address/get-info'
 
 export default class Namecheap {
   /**
@@ -9,6 +12,37 @@ export default class Namecheap {
   constructor(Auth) {
     if (!Auth) throw new Error('Authentication object expected')
     this.Auth = Auth
+  }
+  get users() {
+    return {
+      address: {
+        /**
+         * Gets a list of address IDs and address names associated with the user account.
+         * @returns {Promise.<Address[]>} An array with addresses.
+         * @example
+         *
+         * await nc.users.address.getList()
+         */
+        getList: async (conf) => {
+          const res = await getAddressList(this.Auth, conf)
+          return res
+        },
+        /**
+         * Gets information for the requested address ID.
+         * @param {users.address.getInfo} conf Configuration parameters.
+         * @param {number} conf.id ID of the address.
+         * @returns {Promise.<AddressDetail>} Full information about the address.
+         * @example
+         *
+         * await nc.users.address.getInfo({ id: 335544 })
+         *
+         */
+        getInfo: async (conf) => {
+          const res = await getAddressInfo(this.Auth, conf)
+          return res
+        },
+      },
+    }
   }
   get domains() {
     return {
@@ -20,9 +54,9 @@ export default class Namecheap {
        * @returns {Promise.<DomainCheck[]>} An array with information about checked domains.
        * @example
        *
-       * const res = await nc.domains.check({ domain: 'test.co' })
+       * await nc.domains.check({ domain: 'test.co' })
        */
-      check: async(conf) => {
+      check: async (conf) => {
         const res = await check(this.Auth, conf)
         return res
       },
@@ -35,11 +69,11 @@ export default class Namecheap {
        * @param {string} [conf.filter] Search term to filter results by.
        * @param {('all'|'expiring'|'expired')} [conf.type] What domains to show.
        * @param {number} [conf.pageSize] Number of domains to be listed on a page. Minimum value is *10*, and maximum value is *100*. Default value is *20*.
-       * @returns {Promise.<{domains: DomainInfo[], TotalItems: number, CurrentPage: number, PageSize: number}>} Domains with paging information.
+       * @returns {Promise.<{domains: DomainListInfo[], TotalItems: number, CurrentPage: number, PageSize: number}>} Domains with paging information.
        * @example
        *
        * // Get information about domains in the `.app` zone sorted by descending create date (oldest first)
-       * const res = await nc.domains.getList({
+       * await nc.domains.getList({
        *  sort: 'create',
        *  desc: true,
        *  filter: '.app',
@@ -80,8 +114,22 @@ export default class Namecheap {
        *  PageSize: 20,
        * }
        */
-      getList: async(conf = {}) => {
-        const res = await getList(this.Auth, conf)
+      getList: async (conf = {}) => {
+        const res = await getDomainsList(this.Auth, conf)
+        return res
+      },
+      /**
+       * Returns information about the requested domain.
+       * @param {domains.getInfo} conf Configuration parameters.
+       * @param {string} conf.domain Domain name to get information for.
+       * @returns {Promise.<DomainInfo>} An information about the domain.
+       * @example
+       *
+       * await nc.domains.getInfo({ domain: 'testt.cc' })
+       *
+       */
+      getInfo: async (conf = {}) => {
+        const res = await getDomainInfo(this.Auth, conf)
         return res
       },
     }
@@ -91,6 +139,9 @@ export default class Namecheap {
 // const nc = new Namecheap()
 // nc.domains.check
 
+/** @type {DomainInfo} */
+export const DomainInfo = {}
+
 /**
  * @typedef {Object} Auth
  * @property {string} ApiUser Username required to access the API.
@@ -99,6 +150,12 @@ export default class Namecheap {
  */
 
 /**
+ * @typedef {Object} users.address.getInfo
+ * @property {number} id ID of the address.
+
+ * @typedef {Object} domains.getInfo
+ * @property {string} domain Domain name to get information for.
+ *
  * @typedef {Object} domains.check
  * @property {string} domain A single domain to check.
  * @property {string[]} domains An array of domains to check.
@@ -111,7 +168,7 @@ export default class Namecheap {
  * @property {('all'|'expiring'|'expired')} [type] What domains to show.
  * @property {number} [pageSize] Number of domains to be listed on a page. Minimum value is *10*, and maximum value is *100*. Default value is *20*.
  *
- * @typedef {Object} DomainInfo
+ * @typedef {Object} DomainListInfo
  * @property {boolean} AutoRenew
  * @property {string} Created
  * @property {string} Expires
@@ -136,4 +193,81 @@ export default class Namecheap {
  * @property {number} PremiumRenewalPrice
  * @property {number} PremiumRestorePrice
  * @property {number} PremiumTransferPrice
+ *
+ * @typedef Address
+ * @property {number} AddressID A unique integer value that represents the address profile.
+ * @property {number} AddressName The name of the address profile.
+ * @property {boolean} IsDefault Whether it is a default address.
+ *
+ * @typedef {Object} AddressDetail
+ * @property {string} FirstName
+ * @property {string} LastName
+ * @property {string} JobTitle
+ * @property {string} Organization
+ * @property {string} Address1
+ * @property {string} Address2
+ * @property {string} City
+ * @property {string} StateProvince
+ * @property {string} StateProvinceChoice
+ * @property {string} Zip
+ * @property {string} Country
+ * @property {string} Phone
+ * @property {string} PhoneExt
+ * @property {string} EmailAddress
+ */
+
+
+/**
+ * @typedef {Object} DomainInfo
+ * @property {string} DomainName
+ * @property {number} ID
+ * @property {boolean} IsOwner
+ * @property {boolean} IsPremium
+ * @property {string} OwnerName
+ * @property {string} Status
+ * @property {DomainDetails} DomainDetails
+ * @property {LockDetails} LockDetails
+ * @property {Whoisguard} Whoisguard
+ * @property {PremiumDnsSubscription} PremiumDnsSubscription
+ * @property {DnsDetails} DnsDetails
+ * @property {ModificationRights} ModificationRights
+ *
+ * @typedef {Object} LockDetails
+ *
+ * @typedef {Object} DomainDetails
+ * @property {string} CreatedDate
+ * @property {string} ExpiredDate
+ * @property {number} NumYears
+ *
+ * @typedef {Object} DnsDetails
+ * @property {('CUSTOM'|'FREE')} ProviderType
+ * @property {boolean} IsUsingOurDNS
+ * @property {number} HostCount
+ * @property {string} EmailType
+ * @property {boolean} DynamicDNSStatus
+ * @property {boolean} IsFailover
+ * @property {string[]} Nameserver
+ *
+ * @typedef {Object} PremiumDnsSubscription
+ * @property {Date} CreatedDate
+ * @property {Date} ExpirationDate
+ * @property {boolean} IsActive
+ * @property {number} SubscriptionId
+ * @property {boolean} UseAutoRenew
+ *
+ * @typedef {Object} Whoisguard
+ * @property {string} Enabled
+ * @property {number} ID
+ * @property {string} [ExpiredDate]
+ * @property {EmailDetails} [EmailDetails]
+ *
+ * @typedef {Object} ModificationRights
+ * @property {boolean} All
+ * @property {boolean} [hosts]
+ *
+ * @typedef {Object} EmailDetails
+ * @property {number} AutoEmailChangeFrequencyDays
+ * @property {string} ForwardedTo
+ * @property {string} LastAutoEmailChangeDate
+ * @property {string} WhoisGuardEmail
  */

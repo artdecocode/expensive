@@ -84,13 +84,13 @@ const run = async () => {
     }
 
     if (info) {
-      const i = await getInfo(Auth, { domain })
+      const i = await nc.domains.getInfo({ domain })
       printInfo(i)
       return
     }
 
     if (register) {
-      await Register(Auth, { domain })
+      await Register(nc, { domain })
       return
     }
 
