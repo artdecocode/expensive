@@ -21,18 +21,15 @@ const getSort = (sort, desc) => {
   return s
 }
 
-/**
- * @param {string} domain a domain name to view info for.
- */
-const getList = async (Auth = {}, {
+
+export default async function getList(Auth = {}, {
   page,
-  // size,
   sort,
   desc,
   filter,
   type,
   pageSize,
-} = {}) => {
+} = {}) {
   const res = await query({
     ...Auth,
   }, GET_LIST, {
@@ -56,4 +53,17 @@ const getList = async (Auth = {}, {
   }
 }
 
-export default getList
+/**
+ * @typedef {Object} DomainInfo
+ * @property {boolean} AutoRenew
+ * @property {string} Created
+ * @property {string} Expires
+ * @property {number} ID
+ * @property {boolean} IsExpired
+ * @property {boolean} IsLocked
+ * @property {boolean} IsOurDNS
+ * @property {boolean} IsPremium
+ * @property {string} Name
+ * @property {string} User
+ * @property {string} WhoisGuard
+ */
