@@ -35,7 +35,9 @@ export default async function query({
     throw cb(error)
   }
 
-  return res
+  const [{ content: CommandResponse }] = extractTag('CommandResponse', res)
+
+  return CommandResponse
 }
 
 export const getError = (res) => {
