@@ -3,104 +3,157 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = getInfo;
+exports.parse = void 0;
 
-var _query = _interopRequireDefault(require("../../../lib/query"));
+var _query = _interopRequireDefault(require("../../query"));
+
+var _ = require("../..");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const GET_INFO = 'namecheap.domains.getinfo';
+const COMMAND = 'namecheap.domains.getinfo';
 
-const execRes = (re, s) => {
-  const res = re.exec(s);
-  if (!res) return res;
-  const [, ...args] = res;
-  return args;
-};
+const parseWhois = Whoisguard => {
+  let ID;
+  let ExpiredDate;
+  let EmailDetails;
+  [{
+    content: ID
+  }] = (0, _.extractTag)('ID', Whoisguard);
 
-const propsRe = /(\w+)="(.*?)"/g;
-
-const extractProps = s => {
-  let t;
-  const r = [];
-
-  while ((t = propsRe.exec(s)) !== null) {
-    const [, key, value] = t;
-    r.push({
-      key,
-      value
-    });
+  try {
+    [{
+      props: EmailDetails
+    }] = (0, _.extractTag)('EmailDetails', Whoisguard);
+  } catch (err) {// ok
   }
 
-  return r.reduce((acc, {
-    key,
-    value
-  }) => ({ ...acc,
-    [key]: value
-  }), {});
-};
-
-const extractTag = (tag, string) => {
-  const re = new RegExp(`<${tag}(.*?)/?>(?:([\\s\\S]+?)</${tag}>)?`, 'g');
-  const r = [];
-  let t;
-
-  while ((t = execRes(re, string)) !== null) {
-    if (!t.length) continue;
-    const [p, c = ''] = t;
-    const props = extractProps(p);
-    const item = {
-      props,
-      content: c.trim()
-    };
-    r.push(item);
+  try {
+    [{
+      content: ExpiredDate
+    }] = (0, _.extractTag)('ExpiredDate', Whoisguard);
+  } catch (err) {// ok
   }
 
-  return r;
-};
-/**
- * @param {string} domain a domain name to view info for.
- */
-
-
-const getInfo = async (domain, Auth = {}) => {
-  const res = await (0, _query.default)({ ...Auth
-  }, GET_INFO, {
-    DomainName: domain
-  });
-  const [{
-    content: DomainDetails
-  }] = extractTag('DomainDetails', res);
-  const [{
-    content: Created
-  }] = extractTag('CreatedDate', DomainDetails);
-  const [{
-    content: Expired
-  }] = extractTag('ExpiredDate', DomainDetails);
-  const [{
-    content: Whoisguard,
-    props: WhoisProps
-  }] = extractTag('Whoisguard', res);
-  const [{
-    props: EmailDetails
-  } = {}] = extractTag('EmailDetails', Whoisguard);
-  const [{
-    content: DnsDetails,
-    props: DnsProps
-  }] = extractTag('DnsDetails', res);
-  const Nameservers = extractTag('Nameserver', DnsDetails).map(({
-    content
-  }) => content);
   return {
-    Created,
-    Expired,
-    WhoisEnabled: WhoisProps.Enabled,
-    Nameservers,
-    EmailDetails,
-    DnsProps
+    ID: parseInt(ID, 10),
+    ...(ExpiredDate ? {
+      ExpiredDate
+    } : {}),
+    ...(EmailDetails ? {
+      EmailDetails
+    } : {})
   };
 };
 
-var _default = getInfo;
-exports.default = _default;
+const parsePremiumDNS = dns => {
+  const [{
+    content: UseAutoRenew
+  }] = (0, _.extractTag)('UseAutoRenew', dns);
+  const [{
+    content: SubscriptionId
+  }] = (0, _.extractTag)('SubscriptionId', dns);
+  const [{
+    content: CreatedDate
+  }] = (0, _.extractTag)('CreatedDate', dns);
+  const [{
+    content: ExpirationDate
+  }] = (0, _.extractTag)('ExpirationDate', dns);
+  const [{
+    content: IsActive
+  }] = (0, _.extractTag)('IsActive', dns);
+  return {
+    UseAutoRenew: UseAutoRenew == 'true',
+    SubscriptionId: parseInt(SubscriptionId),
+    CreatedDate: new Date(Date.parse(CreatedDate)),
+    ExpirationDate: new Date(Date.parse(ExpirationDate)),
+    IsActive: IsActive == true
+  };
+};
+
+const parse = res => {
+  const [{
+    content: DomainGetInfoResult,
+    props
+  }] = (0, _.extractTag)('DomainGetInfoResult', res);
+  const [{
+    content: DomainDetails
+  }] = (0, _.extractTag)('DomainDetails', DomainGetInfoResult);
+  const [{
+    content: CreatedDate
+  }] = (0, _.extractTag)('CreatedDate', DomainDetails);
+  const [{
+    content: ExpiredDate
+  }] = (0, _.extractTag)('ExpiredDate', DomainDetails);
+  const [{
+    content: NumYears
+  }] = (0, _.extractTag)('NumYears', DomainDetails);
+  const [{
+    content: Whoisguard,
+    props: WhoisProps
+  }] = (0, _.extractTag)('Whoisguard', DomainGetInfoResult);
+  const whois = parseWhois(Whoisguard);
+  const [{
+    content: PremiumDnsSubscription
+  }] = (0, _.extractTag)('PremiumDnsSubscription', DomainGetInfoResult);
+  const premiumDns = parsePremiumDNS(PremiumDnsSubscription);
+  const [{
+    content: DnsDetails,
+    props: DnsProps
+  }] = (0, _.extractTag)('DnsDetails', DomainGetInfoResult);
+  const Nameserver = (0, _.extractTag)('Nameserver', DnsDetails).map(({
+    content
+  }) => content);
+  const [{
+    content: Modificationrights,
+    props: ModificationrightsProps
+  }] = (0, _.extractTag)('Modificationrights', DomainGetInfoResult);
+  let rights = {};
+
+  if (Modificationrights) {
+    rights = (0, _.extractTag)('Rights', Modificationrights).reduce((acc, {
+      props
+    }) => {
+      const {
+        Type
+      } = props;
+      return { ...acc,
+        [Type]: true
+      };
+    }, {});
+  }
+
+  const d = { ...props,
+    DomainDetails: {
+      CreatedDate,
+      ExpiredDate,
+      NumYears: parseInt(NumYears)
+    },
+    Whoisguard: { ...WhoisProps,
+      ...whois
+    },
+    PremiumDnsSubscription: premiumDns,
+    DnsDetails: { ...DnsProps,
+      Nameserver
+    },
+    Modificationrights: { ...ModificationrightsProps,
+      ...rights
+    }
+  };
+  return d;
+};
+
+exports.parse = parse;
+
+async function getInfo(Auth = {}, {
+  domain
+}) {
+  const res = await (0, _query.default)({ ...Auth
+  }, COMMAND, {
+    DomainName: domain
+  });
+  const d = parse(res);
+  return d;
+}
 //# sourceMappingURL=get-info.js.map

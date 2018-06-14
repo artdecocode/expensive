@@ -3,70 +3,83 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = getList;
 
 var _query = _interopRequireDefault(require("../../../lib/query"));
 
+var _ = require("../..");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const GET_INFO = 'namecheap.domains.getinfo';
+const GET_LIST = 'namecheap.domains.getList';
+const m = {
+  name: 'name',
+  expire: 'expiredate',
+  create: 'createdate'
+  /**
+   * @param {string} sort
+   */
 
-const execRes = (re, s) => {
-  const res = re.exec(s);
-  if (!res) return res;
-  const [, ...args] = res;
-  return args;
 };
 
-const extractTag = (tag, string) => {
-  const re = new RegExp(`<${tag}(.*?)/?>(?:([\\s\\S]+?)</${tag}>)?`, 'g');
-  const r = [];
-  let t;
-
-  while ((t = execRes(re, string)) !== null) {
-    if (!t.length) continue;
-    const [p, c = ''] = t;
-    const item = {
-      props: p.split(' ').filter(a => a).reduce((acc, current) => {
-        const [key, val] = current.split('=');
-        const v = val.replace(/^"/, '').replace(/"$/, '');
-        return { ...acc,
-          [key]: v
-        };
-      }, {}),
-      content: c.trim()
-    };
-    r.push(item);
+const getSort = (sort, desc) => {
+  if (!['name', 'expire', 'create'].includes(sort.toLowerCase())) {
+    throw new Error(`Unknown sort by option: ${sort}.`);
   }
 
-  return r;
+  const s = m[sort].toUpperCase();
+  if (desc) return `${s}_DESC`;
+  return s;
 };
-/**
- * @param {string} domain a domain name to view info for.
- */
 
-
-const getInfo = async (domain, Auth = {}) => {
+async function getList(Auth = {}, {
+  page,
+  sort,
+  desc,
+  filter,
+  type,
+  pageSize
+} = {}) {
   const res = await (0, _query.default)({ ...Auth
-  }, GET_INFO, {
-    DomainName: domain
-  }); // const [{ content: DomainDetails }] = extractTag('DomainDetails', res)
-  // const [{ content: Created }] = extractTag('CreatedDate', DomainDetails)
-  // const [{ content: Expired }] = extractTag('ExpiredDate', DomainDetails)
-  // const [{ content: Whoisguard, props: WhoisProps } = {}] = extractTag('Whoisguard', res)
-  // const [{ props: EmailDetails }] = extractTag('EmailDetails', Whoisguard)
-  // const [{ content: DnsDetails, props: DnsProps }] = extractTag('DnsDetails', res)
-  // const Nameservers = extractTag('Nameserver', DnsDetails).map(({ content }) => content)
-  // return {
-  //   Created,
-  //   Expired,
-  //   WhoisEnabled: WhoisProps.Enabled,
-  //   Nameservers,
-  //   EmailDetails,
-  //   DnsProps,
-  // }
-};
-
-var _default = getInfo;
-exports.default = _default;
+  }, GET_LIST, { ...(page ? {
+      Page: page
+    } : {}),
+    ...(pageSize ? {
+      PageSize: pageSize
+    } : {}),
+    ...(sort ? {
+      SortBy: getSort(sort, desc)
+    } : {
+      SortBy: getSort('create', 'desc')
+    }),
+    ...(filter ? {
+      SearchTerm: filter
+    } : {}),
+    ...(type ? {
+      ListType: type
+    } : {})
+  });
+  const Domain = (0, _.extractTag)('Domain', res);
+  const domains = Domain.map(({
+    props
+  }) => props);
+  const [{
+    content: Paging
+  }] = (0, _.extractTag)('Paging', res);
+  const [{
+    content: TotalItems
+  }] = (0, _.extractTag)('TotalItems', Paging);
+  const [{
+    content: CurrentPage
+  }] = (0, _.extractTag)('CurrentPage', Paging);
+  const [{
+    content: PageSize
+  }] = (0, _.extractTag)('PageSize', Paging);
+  return {
+    domains,
+    TotalItems: parseInt(TotalItems, 10),
+    CurrentPage: parseInt(CurrentPage, 10),
+    PageSize: parseInt(PageSize, 10)
+  };
+}
 //# sourceMappingURL=get-list.js.map
