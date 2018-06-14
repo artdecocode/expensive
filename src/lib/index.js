@@ -5,10 +5,15 @@ export const validateDomains = (arr) => arr.reduce((acc, current) => {
 }, true)
 
 export const startupyDomains = [
+  '.com',
+  '.net',
+  '.org',
+  '.biz',
   '.co',
   '.cc',
   '.io',
   '.bz',
+  '.nu',
   '.app',
 ]
 
