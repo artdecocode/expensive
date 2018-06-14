@@ -3,13 +3,6 @@ import { extractTag } from '../../..'
 
 const COMMAND = 'namecheap.users.address.getInfo'
 
-/**
- * Get information about an address by its IDS.
- * @param {Auth} Auth Authentication object.
- * @param {Config} conf Configuration parameters.
- * @param {number} conf.id ID of an address.
- * @returns {Address} An address information.
- */
 const getList = async (Auth = {}, conf) => {
   const {
     id,

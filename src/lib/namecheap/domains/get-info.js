@@ -91,9 +91,6 @@ export const parse = (res) => {
   return d
 }
 
-/**
- * @returns {Result} An object with domain information.
- */
 export default async function getInfo(Auth = {}, {
   domain,
 }) {

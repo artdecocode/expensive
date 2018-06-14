@@ -21,7 +21,6 @@ const getSort = (sort, desc) => {
   return s
 }
 
-
 export default async function getList(Auth = {}, {
   page,
   sort,
@@ -52,18 +51,3 @@ export default async function getList(Auth = {}, {
     PageSize: parseInt(PageSize, 10),
   }
 }
-
-/**
- * @typedef {Object} DomainInfo
- * @property {boolean} AutoRenew
- * @property {string} Created
- * @property {string} Expires
- * @property {number} ID
- * @property {boolean} IsExpired
- * @property {boolean} IsLocked
- * @property {boolean} IsOurDNS
- * @property {boolean} IsPremium
- * @property {string} Name
- * @property {string} User
- * @property {string} WhoisGuard
- */
