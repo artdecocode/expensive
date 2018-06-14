@@ -125,8 +125,48 @@ export default class Namecheap {
        * @returns {Promise.<DomainInfo>} An information about the domain.
        * @example
        *
+       * // Obtain information for the testt.cc domain:
        * await nc.domains.getInfo({ domain: 'testt.cc' })
        *
+       * // Result:
+       * { Status: 'Ok',
+       *  ID: 30072635,
+       *  DomainName: 'testt.cc',
+       *  OwnerName: 'artdeco',
+       *  IsOwner: true,
+       *  IsPremium: false,
+       *  DomainDetails:
+       *   { CreatedDate: '06/06/2018',
+       *     ExpiredDate: '06/06/2019',
+       *     NumYears: 0 },
+       *  Whoisguard:
+       *   { Enabled: 'True',
+       *     ID: 23996873,
+       *     ExpiredDate: '06/05/2019',
+       *     EmailDetails:
+       *      { WhoisGuardEmail: 'ff474db8ad3b4c3b95a2b0f3b3a73acc.protect[at]whoisguard.com',
+       *        ForwardedTo: 'anton[at]adc.sh',
+       *        LastAutoEmailChangeDate: '',
+       *        AutoEmailChangeFrequencyDays: 0 } },
+       *  PremiumDnsSubscription:
+       *   { UseAutoRenew: false,
+       *     SubscriptionId: -1,
+       *     CreatedDate: 0001-01-01T00:00:00.000Z,
+       *     ExpirationDate: 0001-01-01T00:00:00.000Z,
+       *     IsActive: false },
+       *  DnsDetails:
+       *   { ProviderType: 'CUSTOM',
+       *     IsUsingOurDNS: false,
+       *     HostCount: 2,
+       *     EmailType: 'FWD',
+       *     DynamicDNSStatus: false,
+       *     IsFailover: false,
+       *     Nameserver:
+       *      [ 'ns-1013.awsdns-62.net',
+       *        'ns-1311.awsdns-35.org',
+       *        'ns-1616.awsdns-10.co.uk',
+       *        'ns-355.awsdns-44.com' ] },
+       *  Modificationrights: { All: true } }
        */
       getInfo: async (conf = {}) => {
         const res = await getDomainInfo(this.Auth, conf)
