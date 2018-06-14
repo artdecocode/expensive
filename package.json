@@ -19,7 +19,7 @@
     "doc": "doc -t README-source.md -r -o README.md",
     "dc": "git add README-source.md README.md && git commit -m ",
     "record": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
-    "example/": "yarn e example/example.js",
+    "example/": "yarn e example/simple.js",
     "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
   },
   "files": [
