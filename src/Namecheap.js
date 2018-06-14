@@ -17,12 +17,10 @@ export default class Namecheap {
        * @param {domains.check} conf Configuration parameters.
        * @param {string} [conf.domain] A single domain to check.
        * @param {string[]} [conf.domains] An array of domains to check.
-       * @returns {Promise.<Object.<string, boolean>>} An object representing results for queried domains.
+       * @returns {Promise.<DomainCheck[]>} An array with information about checked domains.
        * @example
        *
-       * ```js
        * const res = await nc.domains.check({ domain: 'test.co' })
-       * ```
        */
       check: async(conf) => {
         const res = await check(this.Auth, conf)
@@ -37,7 +35,7 @@ export default class Namecheap {
        * @param {string} [conf.filter] Search term to filter results by.
        * @param {('all'|'expiring'|'expired')} [conf.type] What domains to show.
        * @param {number} [conf.pageSize] Number of domains to be listed on a page. Minimum value is *10*, and maximum value is *100*. Default value is *20*.
-       * @returns {{domains: DomainInfo[], TotalItems: number, CurrentPage: number, PageSize: number}} Domains with paging information.
+       * @returns {Promise.<{domains: DomainInfo[], TotalItems: number, CurrentPage: number, PageSize: number}>} Domains with paging information.
        * @example
        *
        * // Get information about domains in the `.app` zone sorted by descending create date (oldest first)
@@ -125,4 +123,17 @@ export default class Namecheap {
  * @property {string} Name
  * @property {string} User
  * @property {string} WhoisGuard
+ *
+ * @typedef {Object} DomainCheck
+ * @property {boolean} Available
+ * @property {string} Description
+ * @property {string} Domain
+ * @property {number} EapFee
+ * @property {number} ErrorNo
+ * @property {number} IcannFee
+ * @property {boolean} IsPremiumName
+ * @property {number} PremiumRegistrationPrice
+ * @property {number} PremiumRenewalPrice
+ * @property {number} PremiumRestorePrice
+ * @property {number} PremiumTransferPrice
  */

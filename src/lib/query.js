@@ -14,7 +14,7 @@ export default async function query({
   ApiKey,
   ClientIp,
 }, Command, Options = {}) {
-  const cb = erotic()
+  const cb = erotic(true)
   if (!Command) throw new Error('Command must be passed')
   const qs = stringify({
     ApiUser,

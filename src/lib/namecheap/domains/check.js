@@ -9,7 +9,7 @@ const COMMAND = 'namecheap.domains.check'
  * @param {Auth} Auth Authentication object.
  * @param {Config} conf Configuration parameters.
  * @param {string} conf.domain A single domain to check.
- * @returns {Object} An object representing results for queried domains.
+ * @returns {DomainCheck[]} An array with information about checked domains.
  */
 export default async function check(Auth, conf) {
   const {
@@ -29,6 +29,16 @@ export default async function check(Auth, conf) {
 }
 
 /**
- * @typedef {Object} CheckResult
- * @property {string}
+ * @typedef {Object} DomainCheck
+ * @property {boolean} Available
+ * @property {string} Description
+ * @property {string} Domain
+ * @property {number} EapFee
+ * @property {number} ErrorNo
+ * @property {number} IcannFee
+ * @property {boolean} IsPremiumName
+ * @property {number} PremiumRegistrationPrice
+ * @property {number} PremiumRenewalPrice
+ * @property {number} PremiumRestorePrice
+ * @property {number} PremiumTransferPrice
  */

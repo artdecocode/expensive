@@ -12,6 +12,7 @@ import getPrivateConfig from '../lib/private-config'
 import printInfo from '../lib/print/info'
 import handleRequestIP from '../lib/authenticate/handle-request-ip'
 import questions, { privateQuestions } from '../questions'
+import Namecheap from '../Namecheap'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -75,8 +76,10 @@ const run = async () => {
     phone = p
     user = Auth.ApiUser
 
+    const nc = new Namecheap(Auth)
+
     if (!domain) {
-      await List(Auth, { sort, desc, filter, type, pageSize })
+      await List(nc, { sort, desc, filter, type, pageSize })
       return
     }
 
@@ -91,7 +94,7 @@ const run = async () => {
       return
     }
 
-    await Check(Auth, {
+    await Check(nc, {
       domain,
     })
   } catch ({ stack, message, props }) {
