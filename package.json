@@ -59,7 +59,7 @@
   },
   "dependencies": {
     "africa": "1.1.0",
-    "argufy": "1.0.1",
+    "argufy": "1.1.1",
     "aws-sdk": "2.254.1",
     "bosom": "1.0.0",
     "chrome-launcher": "0.10.2",
