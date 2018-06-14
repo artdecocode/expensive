@@ -1,16 +1,17 @@
 import { askSingle } from 'reloquent'
 import printList from '../lib/print/list'
-import { getList } from '..'
+import Namecheap from '../Namecheap' // eslint-disable-line
 
-export default async function list(Auth, {
-  page,
+/** @param {Namecheap} nc */
+export default async function list(nc, {
   sort,
   desc,
+  page,
   filter,
   type,
   pageSize,
-}) {
-  const { CurrentPage, PageSize, TotalItems, domains } = await getList(Auth, {
+} = {}) {
+  const { domains, CurrentPage, PageSize, TotalItems } = await nc.domains.getList({
     page,
     sort,
     desc,
@@ -26,12 +27,13 @@ export default async function list(Auth, {
       defaultValue: 'y',
     })
     if (answer == 'y') {
-      await list(Auth, {
+      await list(nc, {
         page: CurrentPage + 1,
         sort,
         desc,
         filter,
         type,
+        pageSize,
       })
     }
   }
