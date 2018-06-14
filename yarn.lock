@@ -2284,6 +2284,10 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
+tablature@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tablature/-/tablature-1.0.0.tgz#b0dd3b142326a876f052b3ab587121df9182e8d0"
+
 table@4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/table/-/table-4.0.2.tgz#a33447375391e766ad34d3486e6e2aedc84d2e36"
