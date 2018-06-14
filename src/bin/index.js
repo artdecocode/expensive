@@ -7,7 +7,7 @@ import getUsage from './get-usage'
 import List from './list'
 import Check from './check'
 import Register from './reg'
-import { getConfig, getInfo } from '..'
+import { getConfig } from '..'
 import getPrivateConfig from '../lib/private-config'
 import printInfo from '../lib/print/info'
 import handleRequestIP from '../lib/authenticate/handle-request-ip'
@@ -18,7 +18,7 @@ const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
 
 const {
-  domain,
+  domains,
   help,
   init,
   version,
@@ -31,8 +31,9 @@ const {
   pageSize,
   register,
 } = argufy({
-  domain: {
+  domains: {
     command: true,
+    multiple: true,
   },
   version: {
     short: 'v',
@@ -50,7 +51,7 @@ const {
   type: 't', // add description to argufy, so that usage can be passed to usually
   // </INFO>
   register: { short: 'r', boolean: true },
-}, process.argv)
+})
 
 if (version) {
   const { version: v } = require('../../package.json')
@@ -78,10 +79,12 @@ const run = async () => {
 
     const nc = new Namecheap(Auth)
 
-    if (!domain) {
+    if (!domains) {
       await List(nc, { sort, desc, filter, type, pageSize })
       return
     }
+
+    const [domain] = domains
 
     if (info) {
       const i = await nc.domains.getInfo({ domain })
@@ -95,7 +98,7 @@ const run = async () => {
     }
 
     await Check(nc, {
-      domain,
+      domains,
     })
   } catch ({ stack, message, props }) {
     if (props) {

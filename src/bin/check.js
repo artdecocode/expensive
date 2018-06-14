@@ -11,23 +11,26 @@ const path = resolve(homedir(), '.expensive.log')
 
 /** @param {Namecheap} nc */
 export default async function check(nc, {
-  domain,
+  domains: d,
 }) {
-  const singleWord = isSingleWord(domain)
-  const domains = singleWord ? makeStartupyList(domain) : [domain]
+  const domains = d.reduce((acc, domain) => {
+    const singleWord = isSingleWord(domain)
+    if (singleWord) return [...acc, ...makeStartupyList(domain)]
+    return [...acc, domain]
+  }, [])
 
   console.log('Checking domain%s %s', domains.length > 1 ? 's' : '', domains.join(', '))
 
   const res = await nc.domains.check({
     domains,
   })
-  const data = domains.map((d) => {
-    const found = res.find(({ Domain }) => Domain == d)
+  const data = domains.map((domain) => {
+    const found = res.find(({ Domain }) => Domain == domain)
     return found
   })
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
   const t = tablature({
-    keys: ['Domain', 'Available', hasPremium ? 'IsPremiumName' : undefined].filter(a => a),
+    keys: ['Domain', 'Available', ...(hasPremium ? ['IsPremiumName', 'PremiumRegistrationPrice'] : [])],
     data,
     replacements: {
       Available(v) {
@@ -46,14 +49,19 @@ export default async function check(nc, {
         if (!v) return { value: '', length: 0 }
         return { value: c('\u2713', 'green'), length: 1 }
       },
+      PremiumRegistrationPrice(value) {
+        if (value) return { value, length: value.length }
+        return { value: '', length: 0 }
+      },
     },
     headings: {
       IsPremiumName: 'Premium',
+      PremiumRegistrationPrice: 'Price',
     },
     centerValues: ['Available', 'IsPremiumName'],
   })
   console.log(t)
-  await log(domain, data)
+  await log(d.join(','), data)
 }
 
 const log = async (domain, data) => {
