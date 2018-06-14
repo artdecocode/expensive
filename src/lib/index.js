@@ -77,7 +77,7 @@ const day = 24*60*60*1000
 
 export const mapDomains = (domains) => {
   return domains.map(domain => {
-    const { Created, Expires, WhoisGuard, IsOurDNS } = domain
+    const { Created, Expires, IsOurDNS } = domain
     const cr = Date.parse(Created)
     const e = Date.parse(Expires)
     const t = (new Date).getTime()
@@ -90,7 +90,6 @@ export const mapDomains = (domains) => {
       Since: since,
       Expiry,
       Years,
-      Whois: WhoisGuard,
       DNS: IsOurDNS,
     }
   })
@@ -100,9 +99,4 @@ export const getWhois = (value) => {
   if (value == 'ENABLED') return { value: TICK, length: 1 }
   if (value == 'NOTPRESENT') return { value: DASH, length: 1 }
   return { value, length: value.length }
-}
-
-export const heading = (h) => {
-  const value = `\x1b[1m${h}\x1b[0m`
-  return { value, length: h.length }
 }
