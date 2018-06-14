@@ -51,8 +51,7 @@ const execRes = (re, s) => {
 }
 
 export const extractTag = (tag, string) => {
-  // const re = new RegExp(`<${tag}(.*?)/?>(?:([\\s\\S]+?)</${tag}>)?`, 'g')
-  const re = new RegExp(`<${tag}( .+)?/?>(?:([\\s\\S]+?)</${tag}>)?`, 'g')
+  const re = new RegExp(`<${tag}( .[^>]+)?(?: /)?>(?:([\\s\\S]+?)</${tag}>)?`, 'g')
   const r = []
 
   let t

@@ -1,4 +1,6 @@
 import africa from 'africa'
+import invalidRequestIp from '../fixtures/InvalidRequestIp'
+import addresses from '../fixtures/Addresses'
 
 process.env.SANDBOX = true
 
@@ -26,6 +28,12 @@ export default class Context {
       ...this.config,
       ClientIp: '127.0.0.1',
     }
+  }
+  get InvalidRequestIp() {
+    return invalidRequestIp
+  }
+  get Addresses() {
+    return addresses
   }
   async _destroy() {
   }

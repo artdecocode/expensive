@@ -100,7 +100,7 @@ const run = async () => {
       LOG(Errors[props.Number])
     }
 
-    if (props && props.Number == '1011150') {
+    if (props && props.Number == 1011150) {
       const authComplete = await handleRequestIP(message, { phone, user, head })
       if (authComplete === true) {
         await run()
