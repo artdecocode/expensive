@@ -27,7 +27,11 @@ The CLI client can also perform web-based authentication via Chrome's automation
   * [Display Usage](#display-usage)
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
-  * [`checkDomains(options: Object): Array`](#checkdomainsoptions-object-array)
+  * [new Namecheap(Auth: Object)](#new-namecheapauth-object)
+  * [domains](#domains)
+    * [check](#check)
+    * [getList](#getlist)
+    * [getInfo](#getinfo)
 - [Security](#security)
 - [Errors and Troubleshooting](#errors-and-troubleshooting)
   * [`getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`](#getaddrinfo-enotfound-apinamecheapcom-apinamecheapcom443)
@@ -194,7 +198,7 @@ Prints the help information.
 
 
 ## API
-On top of the CLI application, the package provides means to query _namecheap_ API.
+On top of the CLI application, the package provides means to query _namecheap_ API. To start using the API, a configuration can be read from a `.rc` file using `getConfig` method and passed to a client instance.
 
 ### `getConfig(options: Object): Config`
 
@@ -216,45 +220,24 @@ The `rc` file will only contain the following details required for API calls:
 
 Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
 
-### `checkDomains(options: Object): Array`
+### new Namecheap(Auth: Object)
 
-This method returns a list of free domains for the request. Either domains, or a single domain must be passed. The method also expects to see Auth details (from the config object), and these can be passed by using the destructuring.
-
-- `domains` an array of domains
-- `domain` a single domain
+To be able to make requests, an instance of the `Namecheap` class needs to be created by passing an Auth object to it.
 
 ```js
-/* example/example.js */
+/* example/simple.js */
 /* yarn example/ */
-import { getConfig, checkDomains } from 'expensive'
-import { debuglog } from 'util'
-
-const LOG = debuglog('expensive')
-const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
-
-const domains = process.argv.slice(3)
-
-if (!domains.length) {
-  console.log('Please enter a domain or domains')
-  process.exit()
-}
+import Namecheap, { getConfig } from 'expensive'
 
 (async () => {
   try {
-    // use `.expensive-example.rc` file to get configuration data
+    // use `.expensive-example.rc` file
     // pass `global` to read `.expensiverc` instead
     const Auth = await getConfig({ packageName: 'example' })
 
-    console.log('Checking %s', domains.join(', '))
-    const res = await checkDomains({
-      ...Auth,
-      domains,
-    })
-    if (res.length) {
-      console.log('The following are free: %s', res.join(', '))
-    } else {
-      console.log('All domains are taken.')
-    }
+    const nc = new Namecheap(Auth)
+    const check = await nc.domains.check({ domains })
+    console.log(check)
   } catch ({ stack, message }) {
     DEBUG ? LOG(stack) : console.error(message)
     process.exit(1)
@@ -262,26 +245,17 @@ if (!domains.length) {
 })()
 ```
 
-```sh
-yarn example/ test.co testt.co testtt.co
-```
+### domains
 
-```sh
-# yarn expansions
-yarn run v1.7.0
-yarn e example/example.js test.co testt.co testtt.co
-node example example/example.js test.co testt.co testtt.co
-```
+#### check
 
-```fs
-Checking test.co, testt.co, testtt.co
-The following are free: testtt.co
-✨  Done in 3.04s.
-```
+#### getList
+
+#### getInfo
 
 ## Security
 
-When white-listing the IP addresses via the Chrome automation script, `expensive` will use the username stored in the config file, and ask for the password. The password is not stored anywhere apart from the program's memory and then used for authorisation on the `namecheap.com` website, and as a confirmation password when adding a new white-listed IP address.
+When white-listing the IP addresses via the Chrome automation script, `expensive` will use the username stored in the config file, and ask for the password. The password is not stored anywhere apart from the program's memory and then used for authorisation on the `namecheap.com` website, and as the confirmation password when adding a new white-listed IP address.
 
 You can install the package from github after you're happy with the source code, using the following command:
 
