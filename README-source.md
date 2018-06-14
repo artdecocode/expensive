@@ -221,6 +221,9 @@ Prints the help information.
   </table>
 </details>
 
+### Result Log
+
+A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`
 
 ## API
 <!--
@@ -248,7 +251,7 @@ The `rc` file will only contain the following details required for API calls:
 
 Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
 
-### new Namecheap(Auth: Object)
+### `new Namecheap(Auth: Object)`
 
 To be able to make requests, an instance of the `Namecheap` class needs to be created by passing an Auth object to it.
 

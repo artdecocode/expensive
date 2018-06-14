@@ -25,9 +25,10 @@ The CLI client can also perform web-based authentication via Chrome's automation
   * [Initialise Configuration](#initialise-configuration)
   * [Print Version](#print-version)
   * [Display Usage](#display-usage)
+  * [Result Log](#result-log)
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
-  * [new Namecheap(Auth: Object)](#new-namecheapauth-object)
+  * [`new Namecheap(Auth: Object)`](#new-namecheapauth-object)
   * [domains](#domains)
     * [check](#check)
     * [getList](#getlist)
@@ -196,6 +197,9 @@ Prints the help information.
   </table>
 </details>
 
+### Result Log
+
+A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`
 
 ## API
 On top of the CLI application, the package provides means to query _namecheap_ API. To start using the API, a configuration can be read from a `.rc` file using `getConfig` method and passed to a client instance.
@@ -220,7 +224,7 @@ The `rc` file will only contain the following details required for API calls:
 
 Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
 
-### new Namecheap(Auth: Object)
+### `new Namecheap(Auth: Object)`
 
 To be able to make requests, an instance of the `Namecheap` class needs to be created by passing an Auth object to it.
 
