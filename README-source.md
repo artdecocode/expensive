@@ -102,17 +102,15 @@ The program can be used from a terminal.
     -H, --headless      use headless Chrome for auth
 ```
 
-### Check Tech Zones
+### Check Zones
 
-<!-- To perform whether a domain is free or taken, simply pass the domain name. -->
-
-To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
+To start a domain check in multiple zones, enter a word without a domain.
 
 <details>
   <summary><code>expensive testt</code></summary>
   <table>
   <tr><td>
-    <img alt="Checking a domain in tech zones." src="doc/tech.gif" />
+    <img alt="Checking a domain in multiple zones." src="doc/check.gif" />
   </td></tr>
   </table>
 </details>

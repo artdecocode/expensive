@@ -16,7 +16,7 @@ The CLI client can also perform web-based authentication via Chrome's automation
 - [Table Of Contents](#table-of-contents)
 - [Configuration](#configuration)
 - [CLI](#cli)
-  * [Check Tech Zones](#check-tech-zones)
+  * [Check Zones](#check-zones)
   * [Check Single Domains](#check-single-domains)
   * [Show Domain Information](#show-domain-information)
   * [Set DNS](#set-dns)
@@ -79,15 +79,15 @@ The program can be used from a terminal.
     -H, --headless      use headless Chrome for auth
 ```
 
-### Check Tech Zones
+### Check Zones
 
-To start a domain check in 5 tech zones, enter a word without a domain, e.g.,
+To start a domain check in multiple zones, enter a word without a domain.
 
 <details>
   <summary><code>expensive testt</code></summary>
   <table>
   <tr><td>
-    <img alt="Checking a domain in tech zones." src="doc/tech.gif" />
+    <img alt="Checking a domain in multiple zones." src="doc/check.gif" />
   </td></tr>
   </table>
 </details>
