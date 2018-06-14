@@ -62,3 +62,5 @@ typings/
 
 chrome
 screenshot.png
+
+.expensive-testrc
