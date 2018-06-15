@@ -82,10 +82,19 @@ The program can be used from a terminal.
 
 ### Check Zones
 
-To start a domain check in multiple zones, enter a word without a domain.
+To start a domain check in multiple zones, enter a word without a domain. Multiple words can be entered as well to check all of them. Maximum of 50 domains per request is allowed.
+
+```sh
+expensive domain [domain2] [-fz]
+```
+
+| arg | description |
+| --- | ----------- |
+| -f | Display only free domains |
+| -z | A list of zones to check |
 
 <details>
-  <summary><code>expensive testt</code></summary>
+  <summary><code>expensive testt -f -z com co cc io app</code></summary>
   <table>
   <tr><td>
     <img alt="Checking a domain in multiple zones." src="doc/check.gif" />
