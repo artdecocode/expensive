@@ -1,5 +1,8 @@
 {
   "cSpell.words": [
     "namecheap"
-  ]
+  ],
+  "search.exclude": {
+    "**/README.md": true
+  }
 }
