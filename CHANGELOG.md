@@ -1,8 +1,10 @@
-## 11 June 2018
+## 18 June 2018
 
-## 1.2.2
+## 1.3.0
 
-- [docs] add man page, update readme
+- [feature] `-f`, `-z` when checking domains
+- [feature] `API` as a Class with JSDoc
+- [docs] add man page, tidy up readme
 
 ## 1.2.1
 
