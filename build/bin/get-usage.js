@@ -16,18 +16,20 @@ const l = _lib.allZones.join(', ');
 var _default = () => {
   const u = (0, _usually.default)({
     usage: {
-      domain: `check a domain name in various tech zones\n(${l})`,
-      'domain.com': 'check a domain name',
+      domain: `check a domain name in a number of zones\n(${l})`,
+      'domain.co': 'check a domain name',
+      '-f': 'display only free domains when checking',
+      '-z co,io': 'check in these zones only',
       '-i, --info': 'display info on domain',
-      '-r, --register': 'register a domain',
-      '-r53, --route53': 'assign a hosted zone',
+      // '-r, --register': 'register a domain',
+      // '-r53, --route53': 'assign a hosted zone',
       '-I, --init': 'interactively initialise the configuration',
       '-h, --help': 'print usage information',
       '-v, --version': 'print package\'s version',
       '-H, --head': 'don\'t use headless Chrome for auth'
     },
     description: 'A CLI application to access namecheap.com domain name registrar API.\nSee man expensive for more information.',
-    line: 'expensive [domain.co] -irIHhv -r53'
+    line: 'expensive [domain.co [domain.cc]] -f -z co[,io,app] -i -IHhv'
   });
   return u;
 };
