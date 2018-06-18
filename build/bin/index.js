@@ -36,7 +36,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const LOG = (0, _util.debuglog)('expensive');
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG);
 const {
-  domain,
+  domains,
   help,
   init,
   version,
@@ -48,10 +48,13 @@ const {
   filter,
   type,
   pageSize,
-  register
+  register,
+  free,
+  zones
 } = (0, _argufy.default)({
-  domain: {
-    command: true
+  domains: {
+    command: true,
+    multiple: true
   },
   version: {
     short: 'v',
@@ -92,8 +95,13 @@ const {
   register: {
     short: 'r',
     boolean: true
-  }
-}, process.argv);
+  },
+  free: {
+    short: 'f',
+    boolean: true
+  },
+  zones: 'z'
+});
 
 if (version) {
   const {
@@ -127,7 +135,7 @@ const run = async () => {
     user = Auth.ApiUser;
     const nc = new _Namecheap.default(Auth);
 
-    if (!domain) {
+    if (!domains) {
       await (0, _list.default)(nc, {
         sort,
         desc,
@@ -137,6 +145,8 @@ const run = async () => {
       });
       return;
     }
+
+    const [domain] = domains;
 
     if (info) {
       const i = await nc.domains.getInfo({
@@ -154,7 +164,9 @@ const run = async () => {
     }
 
     await (0, _check.default)(nc, {
-      domain
+      domains,
+      zones,
+      free
     });
   } catch ({
     stack,

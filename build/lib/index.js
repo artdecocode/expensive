@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getWhois = exports.mapDomains = exports.extractTag = exports.makeStartupyList = exports.isSingleWord = exports.startupyDomains = exports.validateDomains = void 0;
+exports.getWhois = exports.mapDomains = exports.extractTag = exports.makeList = exports.isSingleWord = exports.allZones = exports.validateDomains = void 0;
 
 var _erte = require("erte");
 
@@ -12,16 +12,22 @@ const validateDomains = arr => arr.reduce((acc, current) => {
 }, true);
 
 exports.validateDomains = validateDomains;
-const startupyDomains = ['.com', '.net', '.org', '.biz', '.co', '.cc', '.io', '.bz', '.nu', '.app'];
-exports.startupyDomains = startupyDomains;
+const allZones = ['com', 'net', 'org', 'biz', 'co', 'cc', 'io', 'bz', 'nu', 'app'];
+exports.allZones = allZones;
 
 const isSingleWord = d => !/\./.test(d);
 
 exports.isSingleWord = isSingleWord;
 
-const makeStartupyList = d => startupyDomains.map(s => `${d}${s}`);
+const makeList = (d, zones) => {
+  const z = zones.length ? allZones.filter(zone => {
+    return zones.includes(zone);
+  }) : allZones;
+  const res = z.map(s => `${d}.${s}`);
+  return res;
+};
 
-exports.makeStartupyList = makeStartupyList;
+exports.makeList = makeList;
 
 const getPropValue = val => {
   if (val == 'true') return true;

@@ -11,7 +11,7 @@ var _lib = require("../lib");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const l = _lib.startupyDomains.join(', ');
+const l = _lib.allZones.join(', ');
 
 var _default = () => {
   const u = (0, _usually.default)({
