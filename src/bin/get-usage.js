@@ -1,7 +1,7 @@
 import usually from 'usually'
-import { startupyDomains } from '../lib'
+import { allZones } from '../lib'
 
-const l = startupyDomains.join(', ')
+const l = allZones.join(', ')
 
 export default () => {
   const u = usually({

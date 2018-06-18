@@ -1,32 +1,25 @@
 import { askSingle } from 'reloquent'
 import printList from '../lib/print/list'
 import { getAddressList, getAddressInfo } from '..'
+import Namecheap from '../Namecheap' // eslint-disable-line
 
-export default async function register(Auth, {
+/**
+ * Find a default address ID.
+ * @param {Address[]} addresses A list of addresses.
+ * @returns {number} A default address ID.
+ */
+export const findDefault = (addresses) => {
+  const { AddressId } = addresses.find(({ IsDefault }) => IsDefault) || {}
+  return AddressId
+}
+
+/** @param {Namecheap} nc */
+export default async function register(nc, {
   domain,
-  // sort,
-  // desc,
-  // filter,
-  // type,
-  // pageSize,
 }) {
-  const { defaultId } = await getAddressList(Auth)
-  const address = await getAddressInfo(Auth, { id: defaultId })
-  // printList(domains)
-  // if (CurrentPage * PageSize < TotalItems) {
-  //   const t = `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
-  //   const answer = await askSingle({
-  //     text: `Page ${t}. Display more`,
-  //     defaultValue: 'y',
-  //   })
-  //   if (answer == 'y') {
-  //     await list(Auth, {
-  //       page: CurrentPage + 1,
-  //       sort,
-  //       desc,
-  //       filter,
-  //       type,
-  //     })
-  //   }
-  // }
+  const addresses = await nc.users.address.getList()
+  const id = findDefault(addresses)
+  const address = await nc.users.address.getInfo({ id })
+  debugger
+  // const address = await getAddressInfo(Auth, { id: defaultId })
 }

@@ -1,5 +1,5 @@
 import { c } from 'erte'
-import { makeStartupyList, isSingleWord } from '../lib'
+import { makeList, isSingleWord } from '../lib'
 import Namecheap from '../Namecheap' // eslint-disable-line
 import tablature from 'tablature'
 import bosom from 'bosom'
@@ -12,25 +12,41 @@ const path = resolve(homedir(), '.expensive.log')
 /** @param {Namecheap} nc */
 export default async function check(nc, {
   domains: d,
+  free,
+  zones = '',
 }) {
-  const domains = d.reduce((acc, domain) => {
-    const singleWord = isSingleWord(domain)
-    if (singleWord) return [...acc, ...makeStartupyList(domain)]
-    return [...acc, domain]
-  }, [])
+  const domains = d
+    .reduce((acc, domain) => {
+      const singleWord = isSingleWord(domain)
+      if (singleWord) {
+        const z = zones ? zones.split(',') : []
+        const list = makeList(domain, z)
+        return [...acc, ...list]
+      }
+      return [...acc, domain]
+    }, [])
 
   console.log('Checking domain%s %s', domains.length > 1 ? 's' : '', domains.join(', '))
 
   const res = await nc.domains.check({
     domains,
   })
-  const data = domains.map((domain) => {
-    const found = res.find(({ Domain }) => Domain == domain)
-    return found
-  })
+  const data = domains
+    .map((domain) => {
+      const found = res.find(({ Domain }) => Domain == domain)
+      return found
+    })
+    .filter(({ Available }) => {
+      if (!free) return true
+      return Available
+    })
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
+  const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) => PremiumRegistrationPrice != '0.0000')
   const t = tablature({
-    keys: ['Domain', 'Available', ...(hasPremium ? ['IsPremiumName', 'PremiumRegistrationPrice'] : [])],
+    keys: ['Domain', 'Available',
+      ...(hasPremium ? ['IsPremiumName'] : []),
+      ...(hasPremiumRegPrice ? ['PremiumRegistrationPrice'] : []),
+    ],
     data,
     replacements: {
       Available(v) {
@@ -46,12 +62,19 @@ export default async function check(nc, {
         }
       },
       IsPremiumName(v) {
-        if (!v) return { value: '', length: 0 }
+        if (!v) return empty
         return { value: c('\u2713', 'green'), length: 1 }
       },
       PremiumRegistrationPrice(value) {
-        if (value) return { value, length: value.length }
-        return { value: '', length: 0 }
+        if (value == '0.0000') return empty
+        if (value) {
+          const newValue = value.replace(/(\d+)\.(\d\d)\d\d$/, (match, p1, p2) => `${p1}.${p2}`)
+          return {
+            value: newValue,
+            length: newValue.length,
+          }
+        }
+        return empty
       },
     },
     headings: {
@@ -77,4 +100,9 @@ const log = async (domain, data) => {
     },
   ]
   await bosom(path, newData, { space: 2 })
+}
+
+const empty = {
+  value: '',
+  length: 0,
 }

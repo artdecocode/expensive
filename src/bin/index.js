@@ -30,6 +30,8 @@ const {
   type,
   pageSize,
   register,
+  free,
+  zones,
 } = argufy({
   domains: {
     command: true,
@@ -51,6 +53,8 @@ const {
   type: 't', // add description to argufy, so that usage can be passed to usually
   // </INFO>
   register: { short: 'r', boolean: true },
+  free: { short: 'f', boolean: true },
+  zones: 'z',
 })
 
 if (version) {
@@ -64,7 +68,6 @@ if (help) {
   console.log(u)
   process.exit()
 }
-
 
 const run = async () => {
   let phone
@@ -99,6 +102,8 @@ const run = async () => {
 
     await Check(nc, {
       domains,
+      zones,
+      free,
     })
   } catch ({ stack, message, props }) {
     if (props) {

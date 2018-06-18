@@ -4,22 +4,28 @@ export const validateDomains = (arr) => arr.reduce((acc, current) => {
   return acc && typeof current == 'string'
 }, true)
 
-export const startupyDomains = [
-  '.com',
-  '.net',
-  '.org',
-  '.biz',
-  '.co',
-  '.cc',
-  '.io',
-  '.bz',
-  '.nu',
-  '.app',
+export const allZones = [
+  'com',
+  'net',
+  'org',
+  'biz',
+  'co',
+  'cc',
+  'io',
+  'bz',
+  'nu',
+  'app',
 ]
 
 export const isSingleWord = d => !/\./.test(d)
 
-export const makeStartupyList = d => startupyDomains.map(s => `${d}${s}`)
+export const makeList = (d, zones) => {
+  const z = zones.length ? allZones.filter(zone => {
+    return zones.includes(zone)
+  }) : allZones
+  const res = z.map(s => `${d}.${s}`)
+  return res
+}
 
 const getPropValue = (val) => {
   if (val == 'true') return true
