@@ -1,3 +1,13 @@
+## 11 June 2018
+
+## 1.2.2
+
+- [docs] add man page, update readme
+
+## 1.2.1
+
+- [package] Update the `maintainers` field.
+
 ## 10 June 2018
 
 ## 1.2.0

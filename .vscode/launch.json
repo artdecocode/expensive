@@ -14,8 +14,36 @@
         "NODE_DEBUG": "expensive"
       },
       "args": [
-        "testt"
+        // "zavr.co.uk",
+        "test",
+        // "testt",
+        // "testtt",
+        // "-z",
+        // "com,cc,co,io",
+        // "-f"
+        // "-i"
       ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Zoroaster",
+      "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
+      "args": [
+        // "test/spec/query.js",
+        "test/spec/namecheap/domains/get-info.js",
+        "-b",
+        "-w"
+      ],
+      "env": {
+        "BABEL_ENV": "debug",
+        "NODE_DEBUG": "expensive",
+        "ZOROASTER_TIMEOUT": "9999999"
+      },
       "console": "integratedTerminal",
       "skipFiles": [
         "<node_internals>/**/*.js"

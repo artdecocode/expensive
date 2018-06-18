@@ -1,0 +1,46 @@
+.Dd June 11, 2018
+.Dt EXPENSIVE 1
+.Os Mac OS
+.Sh NAME
+.Nm expensive
+.Nd register and control domains via namecheap API
+.Sh SYNOPSIS
+.Nm
+.Op Fl rih
+.Op Fl -help|init
+[\fIdomain.com\fP]
+.Sh DESCRIPTION
+The
+.Nm
+is Node.js client implementation of namecheap.com API.
+It is helpful for quicker registration of domains and DNS set-up.
+It can register domains, and assign their name servers to newly created hosted zones in Route 53.
+Additionally, it can perform an automated 2-factor authorisation in the namecheap web interface to white-list an IP address (implemented as a Chrome automation script).
+
+It will remember the configuration details in \fIHOMEDIR/.expensiverc\fP and \fIHOMEDIR/.expensive-clientrc\fP.
+
+A list of options follows.
+.Bl -tag -width Ds
+.It Fl i
+Display information about the domain.
+.It Fl r
+Register a new domain.
+.It Fl h
+Create a new hosted zone for the domain and assign its name servers.
+.It Fl -help
+Display the usage information and exit.
+.It Fl -init
+Initialise the configuration files.
+.It Ar domain.com
+A domain for which to apply the above operations
+.El
+.Sh HISTORY
+.Bl -tag -width Ds
+.It Ar v1.2.1
+.El
+.Bl -item -compact
+.It
+[docs] add man page, update readme
+.El
+.Sh AUTHOR
+Anton (anton@adc.sh)

@@ -3,39 +3,114 @@
 /* eslint-disable no-console */
 "use strict";
 
-var _erte = require("erte");
-
 var _util = require("util");
-
-var _reloquent = require("reloquent");
 
 var _argufy = _interopRequireDefault(require("argufy"));
 
+var _africa = _interopRequireDefault(require("africa"));
+
 var _getUsage = _interopRequireDefault(require("./get-usage"));
+
+var _list = _interopRequireDefault(require("./list"));
+
+var _check = _interopRequireDefault(require("./check"));
+
+var _reg = _interopRequireDefault(require("./reg"));
 
 var _ = require("..");
 
 var _privateConfig = _interopRequireDefault(require("../lib/private-config"));
 
-var _lib = require("../lib");
+var _info = _interopRequireDefault(require("../lib/print/info"));
 
-var _authenticate = _interopRequireDefault(require("../lib/authenticate"));
+var _handleRequestIp = _interopRequireDefault(require("../lib/authenticate/handle-request-ip"));
 
-var _chromeLauncher = require("chrome-launcher");
+var _questions = _interopRequireWildcard(require("../questions"));
+
+var _Namecheap = _interopRequireDefault(require("../Namecheap"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const LOG = (0, _util.debuglog)('expensive');
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG);
 const {
-  domain,
-  help
+  domains,
+  help,
+  init,
+  version,
+  head,
+  info,
+  sort,
+  // name, expire, create
+  desc,
+  filter,
+  type,
+  pageSize,
+  register,
+  free,
+  zones
 } = (0, _argufy.default)({
-  domain: {
-    command: true
+  domains: {
+    command: true,
+    multiple: true
   },
-  help: 'h'
-}, process.argv);
+  version: {
+    short: 'v',
+    boolean: true
+  },
+  help: {
+    short: 'h',
+    boolean: true
+  },
+  init: {
+    short: 'I',
+    boolean: true
+  },
+  head: {
+    short: 'H',
+    boolean: true
+  },
+  info: {
+    short: 'i',
+    boolean: true
+  },
+  // <INFO>
+  sort: 's',
+  // add validation to argufy
+  desc: {
+    short: 'd',
+    boolean: true
+  },
+  filter: {
+    short: 'f'
+  },
+  pageSize: {
+    short: 'p'
+  },
+  type: 't',
+  // add description to argufy, so that usage can be passed to usually
+  // </INFO>
+  register: {
+    short: 'r',
+    boolean: true
+  },
+  free: {
+    short: 'f',
+    boolean: true
+  },
+  zones: 'z'
+});
+
+if (version) {
+  const {
+    version: v
+  } = require('../../package.json');
+
+  console.log(v);
+  process.exit();
+}
 
 if (help) {
   const u = (0, _getUsage.default)();
@@ -43,41 +118,12 @@ if (help) {
   process.exit();
 }
 
-if (!domain) {
-  const u = (0, _getUsage.default)();
-  console.log(u);
-  console.log();
-  process.exit(1);
-}
-
-const checkSingleWord = async (word, auth) => {
-  const domains = (0, _lib.makeStartupyList)(word);
-  console.log('Checking %s domains: %s', domains.length, domains.join(', '));
-  const res = await (0, _.checkDomains)({ ...auth,
-    domains
-  });
-  reportFree(domains, res);
-};
-
-const reportFree = (domains, freeDomains) => {
-  const [free,, total] = domains.reduce(([f, t, tt], dd) => {
-    const isFree = freeDomains.some(d => d == dd);
-    const it = isFree ? (0, _erte.c)(dd, 'green') : (0, _erte.c)(dd, 'red');
-    return [isFree ? [...f, it] : f, isFree ? t : [...t, it], [...tt, it]];
-  }, [[], [], []]);
-  const percent = free.length / total.length * 100;
-  console.log('%s', total.join(', '));
-  console.log('%s% are free', percent);
-};
-
 const run = async () => {
-  const singleWord = (0, _lib.isSingleWord)(domain);
   let phone;
   let user;
 
   try {
-    const { ...auth
-    } = await (0, _.getConfig)({
+    const Auth = await (0, _.getConfig)({
       global: true
     });
     const {
@@ -86,23 +132,42 @@ const run = async () => {
       phone: p
     } = await (0, _privateConfig.default)();
     phone = p;
-    user = auth.ApiUser;
+    user = Auth.ApiUser;
+    const nc = new _Namecheap.default(Auth);
 
-    if (singleWord) {
-      await checkSingleWord(domain, auth);
+    if (!domains) {
+      await (0, _list.default)(nc, {
+        sort,
+        desc,
+        filter,
+        type,
+        pageSize
+      });
       return;
     }
 
-    console.log('Checking domain %s', domain);
-    const res = await (0, _.checkDomains)({ ...auth,
-      domain
-    });
+    const [domain] = domains;
 
-    if (res.length) {
-      console.log('%s is free', (0, _erte.c)(domain, 'green'));
-    } else {
-      console.log('%s is taken', (0, _erte.c)(domain, 'red'));
+    if (info) {
+      const i = await nc.domains.getInfo({
+        domain
+      });
+      (0, _info.default)(i);
+      return;
     }
+
+    if (register) {
+      await (0, _reg.default)(nc, {
+        domain
+      });
+      return;
+    }
+
+    await (0, _check.default)(nc, {
+      domains,
+      zones,
+      free
+    });
   } catch ({
     stack,
     message,
@@ -115,10 +180,11 @@ const run = async () => {
       LOG(Errors[props.Number]);
     }
 
-    if (props && props.Number == '1011150') {
-      const authComplete = await handleRequestIP(message, {
+    if (props && props.Number == 1011150) {
+      const authComplete = await (0, _handleRequestIp.default)(message, {
         phone,
-        user
+        user,
+        head
       });
 
       if (authComplete === true) {
@@ -136,37 +202,22 @@ const run = async () => {
   }
 };
 
-const handleRequestIP = async (message, {
-  phone,
-  user
-}) => {
-  const _ip = /Invalid request IP: (.+)/.exec(message);
-
-  if (!_ip) throw new Error('Could not extract IP from the error message');
-  const [, ip] = _ip;
-  const [password, chrome] = await Promise.all([(0, _reloquent.askSingle)({
-    text: `Enter password to white-list ${ip}`
-  }), (0, _chromeLauncher.launch)({
-    startingUrl: 'https://www.namecheap.com/myaccount/login.aspx',
-    chromeFlags: [// userDataDir,
-      // '--headless', '--disable-gpu', '--window-size=1000,2000'
-    ]
-  })]);
-  const res = await (0, _authenticate.default)({
-    user,
-    password,
-    ip,
-    phone,
-    chrome
-  });
-  return res;
-};
-
 const Errors = {
-  1011150: 'Parameter RequestIP is invalid'
+  1011150: 'Parameter RequestIP is invalid',
+  2030166: 'Domain is invalid'
 };
 
 (async () => {
+  if (init) {
+    await (0, _africa.default)('expensive', _questions.default, {
+      force: true
+    });
+    await (0, _africa.default)('expensive-client', _questions.privateQuestions, {
+      force: true
+    });
+    return;
+  }
+
   await run();
 })();
 //# sourceMappingURL=index.js.map

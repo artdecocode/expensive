@@ -26,7 +26,7 @@ const getConfig = async (config = {}) => {
   } = config
   if (!global && !packageName) throw new Error('An implementing package name should be given if not using a global rc')
   const p = global && !packageName ? 'expensive' : `${packageName}-expensive`
-  LOG('authenticating %s', p)
+  LOG('Reading %s rc', p)
   const {
     ApiUser,
     ApiKey,
