@@ -1,6 +1,6 @@
 # expensive
 
-[![npm version](https://badge.fury.io/js/expensive.svg)](https://badge.fury.io/js/expensive)
+[![npm version](https://badge.fury.io/js/expensive.svg)](https://npmjs.org/package/expensive)
 
 `expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
 
@@ -19,23 +19,17 @@ The CLI client can also perform web-based authentication via Chrome's automation
   * [Check Zones](#check-zones)
   * [Check Single Domains](#check-single-domains)
   * [Show Domain Information](#show-domain-information)
-  * [Set DNS](#set-dns)
-  * [Set Route 53](#set-route-53)
   * [Register Domain](#register-domain)
-  * [Initialise Configuration](#initialise-configuration)
+  * [Update Configuration](#update-configuration)
   * [Print Version](#print-version)
   * [Display Usage](#display-usage)
   * [Result Log](#result-log)
 - [API](#api)
   * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
   * [`new Namecheap(Auth: Object)`](#new-namecheapauth-object)
-  * [domains](#domains)
-    * [check](#check)
-    * [getList](#getlist)
-    * [getInfo](#getinfo)
-- [Security](#security)
 - [Errors and Troubleshooting](#errors-and-troubleshooting)
   * [`getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`](#getaddrinfo-enotfound-apinamecheapcom-apinamecheapcom443)
+- [Security](#security)
 
 ## Configuration
 
@@ -61,7 +55,7 @@ These are stored in the `.expensive-client.rc` and are not shared with other sof
 
 The last 3 digits will be used to automatically login and white-list an IP address, and AWS keys are used for Route 53 access.
 
- ## CLI
+## CLI
 
 The program can be used from a terminal.
 
@@ -79,6 +73,7 @@ The program can be used from a terminal.
     -v, --version       print package's version
     -H, --headless      use headless Chrome for auth
 ```
+
 
 ### Check Zones
 
@@ -137,32 +132,6 @@ View the domain information. If domain is registered with `namecheap`, it will p
   </table>
 </details>
 
-### Set DNS
-
-To or assign DNS values for a given domain, the `-d` (or `--dns`) command can be used. All items should be separated with a comma.
-
-<details>
-  <summary><code>expensive example.co -d 10.10.10.10,11.11.11.11</code></summary>
-  <table>
-  <tr><td>
-    <img alt="Assigning new DNS values." src="doc/dns.gif" />
-  </td></tr>
-  </table>
-</details>
-
-### Set Route 53
-
-To automatically create a new hosted zone on `Route 53`, and assign its nameservers to the domain, the `-r53` option can be passed.
-
-<details>
-  <summary><code>expensive example.co -r53</code></summary>
-  <table>
-  <tr><td>
-    <img alt="Creating and assigning a route 53 zone." src="doc/route-53.gif" />
-  </td></tr>
-  </table>
-</details>
-
 ### Register Domain
 
 Domain registration from the command-line is made easy by `expensive`. Pass `-r` flag to buy a domain name.
@@ -176,7 +145,8 @@ Domain registration from the command-line is made easy by `expensive`. Pass `-r`
   </table>
 </details>
 
-### Initialise Configuration
+
+### Update Configuration
 
 To update the stored configuration values (e.g., to change an `API` key), run the `-I` (or `--init`) command. See [Configuration](#configuration) for more detail.
 
@@ -188,6 +158,7 @@ To update the stored configuration values (e.g., to change an `API` key), run th
   </td></tr>
   </table>
 </details>
+
 
 ### Print Version
 
@@ -221,6 +192,8 @@ A log of search queries and found free domains is written to `HOMEDIR/.expensive
 
 ## API
 On top of the CLI application, the package provides means to query _namecheap_ API. To start using the API, a configuration can be read from a `.rc` file using `getConfig` method and passed to a client instance.
+
+
 
 ### `getConfig(options: Object): Config`
 
@@ -267,13 +240,15 @@ import Namecheap, { getConfig } from 'expensive'
 })()
 ```
 
-### domains
+## Errors and Troubleshooting
 
-#### check
+`expensive` will display an error text when an error happens during its execution.
 
-#### getList
+### `getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`
 
-#### getInfo
+This error means that there's no internet access.
+
+Check that the computer is connected to the internet.
 
 ## Security
 
@@ -286,16 +261,6 @@ npm i -g artdecocode/expensive#v1.2.0
 ```
 
 This will fetch the package from GitHub, and not registry. If it was possible to see the git sha sum of the commit in `yarn info package` then it would not have been necessary, because one can compare source code against the commit number. By installing from GitHub directly, one can know what they install.
-
-## Errors and Troubleshooting
-
-`expensive` will display an error text when an error happens during its execution.
-
-### `getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`
-
-This error means that there's no internet access.
-
-Check that the computer is connected to the internet.
 
 ---
 
