@@ -20,7 +20,8 @@
     "dc": "git add README-source.md README.md && git commit -m ",
     "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/simple.js",
-    "build": "babel src --out-dir build --source-maps --ignore src/bin/register.js"
+    "build-src": "babel src --out-dir build --source-maps --ignore src/bin/register.js",
+    "build": "yarn-s build-src doc"
   },
   "files": [
     "build"
@@ -46,11 +47,11 @@
   },
   "homepage": "https://github.com/artdecocode/expensive#readme",
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.49",
-    "@babel/core": "7.0.0-beta.49",
-    "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.49",
-    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.49",
-    "@babel/register": "7.0.0-beta.49",
+    "@babel/cli": "7.0.0-beta.51",
+    "@babel/core": "7.0.0-beta.51",
+    "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.51",
+    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.51",
+    "@babel/register": "7.0.0-beta.51",
     "babel-plugin-transform-rename-import": "2.2.0",
     "eslint": "4.19.1",
     "eslint-config-artdeco": "1.0.0",
@@ -59,8 +60,8 @@
   },
   "dependencies": {
     "africa": "1.1.0",
-    "argufy": "1.1.1",
-    "aws-sdk": "2.254.1",
+    "argufy": "1.1.2",
+    "aws-sdk": "2.259.1",
     "bosom": "1.0.0",
     "chrome-launcher": "0.10.2",
     "chrome-remote-interface": "0.25.6",
