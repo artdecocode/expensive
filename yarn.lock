@@ -285,6 +285,10 @@ argufy@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.1.1.tgz#f39f20ee3240b7d1119724fe5e308caaed23a2b0"
 
+argufy@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.1.2.tgz#e99107e00e84b6272bedc0b9a93e42014edd5a72"
+
 arr-diff@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-2.0.0.tgz#8f3b827f955a8bd669697e4a4256ac3ceae356cf"
@@ -745,14 +749,15 @@ doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-documentary@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.1.0.tgz#4b63f8d18d8dfc56d1aacf172785c04db1cf438c"
+documentary@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.3.1.tgz#c79ac3c70322287c09b8988e2a4a4245a7c0570b"
   dependencies:
-    argufy "1.1.1"
+    argufy "1.1.2"
     catchment "2.0.1"
     restream "2.0.3"
     spawncommand "2.0.1"
+    wrote "1.4.0"
 
 dreamopt@~0.6.0:
   version "0.6.0"
@@ -1555,6 +1560,12 @@ make-dir@^1.0.0:
   dependencies:
     pify "^3.0.0"
 
+makepromise@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/makepromise/-/makepromise-1.1.1.tgz#4e03bf98c25ca96a4223b0f2e280e3b3a6f9dea4"
+  dependencies:
+    erotic "0.2.0"
+
 map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -2038,6 +2049,10 @@ restore-cursor@^2.0.0:
     onetime "^2.0.0"
     signal-exit "^3.0.2"
 
+restream@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/restream/-/restream-1.2.0.tgz#fd13b031a54e80cc65d1878c43149f1b3a40efbb"
+
 restream@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/restream/-/restream-2.0.3.tgz#35c032d02f57afacb4b78f6ae9b510f99a29a1d1"
@@ -2437,6 +2452,14 @@ write@^0.2.1:
   resolved "https://registry.yarnpkg.com/write/-/write-0.2.1.tgz#5fc03828e264cea3fe91455476f7a3c566cb0757"
   dependencies:
     mkdirp "^0.5.1"
+
+wrote@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/wrote/-/wrote-1.4.0.tgz#68c95aa1d62e425c8cdf03fa26baa3acca2eed8f"
+  dependencies:
+    catchment "2.0.1"
+    makepromise "1.1.1"
+    restream "1.2.0"
 
 ws@3.3.x:
   version "3.3.3"
