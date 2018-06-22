@@ -1,15 +1,14 @@
 /* eslint-disable no-console */
-// import { debuglog } from 'util'
+import { debuglog } from 'util'
 import { equal, ok } from 'assert'
 import { askSingle } from 'reloquent'
-import { extractFormState, extractOptions, askForNumber } from './lib'
-// import promto from 'promto'
 import { Session } from 'rqt'
+import { extractFormState, extractOptions, askForNumber } from './lib'
 
-// const LOG = debuglog('expensive')
+const LOG = debuglog('expensive')
 
 const S = !!process.env.SANDBOX
-console.log('sandbox: %s', S)
+LOG('sandbox: %s', S)
 
 const getHost = () => {
   return `https://www.${S ? 'sandbox.' : ''}namecheap.com`
