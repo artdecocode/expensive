@@ -1,5 +1,8 @@
+import { debuglog } from 'util'
 import query from '../../../../lib/query'
 import { extractTag } from '../../..'
+
+const LOG = debuglog('expensive')
 
 const COMMAND = 'namecheap.users.address.getInfo'
 
@@ -38,7 +41,8 @@ const getInfo = (add) => {
           [key]: content,
         }
       } catch (er) {
-        throw new Error(`Could not extract tag ${key}`)
+        LOG(`Could not extract tag ${key}`)
+        return acc
       }
     }, {})
   return res

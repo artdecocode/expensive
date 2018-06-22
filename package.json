@@ -4,11 +4,11 @@
   "description": "Namecheap.com API client to register and manage domains from CLI.",
   "main": "build",
   "scripts": {
-    "t": "zoroaster --babel",
+    "t": "zoroaster -b",
     "test": "yarn t test/spec",
     "test-build": "BABEL_ENV=test-build yarn t test/spec",
     "test-all": "yarn-s test test-build",
-    "test-watch": "yarn test --watch",
+    "test-watch": "yarn test -w",
     "start": "node build/bin",
     "dev": "NODE_DEBUG=expensive node src/bin/register",
     "s": "node build/bin",

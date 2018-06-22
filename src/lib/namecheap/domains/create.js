@@ -15,7 +15,7 @@ export default async function create(Auth, conf) {
   const RegistrantAddress = getAddressObject(address, 'Registrant')
   const TechAddress = getAddressObject(address, 'Tech')
   const AdminAddress = getAddressObject(address, 'Admin')
-  const AuxAddress = getAddressObject(address, 'Aux')
+  const AuxAddress = getAddressObject(address, 'AuxBilling')
 
   const res = await query(Auth, COMMAND, {
     DomainName: domain,
@@ -30,7 +30,6 @@ export default async function create(Auth, conf) {
     WGEnabled: whois,
   })
   const [{ props }] = extractTag('DomainCreateResult', res)
-  // const results = DomainCheckResult.map(({ props }) => props)
   return props
 }
 
