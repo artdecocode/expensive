@@ -5,20 +5,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _util = require("util");
+
 var _assert = require("assert");
 
 var _reloquent = require("reloquent");
 
-var _lib = require("./lib");
-
 var _rqt = require("rqt");
 
+var _lib = require("./lib");
+
 /* eslint-disable no-console */
-// import { debuglog } from 'util'
-// import promto from 'promto'
-// const LOG = debuglog('expensive')
+const LOG = (0, _util.debuglog)('expensive');
 const S = !!process.env.SANDBOX;
-console.log('sandbox: %s', S);
+LOG('sandbox: %s', S);
 
 const getHost = () => {
   return `https://www.${S ? 'sandbox.' : ''}namecheap.com`;
