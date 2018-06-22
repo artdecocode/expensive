@@ -1,3 +1,10 @@
+## 21 June 2018
+
+## 1.4.0
+
+- [feature] Whitelist IP automation without a browser.
+- [feature] Register a domain name.
+
 ## 18 June 2018
 
 ## 1.3.0
