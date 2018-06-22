@@ -181,6 +181,8 @@ export default class Namecheap {
 
 /** @type {DomainInfo} */
 export const DomainInfo = {}
+/** @type {AddressDetail} */
+export const AddressDetail = {}
 
 /**
  * @typedef {Object} Auth
