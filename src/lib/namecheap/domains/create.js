@@ -26,8 +26,8 @@ export default async function create(Auth, conf) {
     ...AdminAddress,
     ...AuxAddress,
     Nameservers: nameservers.join(','),
-    AddFreeWhoisguard: whois,
-    WGEnabled: whois,
+    AddFreeWhoisguard: whois ? 'yes' : 'no',
+    WGEnabled: whois ? 'yes' : 'no',
   })
   const [{ props }] = extractTag('DomainCreateResult', res)
   return props
