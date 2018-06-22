@@ -1,5 +1,10 @@
 ## 21 June 2018
 
+## 1.4.1
+
+- [fix] Enable `whois` guard by default when registering.
+- [fix] Automatically apply `NA` to state/province if not available.
+
 ## 1.4.0
 
 - [feature] Whitelist IP automation without a browser.
