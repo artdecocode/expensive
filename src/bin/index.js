@@ -13,9 +13,11 @@ import printInfo from '../lib/print/info'
 import handleRequestIP from '../lib/authenticate/handle-request-ip'
 import questions, { privateQuestions } from '../questions'
 import Namecheap from '../Namecheap'
+import rqt from 'rqt'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
+const SANDBOX = !!process.env.SANDBOX
 
 const {
   domains,
@@ -32,6 +34,7 @@ const {
   register,
   free,
   zones,
+  whitelistIP,
 } = argufy({
   domains: {
     command: true,
@@ -55,6 +58,7 @@ const {
   register: { short: 'r', boolean: true },
   free: { short: 'f', boolean: true },
   zones: 'z',
+  whitelistIP: { short: 'W', boolean: true },
 })
 
 if (version) {
@@ -74,11 +78,23 @@ const run = async () => {
   let user
   try {
     const Auth = await getConfig({
-      global: true,
+      global: !SANDBOX,
+      packageName: SANDBOX ? 'sandbox' : null,
     })
     const { aws_id, aws_key, phone: p } = await getPrivateConfig()
     phone = p
     user = Auth.ApiUser
+
+    if (whitelistIP) {
+      const err = new Error()
+      err.props = {
+        Number: 1011150,
+      }
+      LOG('waiting for ip...')
+      const ip = await rqt('https://api.ipify.org') //  '127.0.0.1' //
+      err.message = `Invalid request IP: ${ip}`
+      throw err
+    }
 
     const nc = new Namecheap(Auth)
 
@@ -112,7 +128,7 @@ const run = async () => {
     }
 
     if (props && props.Number == 1011150) {
-      const authComplete = await handleRequestIP(message, { phone, user, head })
+      const authComplete = await handleRequestIP(message, { phone, user, head, skipPhoneAuth: SANDBOX })
       if (authComplete === true) {
         await run()
         // update the configuration to reflect the IP
@@ -133,10 +149,24 @@ const Errors = {
   2030166: 'Domain is invalid',
 }
 
+const getAppName = () => {
+  const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`
+  return e
+}
+
+const initConfig = async () => {
+  const name = getAppName()
+  const Auth = await africa(name, questions, { force: true })
+  const client = await africa(`${name}-client`, privateQuestions, { force: true })
+  return {
+    Auth,
+    client,
+  }
+}
+
 ; (async () => {
   if (init) {
-    await africa('expensive', questions, { force: true })
-    await africa('expensive-client', privateQuestions, { force: true })
+    await initConfig()
     return
   }
   await run()
