@@ -1,247 +1,152 @@
 /* eslint-disable no-console */
-import { debuglog } from 'util'
-import { equal } from 'assert'
-import CDP from 'chrome-remote-interface'
-import Chrome from 'chrome-remote-interface/lib/chrome' // eslint-disable-line no-unused-vars
+// import { debuglog } from 'util'
+import { equal, ok } from 'assert'
 import { askSingle } from 'reloquent'
-import { mapPhoneOptions, checkAuth, isBlocked, click, evaluate, getValue, setValue, checkLimit } from './lib'
-import { writeFileSync } from 'fs'
+import { extractFormState, extractOptions, askForNumber } from './lib'
+// import promto from 'promto'
+import { Session } from 'rqt'
 
-const LOG = debuglog('expensive')
+// const LOG = debuglog('expensive')
 
-const url = 'https://ap.www.namecheap.com/settings/tools/apiaccess/whitelisted-ips'
+const S = !!process.env.SANDBOX
+console.log('sandbox: %s', S)
+
+const getHost = () => {
+  return `https://www.${S ? 'sandbox.' : ''}namecheap.com`
+}
+const getApHost = () => {
+  return `https://ap.www.${S ? 'sandbox.' : ''}namecheap.com`
+}
+
+const getWhitelistUrl = () => {
+  const host = getApHost()
+  const u = `${host}/settings/tools/apiaccess/whitelisted-ips`
+  return u
+}
+
+const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
 
 const authenticate = async ({
   user,
   password,
-  ip, // ip to set
+  ip,
   phone,
-  chrome,
 }) => {
-  const { port } = chrome
-  LOG('Chrome debugging port running on %s', port)
+  const returnUrl = getWhitelistUrl()
+  const host = getHost()
+  const appHost = getApHost()
+  const url = `${host}/myaccount/login-signup.aspx?ReturnUrl=${encodeURIComponent(returnUrl)}`
 
-  /** @type {Chrome} */
-  let client
-  let res
-  let Page
-  try {
-    client = await CDP({
-      port,
-    })
-    const { Network, DOM, Runtime, Input } = client
-    ;({ Page } = client)
-
-    Network.requestIntercepted(({ interceptionId, request }) => {
-      const blocked = isBlocked(request.url)
-      if (!blocked) {
-        LOG(request.url)
-      }
-      Network.continueInterceptedRequest({
-        interceptionId,
-        errorReason: blocked ? 'Aborted' : undefined,
-      })
-    })
-    // enable events then start!
-    await Network.enable()
-    await Page.enable()
-    await DOM.enable()
-    await Runtime.enable()
-
-    await Network.setRequestInterception({ patterns: [{ urlPattern: '*' }] })
-    // await Network.setCacheDisabled({ cacheDisabled: true })
-
-    await Page.navigate({ url: `https://www.namecheap.com/myaccount/login-signup.aspx?ReturnUrl=${encodeURIComponent(url)}` })
-    await Page.loadEventFired()
-    await login(Runtime, { user, password })
-    await Page.loadEventFired()
-
-    await checkAuth(Runtime)
-
-    await selectPhone(Runtime, phone)
-    await Page.loadEventFired()
-
-    await enterCode(Runtime)
-    await Page.loadEventFired()
-
-    const a = await evaluate(Runtime, 'location.href')
-    equal(a, url, `Unexpected url: ${a}`)
-
-    await addIpAddress(Runtime, Input, { ip, password })
-    res = true
-  } catch (err) {
-    LOG(err)
-    res = err.message
-  } finally {
-    if (client) {
-      // const { data } = await Page.captureScreenshot()
-      // writeFileSync('debug.png', Buffer.from(data, 'base64'))
-      await client.close()
-    }
-  }
-
-  await chrome.kill()
-  console.log('Chrome killed')
-  return res
-}
-
-const fetchNewIp = async (Runtime, {
-  name,
-  csrf,
-  password: accountPassword,
-  ip: ipAddress,
-}) => {
-  const data = {
-    accountPassword,
-    name,
-    ipAddress,
-  }
-  const j = JSON.stringify(data)
-  const url = 'https://ap.www.namecheap.com/api/v1/ncpl/apiaccess/ui/AddIpAddress'
-  const { result, exceptionDetails } = await Runtime.evaluate({
-    expression: `
-      (async () => {
-        const response = await fetch('${url}', {
-          body: '${j}',
-          cache: 'no-cache',
-          credentials: 'include',
-          headers: {
-            'x-ncpl-rcsrf': '${csrf}',
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-        })
-        const contentType = response.headers.get('content-type')
-        if(contentType && contentType.includes('application/json')) {
-          const j = await response.json()
-          return JSON.stringify(j)
-        }
-        throw new Error("haven't got a JSON")
-      })()
-`,
-    awaitPromise: true,
+  const session = new Session({
+    headers: {
+      'User-Agent': USER_AGENT,
+    },
   })
-  if (exceptionDetails) {
-    throw new Error(exceptionDetails.exception.description)
-  }
-  const res = JSON.parse(result.value)
-  if (res.__isError) {
-    throw new Error(res.__errorType)
-  }
-  if (!res.Success) {
-    if (!Array.isArray(res.Errors)) {
-      throw new Error('The request was not successful')
-    }
-    const [{ Message }] = res.Errors
-    throw new Error(Message)
-  }
-}
+  const { SessionKey } = await session.request(`${host}/cart/ajax/SessionHandler.ashx`)
 
-const addIpAddress = async (Runtime, Input, { ip, password }) => {
+  const { body, headers } = await session.request(url, {
+    data: {
+      hidden_LoginPassword: '',
+      LoginUserName: user,
+      LoginPassword: password,
+      sessionEncryptValue: SessionKey,
+    },
+    type: 'form',
+    returnHeaders: true,
+  })
+
+  const validationErrorRe = /<strong class="title">Validation Error<\/strong>\s+<div>(.+?)<\/div>/
+  const [, err] = validationErrorRe.exec(body) || []
+  if (err) throw new Error(err.replace(/(<([^>]+)>)/ig, ''))
+
+  if (headers.location.startsWith('/myaccount/twofa/secondauth.aspx')) {
+    const loc = await secondAuth(`${host}${headers.location}`, session, phone)
+    equal(loc, returnUrl, `Expected to have been redirected to ${returnUrl}`)
+  }
+  const body2 = await session.request(returnUrl)
+  const token = extractXsrf(body2)
+
   const name = `expensive ${new Date().toLocaleString()}`.replace(/:/g, '-')
-  const csrf = await evaluate(Runtime, 'document.querySelector("#x-ncpl-csrfvalue").value')
-  await fetchNewIp(Runtime, {
-    password,
-    name,
-    ip,
-    csrf,
+  const res = await session.request(`${appHost}/api/v1/ncpl/apiaccess/ui/AddIpAddress`, {
+    data: {
+      name,
+      accountPassword: password,
+      ipAddress: ip,
+    },
+    headers: {
+      'x-ncpl-rcsrf': token,
+    },
   })
-  // await new Promise(r => setTimeout(r, 1000)) // wait for
-  // await focus(Runtime, '#ip-name')
-  // for (let i = 0; i < name.length; i++) {
-  //   await Input.dispatchKeyEvent({ type: 'char', text: name[i] })
-  // }
-  // await focus(Runtime, '#ip-address')
-  // for (let i = 0; i < ip.length; i++) {
-  //   await Input.dispatchKeyEvent({ type: 'char', text: ip[i] })
-  // }
-  // await evaluate(Runtime, 'document.querySelectorAll(\'input[type="password"]\')[1].focus()')
-  // for (let i = 0; i < password.length; i++) {
-  //   await Input.dispatchKeyEvent({ type: 'char', text: password[i] })
-  // }
-  // await evaluate(Runtime, 'document.querySelectorAll(\'button.gb-btn--primary\')[1].click()')
+  if (!res.Success) throw new Error(res.Errors.map(({ Message }) => Message).join(', '))
 }
 
-const login = async (Runtime, { user, password }) => {
-  await setValue(Runtime, 'input.nc_username', user)
-  await setValue(Runtime, 'input.nc_password', password)
-  await click(Runtime, 'input.nc_login_submit')
+const extractXsrf = (body) => {
+  const re = /<input type="hidden" id="x-ncpl-csrfvalue" value="(.+?)"/
+  const res = re.exec(body)
+  if (!res) throw new Error('Could not find the x-ncpl-csrfvalue token on the page.')
+  const [, token] = res
+  return token
 }
 
-const selectPhone = async (Runtime, phone) => {
-  const submitSelector = 'input[type="submit"]'
-  const selectSelector = 'select.verification-method'
-  /** @type {{v: string, i: string}[]} */
-  const options = await evaluate(Runtime, `
-  Array.from(document.querySelectorAll('${selectSelector} > option'))
-    .map(p => ({v: p.value, i: p.innerHTML }))`, true)
+const secondAuth = async (location, session, phone) => {
+  let fs
+  let data
 
-  if (phone) {
-    const option = options.find(({ i }) => i.endsWith(phone))
-    if (!option) throw new Error(`A phone number ending with ${phone} cannot be found. Added numbers: ${options.map(({ i }) => i).join(', ')}`)
-    await evaluate(Runtime, `document.querySelector('${selectSelector}').value = "${option.v}"`)
-    await evaluate(Runtime, `document.querySelector('${submitSelector}').click()`)
-    return
+  const body = await session.request(location)
+
+  ok(/Select Phone Contact Number/.test(body), 'Could not find the Select Phone section.')
+
+  const options = extractOptions(body)
+  ok(options.length, 'Could not find any numbers.')
+
+  const value = await askForNumber(options, phone)
+
+  fs = extractFormState(body)
+  data = {
+    ...fs,
+    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$ddlAuthorizeList: value,
+    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnSendVerification: 'Proceed with Login',
   }
-
-  const keys = options.map(({ i }) => i.slice(i.length - 3))
-
-  if (options.length) {
-    const text = `Which phone number to use for 2 factor auth
-${
-  options
-    .map(({ i }) => ` ${i}`)
-    .map(mapPhoneOptions)
-    .join('\n')
-}
-enter last 3 digits`
-
-    const answer = await askSingle({
-      text,
-      async getDefault() {
-        return phone || keys[0]
-      },
-      validation(a) {
-        const p = options.some(({ i }) => i.endsWith(a))
-        if (!p) {
-          throw new Error('unknown number entered')
-        }
-      },
-    })
-
-    console.log(answer)
-    const { v } = options.find(({ i }) => i.endsWith(answer))
-    await Runtime.evaluate({
-      expression: `document.querySelector('select.verification-method').value = "${v}"`,
-    })
-  }
-  await Runtime.evaluate({
-    expression: `document.querySelector('input[type="submit"]').click()`, // eslint-disable-line
+  const body2 = await session.request(location, {
+    data,
+    type: 'form',
   })
+
+  if (/You have reached the limit on the number.+/m.test(body2)) {
+    throw new Error(body2.match(/You have reached the limit on the number.+/m)[0])
+  }
+  ok(/We sent a message with the verification code/.test(body2), 'Could not find the code entry section.')
+
+  const loc = await submitCode(body2, session, location)
+  return loc
 }
 
-const enterCode = async (Runtime) => {
-  const val = await getValue(Runtime, 'input[type="submit"]')
-  equal(val, 'Submit Security Code', 'Did not get to the page with verification of security code')
-
-  /** @type {string} */
-  const info = await Runtime.evaluate({
-    expression: `document.querySelector('.info').innerText`, // eslint-disable-line
-  })
-  const r = /Your \d-digit code begins with (\d)/.exec(info.result.value)
-  if (!r) {
-    await checkLimit(Runtime)
-    throw new Error('Could not enter the code') // return
-  }
-
-  const [, b] = r
+const submitCode = async (body, session, location) => {
+  const [, b] = /Your 6-digit code begins with (\d)./.exec(body) || []
+  if (!b) throw new Error('Could not send the code.')
 
   const code = await askSingle({
     text: `Security code (begins with ${b})`,
   })
+  const fs = extractFormState(body)
+  const data = {
+    ...fs,
+    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$txtAuthVerification: code,
+    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnVerify: 'Submit Security Code',
+  }
 
-  await setValue(Runtime, 'input[placeholder="Verification Code"]', code)
-  await click(Runtime, 'input[type="submit"]')
+  const { body: body2, headers } = await session.request(location, {
+    data,
+    type: 'form',
+    returnHeaders: true,
+  })
+  if (/Oops, you entered an invalid code.+/m.test(body2)) {
+    console.log('Incorrect code.')
+    const res = await submitCode(body2, session, location)
+    return res
+  }
+  ok(/Object moved/.test(body2), 'Expected to be redirected after sign-in.')
+  return headers.location
 }
 
 export default authenticate

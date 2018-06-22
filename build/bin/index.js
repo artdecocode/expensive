@@ -29,12 +29,15 @@ var _questions = _interopRequireWildcard(require("../questions"));
 
 var _Namecheap = _interopRequireDefault(require("../Namecheap"));
 
+var _rqt = _interopRequireDefault(require("rqt"));
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const LOG = (0, _util.debuglog)('expensive');
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG);
+const SANDBOX = !!process.env.SANDBOX;
 const {
   domains,
   help,
@@ -50,7 +53,8 @@ const {
   pageSize,
   register,
   free,
-  zones
+  zones,
+  whitelistIP
 } = (0, _argufy.default)({
   domains: {
     command: true,
@@ -100,7 +104,11 @@ const {
     short: 'f',
     boolean: true
   },
-  zones: 'z'
+  zones: 'z',
+  whitelistIP: {
+    short: 'W',
+    boolean: true
+  }
 });
 
 if (version) {
@@ -124,7 +132,8 @@ const run = async () => {
 
   try {
     const Auth = await (0, _.getConfig)({
-      global: true
+      global: !SANDBOX,
+      packageName: SANDBOX ? 'sandbox' : null
     });
     const {
       aws_id,
@@ -133,6 +142,19 @@ const run = async () => {
     } = await (0, _privateConfig.default)();
     phone = p;
     user = Auth.ApiUser;
+
+    if (whitelistIP) {
+      const err = new Error();
+      err.props = {
+        Number: 1011150
+      };
+      LOG('waiting for ip...');
+      const ip = await (0, _rqt.default)('https://api.ipify.org'); //  '127.0.0.1' //
+
+      err.message = `Invalid request IP: ${ip}`;
+      throw err;
+    }
+
     const nc = new _Namecheap.default(Auth);
 
     if (!domains) {
@@ -184,7 +206,8 @@ const run = async () => {
       const authComplete = await (0, _handleRequestIp.default)(message, {
         phone,
         user,
-        head
+        head,
+        skipPhoneAuth: SANDBOX
       });
 
       if (authComplete === true) {
@@ -207,14 +230,28 @@ const Errors = {
   2030166: 'Domain is invalid'
 };
 
+const getAppName = () => {
+  const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`;
+  return e;
+};
+
+const initConfig = async () => {
+  const name = getAppName();
+  const Auth = await (0, _africa.default)(name, _questions.default, {
+    force: true
+  });
+  const client = await (0, _africa.default)(`${name}-client`, _questions.privateQuestions, {
+    force: true
+  });
+  return {
+    Auth,
+    client
+  };
+};
+
 (async () => {
   if (init) {
-    await (0, _africa.default)('expensive', _questions.default, {
-      force: true
-    });
-    await (0, _africa.default)('expensive-client', _questions.privateQuestions, {
-      force: true
-    });
+    await initConfig();
     return;
   }
 

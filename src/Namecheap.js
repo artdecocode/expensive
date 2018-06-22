@@ -1,4 +1,5 @@
 import check from './lib/namecheap/domains/check'
+import create from './lib/namecheap/domains/create'
 import getDomainsList from './lib/namecheap/domains/get-list'
 import getDomainInfo from './lib/namecheap/domains/get-info'
 import getAddressList from './lib/namecheap/users/address/get-list'
@@ -46,6 +47,18 @@ export default class Namecheap {
   }
   get domains() {
     return {
+      /**
+       * Registers a new domain.
+       * @param {domains.create} conf Configuration parameters.
+       * @param {string} conf.domain A domain name to register.
+       * @param {AddressDetail} conf.address An address to use for all fields.
+       * @returns {Promise.<RegistrationResult>} Result of the domain registration process.
+       */
+      create: async (conf) => {
+        const res = await create(this.Auth, conf)
+        return res
+      },
+
       /**
        * Checks the availability of domains.
        * @param {domains.check} conf Configuration parameters.
@@ -181,6 +194,8 @@ export default class Namecheap {
 
 /** @type {DomainInfo} */
 export const DomainInfo = {}
+/** @type {AddressDetail} */
+export const AddressDetail = {}
 
 /**
  * @typedef {Object} Auth
@@ -192,7 +207,11 @@ export const DomainInfo = {}
 /**
  * @typedef {Object} users.address.getInfo
  * @property {number} id ID of the address.
-
+ *
+ * @typedef {Object} domains.create
+ * @property {string} domain A domain name to register.
+ * @property {AddressDetail} address An address to use for all fields.
+ *
  * @typedef {Object} domains.getInfo
  * @property {string} domain Domain name to get information for.
  *
@@ -310,4 +329,14 @@ export const DomainInfo = {}
  * @property {string} ForwardedTo
  * @property {string} LastAutoEmailChangeDate
  * @property {string} WhoisGuardEmail
+ *
+ * @typedef {Object} RegistrationResult
+ * @property {string} ChargedAmount
+ * @property {string} Domain
+ * @property {boolean} FreePositiveSSL
+ * @property {boolean} NonRealTimeDomain
+ * @property {number} OrderID
+ * @property {boolean} Registered
+ * @property {number} TransactionID
+ * @property {boolean} WhoisguardEnable
  */
