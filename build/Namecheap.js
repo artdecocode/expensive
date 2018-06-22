@@ -60,7 +60,22 @@ class Namecheap {
         }
       }
     };
-  }
+  } // get whoisguard() {
+  //   return {
+  //     /**
+  //      * Allots WhoisGuard privacy protection to a domain.
+  //      * @param {whoisguard.allot} conf Configuration parameters.
+  //      * @param {string} conf.domain A domain name to register.
+  //      * @param {AddressDetail} conf.address An address to use for all fields.
+  //      * @returns {Promise.<RegistrationResult>} Result of the domain registration process.
+  //      */
+  //     allot: async (conf) => {
+  //       const res = await allot(this.Auth, conf)
+  //       return res
+  //     },
+  //   }
+  // }
+
 
   get domains() {
     return {

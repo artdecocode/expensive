@@ -36,8 +36,8 @@ async function create(Auth, conf) {
     ...AdminAddress,
     ...AuxAddress,
     Nameservers: nameservers.join(','),
-    AddFreeWhoisguard: whois,
-    WGEnabled: whois
+    AddFreeWhoisguard: whois ? 'yes' : 'no',
+    WGEnabled: whois ? 'yes' : 'no'
   });
   const [{
     props
@@ -52,7 +52,7 @@ const keys = ['JobTitle', 'FirstName', 'LastName', 'Address1', 'Address2', 'City
 
 const getAddressObject = (address, key) => {
   const res = keys.reduce((acc, current) => {
-    const val = address[current];
+    const val = current == 'StateProvince' && !address[current] ? 'NA' : address[current];
     return { ...acc,
       [`${key}${current}`]: val
     };
