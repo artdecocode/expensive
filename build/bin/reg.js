@@ -6,13 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = register;
 exports.findDefault = void 0;
 
-var _reloquent = require("reloquent");
-
-var _list = _interopRequireDefault(require("../lib/print/list"));
-
-var _ = require("..");
+var _erte = require("erte");
 
 var _Namecheap = _interopRequireDefault(require("../Namecheap"));
+
+var _build = require("reloquent/build");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44,6 +42,36 @@ async function register(nc, {
   const address = await nc.users.address.getInfo({
     id
   });
-  debugger; // const address = await getAddressInfo(Auth, { id: defaultId })
+  console.log('Registering for:');
+  printAddress(address);
+  const y = await (0, _build.askSingle)({
+    text: 'OK?',
+    defaultValue: 'y'
+  });
+  if (y != 'y') return;
+  const {
+    ChargedAmount
+  } = await nc.domains.create({
+    domain,
+    address
+  });
+  console.log('Successfully registered %s! Charged amount: $%s.', (0, _erte.c)(domain, 'green'), ChargedAmount);
 }
+
+const printAddress = ({
+  FirstName,
+  LastName,
+  Address1,
+  Address2,
+  City,
+  Zip,
+  Country,
+  EmailAddress
+}) => {
+  console.log(' %s %s, %s', FirstName, LastName, EmailAddress);
+  console.log(' %s', Address1);
+  Address2 && console.log(' %s', Address2);
+  console.log(' %s', City);
+  console.log(' %s, %s', Zip, Country);
+};
 //# sourceMappingURL=reg.js.map
