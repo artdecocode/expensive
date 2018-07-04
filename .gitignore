@@ -63,4 +63,8 @@ typings/
 chrome
 screenshot.png
 
-.expensive-testrc
+.password
+
+automation
+.expensive-password
+.sandbox-expensive-password
