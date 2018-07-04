@@ -10,7 +10,7 @@
     "test-all": "yarn-s test test-build",
     "test-watch": "yarn test -w",
     "start": "node build/bin",
-    "dev": "NODE_DEBUG=expensive node src/bin/register",
+    "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin/register",
     "s": "node build/bin",
     "lint": "eslint .",
     "e": "node example",
@@ -20,7 +20,7 @@
     "dc": "git add README-source.md README.md && git commit -m ",
     "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/simple.js",
-    "build-src": "babel src --out-dir build --source-maps --ignore src/bin/register.js",
+    "b": "b --source-maps --copy-files --ignore src/bin/register.js",
     "build": "yarn-s build-src doc"
   },
   "files": [
@@ -47,14 +47,7 @@
   },
   "homepage": "https://github.com/artdecocode/expensive#readme",
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.51",
-    "@babel/core": "7.0.0-beta.51",
-    "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.51",
-    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.51",
-    "@babel/register": "7.0.0-beta.51",
-    "babel-plugin-transform-rename-import": "2.2.0",
     "documentary": "1.6.1",
-    "eslint": "4.19.1",
     "eslint-config-artdeco": "1.0.0",
     "yarn-s": "1.1.0",
     "zoroaster": "2.1.0"
@@ -67,7 +60,7 @@
     "erotic": "1.2.1",
     "erte": "1.1.4",
     "promto": "1.0.1",
-    "reloquent": "1.0.1",
+    "reloquent": "1.0.6",
     "rqt": "2.0.0",
     "tablature": "1.0.0",
     "usually": "1.0.0"
