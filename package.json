@@ -16,7 +16,7 @@
     "e": "node example",
     "man": "man man/doc.1",
     "m": "man man/doc.1",
-    "doc": "doc documentation -o README.md",
+    "doc": "doc documentary -o README.md",
     "dc": "git add README-source.md README.md && git commit -m ",
     "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/simple.js",
@@ -47,14 +47,14 @@
   },
   "homepage": "https://github.com/artdecocode/expensive#readme",
   "devDependencies": {
-    "documentary": "1.6.1",
-    "eslint-config-artdeco": "1.0.0",
+    "documentary": "1.9.0",
+    "eslint-config-artdeco": "1.0.1",
     "yarn-s": "1.1.0",
     "zoroaster": "2.1.0"
   },
   "dependencies": {
-    "africa": "1.1.1",
-    "argufy": "1.1.2",
+    "africa": "1.2.0",
+    "argufy": "1.2.1",
     "bosom": "1.0.0",
     "catchment": "2.0.1",
     "erotic": "1.2.1",
