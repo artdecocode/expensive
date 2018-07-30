@@ -10,11 +10,10 @@ import Register from './reg'
 import { getConfig } from '..'
 import getPrivateConfig from '../lib/private-config'
 import printInfo from '../lib/print/info'
+import handleRequestIP from '../lib/authenticate/handle-request-ip'
 import questions, { privateQuestions } from '../questions'
 import Namecheap from '../Namecheap'
-import handleIp from '../lib/web/handle-ip'
-import handleWhitelist from '../lib/web/handle-whitelist'
-import Errors from './errors.json'
+import rqt from 'rqt'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -25,6 +24,7 @@ const {
   help,
   init,
   version,
+  head,
   info,
   sort, // name, expire, create
   desc,
@@ -46,6 +46,7 @@ const {
   },
   help: { short: 'h', boolean: true },
   init: { short: 'I', boolean: true },
+  head: { short: 'H', boolean: true },
   info: { short: 'i', boolean: true },
   // <INFO>
   sort: 's', // add validation to argufy
@@ -72,21 +73,28 @@ if (help) {
   process.exit()
 }
 
-const run = async (name) => {
-  /** @type {string} */
+const run = async () => {
   let phone
-  /** @type {string} */
   let user
   try {
     const Auth = await getConfig({
       global: !SANDBOX,
       packageName: SANDBOX ? 'sandbox' : null,
     })
-    const { phone: p } = await getPrivateConfig() // aws_id, aws_key,
+    const { aws_id, aws_key, phone: p } = await getPrivateConfig()
     phone = p
     user = Auth.ApiUser
 
-    await handleWhitelist(whitelistIP)
+    if (whitelistIP) {
+      const err = new Error()
+      err.props = {
+        Number: 1011150,
+      }
+      LOG('waiting for ip...')
+      const ip = await rqt('https://api.ipify.org') //  '127.0.0.1' //
+      err.message = `Invalid request IP: ${ip}`
+      throw err
+    }
 
     const nc = new Namecheap(Auth)
 
@@ -119,15 +127,15 @@ const run = async (name) => {
       LOG(Errors[props.Number])
     }
 
-    const ip = await handleIp({
-      message,
-      phone,
-      user,
-      name,
-      props,
-    })
-    if (ip) {
-      run(name)
+    if (props && props.Number == 1011150) {
+      const authComplete = await handleRequestIP(message, { phone, user, head, skipPhoneAuth: SANDBOX })
+      if (authComplete === true) {
+        await run()
+        // update the configuration to reflect the IP
+        // modify `africa` to be able to update the configuration
+      } else {
+        console.log(authComplete)
+      }
       return
     }
 
@@ -136,12 +144,18 @@ const run = async (name) => {
   }
 }
 
+const Errors = {
+  1011150: 'Parameter RequestIP is invalid',
+  2030166: 'Domain is invalid',
+}
+
 const getAppName = () => {
   const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`
   return e
 }
 
-const initConfig = async (name) => {
+const initConfig = async () => {
+  const name = getAppName()
   const Auth = await africa(name, questions, { force: true })
   const client = await africa(`${name}-client`, privateQuestions, { force: true })
   return {
@@ -151,10 +165,9 @@ const initConfig = async (name) => {
 }
 
 ; (async () => {
-  const name = getAppName()
   if (init) {
-    await initConfig(name)
+    await initConfig()
     return
   }
-  await run(name)
+  await run()
 })()

@@ -23,15 +23,13 @@ var _privateConfig = _interopRequireDefault(require("../lib/private-config"));
 
 var _info = _interopRequireDefault(require("../lib/print/info"));
 
+var _handleRequestIp = _interopRequireDefault(require("../lib/authenticate/handle-request-ip"));
+
 var _questions = _interopRequireWildcard(require("../questions"));
 
 var _Namecheap = _interopRequireDefault(require("../Namecheap"));
 
-var _handleIp = _interopRequireDefault(require("../lib/web/handle-ip"));
-
-var _handleWhitelist = _interopRequireDefault(require("../lib/web/handle-whitelist"));
-
-var _errors = _interopRequireDefault(require("./errors.json"));
+var _rqt = _interopRequireDefault(require("rqt"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -45,6 +43,7 @@ const {
   help,
   init,
   version,
+  head,
   info,
   sort,
   // name, expire, create
@@ -71,6 +70,10 @@ const {
   },
   init: {
     short: 'I',
+    boolean: true
+  },
+  head: {
+    short: 'H',
     boolean: true
   },
   info: {
@@ -123,11 +126,8 @@ if (help) {
   process.exit();
 }
 
-const run = async name => {
-  /** @type {string} */
+const run = async () => {
   let phone;
-  /** @type {string} */
-
   let user;
 
   try {
@@ -136,12 +136,25 @@ const run = async name => {
       packageName: SANDBOX ? 'sandbox' : null
     });
     const {
+      aws_id,
+      aws_key,
       phone: p
-    } = await (0, _privateConfig.default)(); // aws_id, aws_key,
-
+    } = await (0, _privateConfig.default)();
     phone = p;
     user = Auth.ApiUser;
-    await (0, _handleWhitelist.default)(whitelistIP);
+
+    if (whitelistIP) {
+      const err = new Error();
+      err.props = {
+        Number: 1011150
+      };
+      LOG('waiting for ip...');
+      const ip = await (0, _rqt.default)('https://api.ipify.org'); //  '127.0.0.1' //
+
+      err.message = `Invalid request IP: ${ip}`;
+      throw err;
+    }
+
     const nc = new _Namecheap.default(Auth);
 
     if (!domains) {
@@ -186,19 +199,24 @@ const run = async name => {
       LOG((0, _util.inspect)(props, {
         colors: true
       }));
-      LOG(_errors.default[props.Number]);
+      LOG(Errors[props.Number]);
     }
 
-    const ip = await (0, _handleIp.default)({
-      message,
-      phone,
-      user,
-      name,
-      props
-    });
+    if (props && props.Number == 1011150) {
+      const authComplete = await (0, _handleRequestIp.default)(message, {
+        phone,
+        user,
+        head,
+        skipPhoneAuth: SANDBOX
+      });
 
-    if (ip) {
-      run(name);
+      if (authComplete === true) {
+        await run(); // update the configuration to reflect the IP
+        // modify `africa` to be able to update the configuration
+      } else {
+        console.log(authComplete);
+      }
+
       return;
     }
 
@@ -207,12 +225,18 @@ const run = async name => {
   }
 };
 
+const Errors = {
+  1011150: 'Parameter RequestIP is invalid',
+  2030166: 'Domain is invalid'
+};
+
 const getAppName = () => {
   const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`;
   return e;
 };
 
-const initConfig = async name => {
+const initConfig = async () => {
+  const name = getAppName();
   const Auth = await (0, _africa.default)(name, _questions.default, {
     force: true
   });
@@ -226,13 +250,11 @@ const initConfig = async name => {
 };
 
 (async () => {
-  const name = getAppName();
-
   if (init) {
-    await initConfig(name);
+    await initConfig();
     return;
   }
 
-  await run(name);
+  await run();
 })();
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index1.js.map

@@ -2,82 +2,73 @@
 import { debuglog } from 'util'
 import { equal, ok } from 'assert'
 import { askSingle } from 'reloquent'
-import { Session } from 'rqt'
 import { extractFormState, extractOptions, askForNumber } from './lib'
+import Client from '../web'
 
 const LOG = debuglog('expensive')
 
 const S = !!process.env.SANDBOX
 LOG('sandbox: %s', S)
 
-const getHost = () => {
-  return `https://www.${S ? 'sandbox.' : ''}namecheap.com`
-}
-const getApHost = () => {
-  return `https://ap.www.${S ? 'sandbox.' : ''}namecheap.com`
-}
 
-const getWhitelistUrl = () => {
-  const host = getApHost()
-  const u = `${host}/settings/tools/apiaccess/whitelisted-ips`
-  return u
-}
+/**
+ * Run authorisation process. Returns `true` if it passed an an ip address was added, and a string with an error message if there was an error.
+ * @param {Config} config Config object
+ * @param {string} config.user
+ * @param {string} config.password
+ * @param {string} config.ip
+ * @param {string} config.phone
+ */
+const authenticate = async (config = {}) => {
+  const {
+    user,
+    password,
+    ip,
+    phone,
+  } = config
 
-const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
+  const client = new Client(user, password, S)
+  await client.obtainSession()
+  await client.signIn()
 
-const authenticate = async ({
-  user,
-  password,
-  ip,
-  phone,
-}) => {
-  const returnUrl = getWhitelistUrl()
-  const host = getHost()
-  const appHost = getApHost()
-  const url = `${host}/myaccount/login-signup.aspx?ReturnUrl=${encodeURIComponent(returnUrl)}`
+  // const sauthLocation = client.getRedirect()
 
-  const session = new Session({
-    headers: {
-      'User-Agent': USER_AGENT,
-    },
-  })
-  const { SessionKey } = await session.request(`${host}/cart/ajax/SessionHandler.ashx`)
+  client.checkValidationError()
+  // const sauthLocation = client.getRedirect(/\/myaccount\/twofa\/secondauth\.aspx/)
+  // if (sauthLocation) {
+  //   const loc = await secondAuth(sauthLocation, client, phone)
+  // }
 
-  const { body, headers } = await session.request(url, {
-    data: {
-      hidden_LoginPassword: '',
-      LoginUserName: user,
-      LoginPassword: password,
-      sessionEncryptValue: SessionKey,
-    },
-    type: 'form',
-    returnHeaders: true,
-  })
+  // const loc = await secondAuth(`${host}${headers.location}`, session, phone)
 
-  const validationErrorRe = /<strong class="title">Validation Error<\/strong>\s+<div>(.+?)<\/div>/
-  const [, err] = validationErrorRe.exec(body) || []
-  if (err) throw new Error(err.replace(/(<([^>]+)>)/ig, ''))
+  // if (headers.location.startsWith('/myaccount/twofa/secondauth.aspx')) {
+  //   equal(loc, returnUrl, `Expected to have been redirected to ${returnUrl}`)
+  // }
 
-  if (headers.location.startsWith('/myaccount/twofa/secondauth.aspx')) {
-    const loc = await secondAuth(`${host}${headers.location}`, session, phone)
-    equal(loc, returnUrl, `Expected to have been redirected to ${returnUrl}`)
-  }
+  // client.
   const body2 = await session.request(returnUrl)
   const token = extractXsrf(body2)
 
-  const name = `expensive ${new Date().toLocaleString()}`.replace(/:/g, '-')
-  const res = await session.request(`${appHost}/api/v1/ncpl/apiaccess/ui/AddIpAddress`, {
-    data: {
-      name,
-      accountPassword: password,
-      ipAddress: ip,
-    },
-    headers: {
-      'x-ncpl-rcsrf': token,
-    },
-  })
-  if (!res.Success) throw new Error(res.Errors.map(({ Message }) => Message).join(', '))
+
+  client.AddIpAddress()
+  // await handleAppApi(appHost, session, data, 'AddIpAddress', token) // final step to add
 }
+
+
+// const handleAppApi = async (appHost, session, data, path, token) => {
+//   const res = await session.request(`${appHost}${u}${path}`, {
+//     data,
+//     headers: {
+//       'x-ncpl-rcsrf': token,
+//     },
+//   })
+//   if (!res.Success) {
+//     const t = res.Errors.map(({ Message }) => Message).join(', ')
+//     const r = new Error(t)
+//     r.__type = res.__type
+//     throw r
+//   }
+// }
 
 const extractXsrf = (body) => {
   const re = /<input type="hidden" id="x-ncpl-csrfvalue" value="(.+?)"/
@@ -87,37 +78,13 @@ const extractXsrf = (body) => {
   return token
 }
 
-const secondAuth = async (location, session, phone) => {
-  let fs
-  let data
+/**
+ *
+ * @param {Client} client
+ * @param {string} phone
+ */
+const secondAuth = async (location, client, phone) => {
 
-  const body = await session.request(location)
-
-  ok(/Select Phone Contact Number/.test(body), 'Could not find the Select Phone section.')
-
-  const options = extractOptions(body)
-  ok(options.length, 'Could not find any numbers.')
-
-  const value = await askForNumber(options, phone)
-
-  fs = extractFormState(body)
-  data = {
-    ...fs,
-    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$ddlAuthorizeList: value,
-    ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnSendVerification: 'Proceed with Login',
-  }
-  const body2 = await session.request(location, {
-    data,
-    type: 'form',
-  })
-
-  if (/You have reached the limit on the number.+/m.test(body2)) {
-    throw new Error(body2.match(/You have reached the limit on the number.+/m)[0])
-  }
-  ok(/We sent a message with the verification code/.test(body2), 'Could not find the code entry section.')
-
-  const loc = await submitCode(body2, session, location)
-  return loc
 }
 
 const submitCode = async (body, session, location) => {
@@ -149,3 +116,11 @@ const submitCode = async (body, session, location) => {
 }
 
 export default authenticate
+
+/**
+ * @typedef {Object} Config
+ * @property {string} user
+ * @property {string} password
+ * @property {string} ip
+ * @property {string} phone
+ */
