@@ -1,33 +1,26 @@
 {
   "name": "expensive",
   "version": "1.4.1",
-  "description": "Namecheap.com API client to register and manage domains from CLI.",
-  "main": "build",
+  "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
-    "t": "zoroaster -b",
+    "t": "zoroaster -a",
     "test": "yarn t test/spec",
-    "test-build": "BABEL_ENV=test-build yarn t test/spec",
-    "test-all": "yarn-s test test-build",
-    "test-watch": "yarn test -w",
-    "start": "node build/bin",
-    "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin/register",
-    "s": "node build/bin",
+    "test-build": "ALAMODE_ENV=test-build yarn t test/spec",
+    "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "lint": "eslint .",
     "e": "node example",
     "man": "man man/doc.1",
-    "m": "man man/doc.1",
-    "doc": "doc documentary -o README.md",
-    "dc": "git add README-source.md README.md && git commit -m ",
+    "doc": "NODE_DEBUG=documentary doc documentary -o README.md",
     "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/simple.js",
-    "b": "b --source-maps --copy-files --ignore src/bin/register.js",
-    "build": "yarn-s build-src doc"
+    "b": "alamode src -o build -s -i bin/index.js",
+    "build": "yarn-s b doc"
   },
   "files": [
     "build"
   ],
   "bin": {
-    "expensive": "build/bin/index.js"
+    "expensive": "build/bin/expensive.js"
   },
   "man": "./man/doc.1",
   "repository": {
@@ -47,21 +40,20 @@
   },
   "homepage": "https://github.com/artdecocode/expensive#readme",
   "devDependencies": {
-    "documentary": "1.9.0",
+    "alamode": "1.5.1",
+    "documentary": "1.20.1",
     "eslint-config-artdeco": "1.0.1",
     "yarn-s": "1.1.0",
-    "zoroaster": "2.1.0"
+    "zoroaster": "3.6.1"
   },
   "dependencies": {
     "africa": "1.2.0",
     "argufy": "1.2.1",
     "bosom": "1.0.0",
-    "catchment": "2.0.1",
-    "erotic": "1.2.1",
+    "erotic": "2.0.1",
     "erte": "1.1.4",
     "promto": "1.0.1",
     "reloquent": "1.0.6",
-    "rqt": "2.0.0",
     "tablature": "1.0.0",
     "usually": "1.0.0"
   }

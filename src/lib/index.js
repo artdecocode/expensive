@@ -27,59 +27,6 @@ export const makeList = (d, zones) => {
   return res
 }
 
-const getPropValue = (val) => {
-  if (val == 'true') return true
-  if (val == 'false') return false
-  if (/^\d+$/.test(val)) {
-    return parseInt(val, 10)
-  }
-  return val
-}
-
-const propsRe = /(\w+)="(.*?)"/g
-const extractProps = (s) => {
-  let t
-  const r = []
-  while((t = propsRe.exec(s)) !== null) {
-    const [, key, value] = t
-    r.push({
-      key,
-      value: getPropValue(value),
-    })
-  }
-  return r.reduce((acc, { key, value }) => ({
-    ...acc,
-    [key]: value,
-  }), {})
-}
-
-
-const execRes = (re, s) => {
-  const res = re.exec(s)
-  if (!res) return res
-  const [, ...args] = res
-  return args
-}
-
-export const extractTag = (tag, string) => {
-  const re = new RegExp(`<${tag}( .[^>]+)?(?: /)?>(?:([\\s\\S]+?)</${tag}>)?`, 'g')
-  const r = []
-
-  let t
-  while ((t = execRes(re, string)) !== null) {
-    if (!t.length) continue
-    const [_p = '', _c = ''] = t
-    const p = _p.replace(/\/$/, '').trim()
-    const props = extractProps(p)
-    const item = {
-      props,
-      content: _c.trim(),
-    }
-    r.push(item)
-  }
-  return r
-}
-
 const TICK = c('\u2713', 'green')
 const CROSS = c('\u2717', 'red')
 const DASH = c('-', 'grey')
