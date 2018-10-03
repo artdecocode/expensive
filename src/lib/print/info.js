@@ -1,5 +1,4 @@
 import { c } from 'erte'
-import { DomainInfo } from '../../Namecheap' // eslint-disable-line
 
 /** @param {DomainInfo} info */
 const printInfo = (info) => {

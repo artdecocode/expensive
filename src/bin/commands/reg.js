@@ -1,6 +1,5 @@
 import { c } from 'erte'
-import Namecheap from '../Namecheap' // eslint-disable-line
-import { askSingle } from 'reloquent/build';
+import { askSingle } from 'reloquent'
 
 /**
  * Find a default address ID.

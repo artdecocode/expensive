@@ -1,22 +1,7 @@
 import argufy from 'argufy'
 
 const getArgs = () => {
-  const {
-    domains,
-    help,
-    init,
-    version,
-    info,
-    sort, // name, expire, create
-    desc,
-    filter,
-    type,
-    pageSize,
-    register,
-    free,
-    zones,
-    whitelistIP,
-  } = argufy({
+  return argufy({
     domains: {
       command: true,
       multiple: true,
@@ -38,6 +23,8 @@ const getArgs = () => {
     register: { short: 'r', boolean: true },
     free: { short: 'f', boolean: true },
     zones: 'z',
+    Whois: { boolean: true },
+    whois: { short: 'w', boolean: true },
     whitelistIP: { short: 'W', boolean: true },
   })
 }

@@ -1,6 +1,5 @@
 import { askSingle } from 'reloquent'
 import bosom from 'bosom'
-import authenticate from '../authenticate'
 import { debuglog } from 'util'
 
 const LOG = debuglog('expensive')

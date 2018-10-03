@@ -1,11 +1,10 @@
 import { c } from 'erte'
-import { makeList, isSingleWord } from '../lib'
-import Namecheap from '../Namecheap' // eslint-disable-line
 import tablature from 'tablature'
 import bosom from 'bosom'
 import { homedir } from 'os'
 import { resolve } from 'path'
 import { existsSync } from 'fs'
+import { makeList, isSingleWord } from '../../lib'
 
 const path = resolve(homedir(), '.expensive.log')
 

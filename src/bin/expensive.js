@@ -2,19 +2,18 @@
 import { debuglog, inspect } from 'util'
 import africa from 'africa'
 import getUsage from './get-usage'
-import List from './list'
-import Check from './check'
-import Register from './reg'
-import { getConfig } from '..'
-import getPrivateConfig from '../lib/private-config'
+import List from './commands/list'
+import Check from './commands/check'
+import Register from './commands/reg'
+import getConfig from '../lib/get-config'
 import printInfo from '../lib/print/info'
-import questions, { privateQuestions } from '../questions'
-import Namecheap from '../Namecheap'
+import questions from '../questions'
 import handleIp from '../lib/web/handle-ip'
 import handleWhitelist from '../lib/web/handle-whitelist'
 import Errors from './errors.json'
 import { version } from '../../package.json'
 import getArgs from './get-args'
+import whois from './commands/whois'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -35,6 +34,8 @@ const {
   free: _free,
   zones: _zones,
   whitelistIP: _whitelistIP,
+  whois: _whois,
+  Whois: _Whois,
 } = getArgs()
 
 if (_version) {
@@ -46,21 +47,9 @@ if (_version) {
   process.exit()
 }
 
-const run = async (name) => {
-  /** @type {string} */
-  let phone
-  /** @type {string} */
-  let user
+const run = async (name, sandbox) => {
   try {
-    const Auth = await getConfig({
-      global: !SANDBOX,
-      packageName: SANDBOX ? 'sandbox' : null,
-    })
-    ;({ phone } = await getPrivateConfig()) // aws_id, aws_key,
-    user = Auth.ApiUser
-
-    await handleWhitelist(whitelistIP)
-
+    // await handleWhitelist(whitelistIP)
     const nc = new Namecheap(Auth)
 
     if (!domains) {
@@ -109,22 +98,21 @@ const run = async (name) => {
   }
 }
 
-const getAppName = () => {
-  const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`
-  return e
-}
+// const getAppName = () => {
+//   const e = `${process.env.SANDBOX ? 'sandbox-' : ''}expensive`
+//   return e
+// }
 
-const initConfig = async (name) => {
-  const Auth = await africa(name, questions, { force: true })
-  const client = await africa(`${name}-client`, privateQuestions, { force: true })
-  return {
-    Auth,
-    client,
-  }
+const initConfig = async (sandbox) => {
+  const n = sandbox ? 'expensive-sandbox' : 'expensive'
+  await africa(n, questions, { force: true })
 }
 
 (async () => {
-  const name = getAppName()
-  if (init) return initConfig(name)
-  await run(name)
+  if (_whois || _Whois) return whois(_domains, _Whois)
+  if (_init) return initConfig(SANDBOX)
+  const Settings = await getConfig(SANDBOX)
+  debugger
+  // if (_whitelistIP) return whitelistIP(SANDBOX)
+  // await run(SANDBOX)
 })()

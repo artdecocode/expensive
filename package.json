@@ -47,6 +47,7 @@
     "zoroaster": "3.6.1"
   },
   "dependencies": {
+    "@rqt/namecheap-web": "1.1.0",
     "africa": "1.2.0",
     "argufy": "1.2.1",
     "bosom": "1.0.0",
@@ -54,6 +55,7 @@
     "erte": "1.1.4",
     "promto": "1.0.1",
     "reloquent": "1.0.6",
+    "rqt": "3.0.0",
     "tablature": "1.0.0",
     "usually": "1.0.0"
   }

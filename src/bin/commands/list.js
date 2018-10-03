@@ -1,6 +1,5 @@
 import { askSingle } from 'reloquent'
-import printList from '../lib/print/list'
-import Namecheap from '../Namecheap' // eslint-disable-line
+import printList from '../../lib/print/list'
 
 /** @param {Namecheap} nc */
 export default async function list(nc, {

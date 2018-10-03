@@ -7,18 +7,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch App",
-      "program": "${workspaceFolder}/src/bin/register.js",
+      "name": "Launch Expensive",
+      "program": "${workspaceFolder}/src/bin/index.js",
       "env": {
-        "BABEL_ENV": "debug",
         "NODE_DEBUG": "expensive",
-        // "SANDBOX": "1",
+        "SANDBOX": "1",
       },
       "args": [
-        // "zavr.co.uk",
-        "tesasdfasdfas1f12.com",
-        "-r",
-        "-W",
+        "adc.sh",
+        "-w"
+        // "tesasdfasdfas1f12.com",
+        // "-r",
+        // "-W",
         // "testtt",
         // "-z",
         // "com,cc,co,io",
