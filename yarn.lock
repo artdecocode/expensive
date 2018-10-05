@@ -34,6 +34,13 @@
     reloquent "1.0.6"
     rqt "3.0.0"
 
+"@rqt/namecheap@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-1.0.0.tgz#f65aaabff8b38ae753aed2fd5dfe5f614a0f7c1f"
+  dependencies:
+    rexml "1.2.0"
+    rqt "3.0.0"
+
 "@wrote/clone@1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@wrote/clone/-/clone-1.0.1.tgz#2f6e24f4855467b13cc4d7a2ca9677d07ab40292"
@@ -260,6 +267,10 @@ restream@3.2.1:
 rexml@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/rexml/-/rexml-1.1.0.tgz#d005c515528aa0c81a39cd456a0da40321ab3fe8"
+
+rexml@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/rexml/-/rexml-1.2.0.tgz#f78ada4db77b77b5ade1c16ba9e7da6975192438"
 
 rqt@3.0.0:
   version "3.0.0"

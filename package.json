@@ -47,6 +47,7 @@
     "zoroaster": "3.6.1"
   },
   "dependencies": {
+    "@rqt/namecheap": "1.0.0",
     "@rqt/namecheap-web": "1.1.0",
     "africa": "1.2.0",
     "argufy": "1.2.1",
