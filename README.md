@@ -1,63 +1,60 @@
+[![namecheap](https://raw.githubusercontent.com/artdecocode/expensive/HEAD/images/nc.gif)](https://nameexpensive.com)
+
 # expensive
 
 [![npm version](https://badge.fury.io/js/expensive.svg)](https://npmjs.org/package/expensive)
 
-`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
+`expensive` is a [namecheap.com](https://nameexpensive.com) client to check domain availability, obtain WHOIS information, register domains, update DNS hosts and control domains' name servers via the CLI. It allows to login using 2-factor authentication and white-list IP addresses without having to use the web interface. The package uses the [API](https://github.com/rqt/namecheap) and [Web API](https://github.com/rqt/namecheap-web) libraries to make requests.
 
-```sh
-# install node with nvm https://github.com/creationix/nvm
-npm i -g expensive
-```
-
-The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
+| Package Manager |          Command          |
+| --------------- | ------------------------- |
+| Yarn            | yarn add global expensive |
+| Npm             | npm i -g expensive        |
 
 ## Table Of Contents
 
 - [Table Of Contents](#table-of-contents)
 - [Configuration](#configuration)
+- [Sandbox](#sandbox)
 - [CLI](#cli)
-  * [Check Zones](#check-zones)
-  * [Check Single Domains](#check-single-domains)
+  * [Check Availability](#check-availability)
+  * [Whois](#whois)
   * [Show Domain Information](#show-domain-information)
   * [Register Domain](#register-domain)
-  * [Update Configuration](#update-configuration)
+  * [Initialise/Update Settings](#initialiseupdate-settings)
   * [Print Version](#print-version)
   * [Display Usage](#display-usage)
-  * [Result Log](#result-log)
-- [API](#api)
-  * [`getConfig(options: Object): Config`](#getconfigoptions-object-config)
-  * [`new Namecheap(Auth: Object)`](#new-namecheapauth-object)
-- [Errors and Troubleshooting](#errors-and-troubleshooting)
-  * [`getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`](#getaddrinfo-enotfound-apinamecheapcom-apinamecheapcom443)
-- [Security](#security)
+- [Result Log](#result-log)
+- [Copyright](#copyright)
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
 
 ## Configuration
 
 Upon the first run the program will ask a series of questions:
 
 ```fs
-username: <namecheap-username>
-api key https://ap.www.namecheap.com/settings/tools/apiaccess/: <api key accessed at the given page>
-client ip [10.10.10.10]: <the ip>
-```
-
-After they've been answered, `expensive` will remember the answers and store them in `.expensiverc` file in the home directory, and use this data for all subsequent calls to the API. These are also available to other programs which want to use the API and can be read with `getConfig` when using the package programmatically (see below).
-
-There are additional questions which are required for specific features:
-
-```
+Username: <namecheap-username>
+Api key https://ap.www.namecheap.com/settings/tools/apiaccess/: <api key>
+Client ip [10.10.10.10]: <the ip>
 Last 3 digit of phone to use for 2 factor auth: <055>
-AWS access key id: <aws-key-id>
-AWS secret access key: <aws-key>
 ```
 
-These are stored in the `.expensive-client.rc` and are not shared with other software.
+After they've been answered, `expensive` will remember the answers and store them in the `.expensiverc` file in the home directory (or `.expensive-sandboxrc`), and use this data for all calls to the API.
 
-The last 3 digits will be used to automatically login and white-list an IP address, and AWS keys are used for Route 53 access.
+Client IP is required for requests, but if not given, the it will be acquired automatically each time prior to calls. The last 3 digits will be used to during the second-stage of the 2-factor web auth required to white-list unknown IP addresses.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
+
+## Sandbox
+
+To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-S` flags should be passed.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true"></a></p>
 
 ## CLI
 
-The program can be used from a terminal.
+The program can be used from the terminal.
 
 ```sh
 expensive -h
@@ -82,18 +79,30 @@ See man expensive for more information.
 ```
 
 
-### Check Zones
+|                 Command                 |                             Meaning                             |
+| --------------------------------------- | --------------------------------------------------------------- |
+| [`example ex.com`](#check-availability) | Check domain availability.                                      |
+| [`desired.com -w`](#whois)              | Request WHOIS data.                                             |
+| [`ex.com -i`](#show-domain-information) | Display information about a domain associated with the account. |
+| [`create.com -r`](#register-domain)     | Register a domain name.                                         |
+| [`--init`](#initialiseupdate-settings)  | Initialises or updates settings such as API key.                |
+| [`--version`](#print-version)           | Print version.                                                  |
+| [`--help`](#display-usage)              | Show help.                                                      |
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
+
+### Check Availability
 
 To start a domain check in multiple zones, enter a word without a domain. Multiple words can be entered as well to check all of them. Maximum of 50 domains per request is allowed.
 
 ```sh
-expensive domain [domain2] [-f] [-z com,co,etc]
+expensive domain[ domain2 ...domainN] [-f] [-z com,co,etc]
 ```
 
-| arg | description |
-| --- | ----------- |
-| -f | Display only free domains in the output. |
-| -z | A list of zones to check. Defaults to `com`, `net`, `org`, `biz`, `co`, `cc`, `io`, `bz`, `nu` and `app`. |
+|     arg     |                                                description                                                |
+| ----------- | --------------------------------------------------------------------------------------------------------- |
+| -f, --free  | Display only free domains in the output.                                                                  |
+| -z, --zones | A list of zones to check. Defaults to `com`, `net`, `org`, `biz`, `co`, `cc`, `io`, `bz`, `nu` and `app`. |
 
 <details>
   <summary><code>expensive testt</code></summary>
@@ -113,7 +122,6 @@ expensive domain [domain2] [-f] [-z com,co,etc]
   </table>
 </details>
 
-### Check Single Domains
 
 To check a single domain, pass the domain name, e.g.,
 
@@ -126,9 +134,68 @@ To check a single domain, pass the domain name, e.g.,
   </table>
 </details>
 
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="15"></a></p>
+
+### Whois
+
+To request data from the WHOIS database from [`namecheap.com`](https://nameexpensive.com) website, the `--whois` or `-w` option can be used. Data will be printed in short form, with dates parsed to show the number of days passed since registration, and remaining until the domain is free.
+
+```sh
+expensive test.org -w
+```
+
+```fs
+Domain Name: TEST.ORG
+Registrar URL: http://www.psi-usa.info
+Updated Date: 2018-7-27 04:28:31 (71 days ago)
+Creation Date: 1997-7-27 08:00:00 (7741 days ago)
+Registry Expiry Date: 2019-7-26 07:00:00 (in 293 days)
+Name Server: NS0.TMT.DE
+ NS4.TMT.DE
+ NS3.TMT.DE
+ NS2.TMT.DE
+ NS1.TMT.DE
+```
+
+To request the extended form, the `--Whois` argument needs to be supplied.
+
+<details>
+<code>expensive test.org --Whois</code>
+
+```fs
+Domain Name: TEST.ORG
+Registry Domain ID: D380528-LROR
+Registrar WHOIS Server: whois.psi-usa.info
+Registrar URL: http://www.psi-usa.info
+Updated Date: 2018-07-27T01:28:31Z
+Creation Date: 1997-07-27T04:00:00Z
+Registry Expiry Date: 2019-07-26T04:00:00Z
+Registrar Registration Expiration Date:
+Registrar: PSI-USA, Inc. dba Domain Robot
+Registrar IANA ID: 151
+Registrar Abuse Contact Email: domain-abuse@psi-usa.info
+Registrar Abuse Contact Phone: +49.94159559482
+Reseller:
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+Registrant Organization: TMT Teleservice GmbH &amp; Co.KG
+Registrant State/Province: Bayern
+Registrant Country: DE
+Name Server: NS0.TMT.DE
+Name Server: NS4.TMT.DE
+Name Server: NS3.TMT.DE
+Name Server: NS2.TMT.DE
+Name Server: NS1.TMT.DE
+DNSSEC: unsigned
+URL of the ICANN Whois Inaccuracy Complaint Form https://www.icann.org/wicf/)
+&gt;&gt;&gt; Last update of WHOIS database: 2018-10-06T01:22:28Z
+```
+</details>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="15"></a></p>
+
 ### Show Domain Information
 
-View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
+View the domain information associated with the account.
 
 <details>
   <summary><code>expensive example.co -i</code></summary>
@@ -139,40 +206,44 @@ View the domain information. If domain is registered with `namecheap`, it will p
   </table>
 </details>
 
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true" width="15"></a></p>
+
 ### Register Domain
 
-Domain registration from the command-line is made easy by `expensive`. Pass `-r` flag to buy a domain name.
+Domain registration from the command-line is made easy with [`expensive`](https://nameexpensive.com). Passing `-r` flag will result in acquiring the domain name. The default account address will be used for all WHOIS fields, such as `Registrant`, `Tech`, `Admin` and `AuxBilling`.
 
 <details>
   <summary><code>expensive example.co -r</code></summary>
   <table>
   <tr><td>
-    <img alt="Buying a domain name." src="doc/register.gif" />
+    <img alt="Registering a domain name." src="doc/register.gif" />
   </td></tr>
   </table>
 </details>
 
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="15"></a></p>
 
-### Update Configuration
+### Initialise/Update Settings
 
-To update the stored configuration values (e.g., to change an `API` key), run the `-I` (or `--init`) command. See [Configuration](#configuration) for more detail.
+To update or initialise stored configuration values (e.g., on the first use, or to change an `API` key), run the `-I` or `--init` command. The [Configuration](#configuration) section explains how settings are stored in more detail.
 
 <details>
-  <summary><code>expensive -I</code></summary>
+  <summary><code>expensive --init</code></summary>
   <table>
   <tr><td>
-    <img alt="Updating configuration." src="doc/init.gif" />
+    <img alt="Updating the stored configuration." src="doc/init.gif" />
   </td></tr>
   </table>
 </details>
 
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="15"></a></p>
 
 ### Print Version
 
-Version number can be displayed with `-v` (or `--version`).
+Version number can be displayed with `--version` or `-v`.
 
 <details>
-  <summary><code>expensive -v</code></summary>
+  <summary><code>expensive --version</code></summary>
   <table>
   <tr><td>
     <img alt="Viewing the version." src="doc/version.gif" />
@@ -180,12 +251,14 @@ Version number can be displayed with `-v` (or `--version`).
   </table>
 </details>
 
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="15"></a></p>
+
 ### Display Usage
 
-Prints the help information.
+Prints the help information with `-h` or `--help`.
 
 <details>
-  <summary><code>expensive -h</code></summary>
+  <summary><code>expensive --help</code></summary>
   <table>
   <tr><td>
     <img alt="Displaying the usage." src="doc/usage.gif" />
@@ -193,85 +266,31 @@ Prints the help information.
   </table>
 </details>
 
-### Result Log
-
-A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`
-
-## API
-On top of the CLI application, the package provides means to query _namecheap_ API. To start using the API, a configuration can be read from a `.rc` file using `getConfig` method and passed to a client instance.
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true"></a></p>
 
 
 
-### `getConfig(options: Object): Config`
 
-Reads the `rc` file (or ask questions to create one) for given details: if `global` is set to true, the `HOME/.expensiverc` is looked up, and if `packageName` is provided, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file with the API key, or have separate configurations.
 
-- `packageName`: name of the package implementing `expensive`, or
-- `global`: a boolean to indicate that the global `.expensiverc` should be used
-- `opts`: other options accepted by [`africa`](https://npmjs.org/package/africa).
 
-The `rc` file will only contain the following details required for API calls:
 
-```sh
-{
-  "ApiUser": "namecheap_user",
-  "ApiKey": "api_key_from_tools",
-  "ClientIp": "10.10.10.10"
-}
-```
 
-Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
 
-### `new Namecheap(Auth: Object)`
 
-To be able to make requests, an instance of the `Namecheap` class needs to be created by passing an Auth object to it.
 
-```js
-/* example/simple.js */
-/* yarn example/ */
-import Namecheap, { getConfig } from 'expensive'
 
-(async () => {
-  try {
-    // use `.expensive-example.rc` file
-    // pass `global` to read `.expensiverc` instead
-    const Auth = await getConfig({ packageName: 'example' })
 
-    const nc = new Namecheap(Auth)
-    const check = await nc.domains.check({ domains })
-    console.log(check)
-  } catch ({ stack, message }) {
-    DEBUG ? LOG(stack) : console.error(message)
-    process.exit(1)
-  }
-})()
-```
 
-## Errors and Troubleshooting
+## Result Log
 
-`expensive` will display an error text when an error happens during its execution.
+A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`.
 
-### `getaddrinfo ENOTFOUND api.namecheap.com api.namecheap.com:443`
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true"></a></p>
 
-This error means that there's no internet access.
+## Copyright
 
-Check that the computer is connected to the internet.
+(c) [Art Deco][1] 2018
 
-## Security
+[1]: https://artd.eco
 
-When white-listing the IP addresses via the Chrome automation script, `expensive` will use the username stored in the config file, and ask for the password. The password is not stored anywhere apart from the program's memory and then used for authorisation on the `namecheap.com` website, and as the confirmation password when adding a new white-listed IP address.
-
-You can install the package from github after you're happy with the source code, using the following command:
-
-```sh
-npm i -g artdecocode/expensive#v1.2.0
-```
-
-This will fetch the package from GitHub, and not registry. If it was possible to see the git sha sum of the commit in `yarn info package` then it would not have been necessary, because one can compare source code against the commit number. By installing from GitHub directly, one can know what they install.
-
----
-
-(c) [Art Deco Code][1] 2018
-
-[1]: https://artdeco.bz
-[2]: https://appshot.io
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/-1.svg?sanitize=true"></a></p>

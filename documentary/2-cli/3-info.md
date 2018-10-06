@@ -1,7 +1,6 @@
-
 ### Show Domain Information
 
-View the domain information. If domain is registered with `namecheap`, it will print information available from the account.
+View the domain information associated with the account.
 
 <details>
   <summary><code>expensive example.co -i</code></summary>
@@ -11,3 +10,5 @@ View the domain information. If domain is registered with `namecheap`, it will p
   </td></tr>
   </table>
 </details>
+
+%~ width="15"%

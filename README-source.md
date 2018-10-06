@@ -1,6 +1,3 @@
-
-
-
 <!-- ## Reporting -->
 
 <!-- To see the status of a single or all domains printed in the console, use the info extension (`-i`). -->

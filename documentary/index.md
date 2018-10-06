@@ -1,17 +1,21 @@
+[![namecheap](https://raw.githubusercontent.com/artdecocode/expensive/HEAD/images/nc.gif)](https://nameexpensive.com)
+
 # expensive
 
 %NPM: expensive%
 
-`expensive` is a [namecheap.com](https://namecheap.com) client to check domain availability, register domains, create Route 53 record zones and control domains' name servers via the CLI. The package significantly reduces the chore associated with performing these routine operations when creating new websites.
+`expensive` is a [namecheap.com](https://nameexpensive.com) client to check domain availability, obtain WHOIS information, register domains, update DNS hosts and control domains' name servers via the CLI. It allows to login using 2-factor authentication and white-list IP addresses without having to use the web interface. The package uses the [API](https://github.com/rqt/namecheap) and [Web API](https://github.com/rqt/namecheap-web) libraries to make requests.
 
-```sh
-# install node with nvm https://github.com/creationix/nvm
-npm i -g expensive
+```table
+[
+  ["Package Manager", "Command"],
+  ["Yarn", "yarn add global expensive"],
+  ["Npm", "npm i -g expensive"]
+]
 ```
-
-The CLI client can also perform web-based authentication via Chrome's automation to white-list IP addresses (useful when having dynamic IPs).
 
 ## Table Of Contents
 
 %TOC%
 
+%~%

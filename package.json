@@ -5,7 +5,7 @@
   "scripts": {
     "t": "zoroaster -a",
     "test": "yarn t test/spec",
-    "test-build": "ALAMODE_ENV=test-build yarn t test/spec",
+    "test-build": "ALAMODE_ENV=test-build yarn test",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "lint": "eslint .",
     "e": "node example",
@@ -30,8 +30,14 @@
   "keywords": [
     "namecheap",
     "domains",
+    "domain",
+    "register",
+    "DNS",
+    "devops",
+    "dev ops",
     "api",
-    "expensive"
+    "expensive",
+    "whois"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "MIT",

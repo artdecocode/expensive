@@ -1,4 +1,4 @@
-
+<!--
 ### `new Namecheap(Auth: Object)`
 
 To be able to make requests, an instance of the `Namecheap` class needs to be created by passing an Auth object to it.
@@ -22,4 +22,4 @@ import Namecheap, { getConfig } from 'expensive'
     process.exit(1)
   }
 })()
-```
+``` -->

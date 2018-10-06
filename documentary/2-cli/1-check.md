@@ -1,18 +1,16 @@
-
-
-### Check Zones
+### Check Availability
 
 To start a domain check in multiple zones, enter a word without a domain. Multiple words can be entered as well to check all of them. Maximum of 50 domains per request is allowed.
 
 ```sh
-expensive domain [domain2] [-f] [-z com,co,etc]
+expensive domain[ domain2 ...domainN] [-f] [-z com,co,etc]
 ```
 
 ```table
 [
   ["arg", "description"],
-  ["-f", "Display only free domains in the output."],
-  ["-z", "A list of zones to check. Defaults to `com`, `net`, `org`, `biz`, `co`, `cc`, `io`, `bz`, `nu` and `app`."]
+  ["-f, --free", "Display only free domains in the output."],
+  ["-z, --zones", "A list of zones to check. Defaults to `com`, `net`, `org`, `biz`, `co`, `cc`, `io`, `bz`, `nu` and `app`."]
 ]
 ```
 
@@ -33,3 +31,17 @@ expensive domain [domain2] [-f] [-z com,co,etc]
   </td></tr>
   </table>
 </details>
+
+
+To check a single domain, pass the domain name, e.g.,
+
+<details>
+  <summary><code>expensive testt.co</code></summary>
+  <table>
+  <tr><td>
+    <img alt="Checking a single domain." src="doc/single.gif" />
+  </td></tr>
+  </table>
+</details>
+
+%~ width="15"%

@@ -1,4 +1,4 @@
-
+<!--
 ### `getConfig(options: Object): Config`
 
 Reads the `rc` file (or ask questions to create one) for given details: if `global` is set to true, the `HOME/.expensiverc` is looked up, and if `packageName` is provided, the `rc` file at `.${packageName}-expensiverc` is used for storing and reading of configuration. This makes possible for other libraries to refer to the same `rc` file with the API key, or have separate configurations.
@@ -17,4 +17,4 @@ The `rc` file will only contain the following details required for API calls:
 }
 ```
 
-Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work.
+Client IP does not seem to have to be correct, although it has to be present and non-white-listed IPs won't work. -->
