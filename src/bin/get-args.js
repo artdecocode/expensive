@@ -26,6 +26,7 @@ const getArgs = () => {
     Whois: { boolean: true },
     whois: { short: 'w', boolean: true },
     whitelistIP: { short: 'W', boolean: true },
+    sandbox: { short: 'S', boolean: true },
   })
 }
 

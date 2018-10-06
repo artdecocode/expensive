@@ -1,13 +1,23 @@
 import { c } from 'erte'
+import t from 'tablature'
 
-/** @param {DomainInfo} info */
+/** @param {import('@rqt/namecheap/build/api').DomainInfo} info */
 const printInfo = (info) => {
-  console.log('Created:\t%s', info.DomainDetails.CreatedDate)
-  console.log('Expires on:\t%s', info.DomainDetails.ExpiredDate)
-  console.log('Whois enabled:\t%s', info.Whoisguard.Enabled)
-  if (info.Whoisguard.EmailDetails) console.log('Whois email:\t%s', info.Whoisguard.EmailDetails.ForwardedTo)
-  console.log('DNS:\t\t%s', c(info.DnsDetails.ProviderType, info.DnsDetails.ProviderType == 'FREE' ? 'red' : 'green'))
-  console.log('Nameservers:\t%s', info.DnsDetails.Nameserver.join(', '))
+  const data = [
+    { name: 'Created:', value: info.DomainDetails.CreatedDate },
+    { name: 'Expires on:', value: info.DomainDetails.ExpiredDate },
+    { name: 'Whois enabled:', value: info.Whoisguard.Enabled },
+    ...(info.Whoisguard.EmailDetails ? {
+      name: 'Whois email:', value: info.Whoisguard.EmailDetails.ForwardedTo,
+    } : {}),
+    { name: 'DNS:', value: c(info.DnsDetails.ProviderType,
+      info.DnsDetails.ProviderType == 'FREE' ? 'red' : 'green'),
+    },
+    { name: 'Nameservers:', value: info.DnsDetails.Nameserver.join(', ') },
+    { name: 'Created:', value: info.DomainDetails.CreatedDate },
+  ]
+  const res = t({ data })
+  console.log(res)
 }
 
 export default printInfo

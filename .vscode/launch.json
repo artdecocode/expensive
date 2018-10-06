@@ -14,8 +14,8 @@
         "SANDBOX": "1",
       },
       "args": [
-        "adc.sh",
-        "-w"
+        "grunge.software",
+        // "-i"
         // "tesasdfasdfas1f12.com",
         // "-r",
         // "-W",

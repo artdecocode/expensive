@@ -11,13 +11,13 @@ export const findDefault = (addresses) => {
   return AddressId
 }
 
-/** @param {Namecheap} nc */
-export default async function register(nc, {
-  domain,
-}) {
+/**
+ * @param {import('@rqt/namecheap')} nc
+ */
+export default async function register(nc, domain) {
   const addresses = await nc.users.address.getList()
   const id = findDefault(addresses)
-  const address = await nc.users.address.getInfo({ id })
+  const address = await nc.users.address.getInfo(id)
   console.log('Registering for:')
   printAddress(address)
   const y = await askSingle({
@@ -29,10 +29,16 @@ export default async function register(nc, {
     domain,
     address,
   })
-  console.log('Successfully registered %s! Charged amount: $%s.', c(domain, 'green'), ChargedAmount)
+  console.log(
+    'Successfully registered %s! Charged amount: $%s.',
+    c(domain, 'green'),
+    ChargedAmount,
+  )
 }
 
-const printAddress = ({ FirstName, LastName, Address1, Address2, City, Zip, Country, EmailAddress }) => {
+const printAddress = ({
+  FirstName, LastName, Address1, Address2, City, Zip, Country, EmailAddress,
+}) => {
   console.log(' %s %s, %s', FirstName, LastName, EmailAddress)
   console.log(' %s', Address1)
   Address2 && console.log(' %s', Address2)

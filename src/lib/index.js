@@ -58,3 +58,8 @@ export const getWhois = (value) => {
   if (value == 'NOTPRESENT') return { value: DASH, length: 1 }
   return { value, length: value.length }
 }
+
+export const getAppName = (sandbox) => {
+  const n = sandbox ? 'expensive-sandbox' : 'namecheap'
+  return n
+}

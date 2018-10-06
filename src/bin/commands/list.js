@@ -1,7 +1,7 @@
 import { askSingle } from 'reloquent'
 import printList from '../../lib/print/list'
 
-/** @param {Namecheap} nc */
+/** @param {import('@rqt/namecheap')} nc */
 export default async function list(nc, {
   sort,
   desc,

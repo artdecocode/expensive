@@ -8,7 +8,7 @@ import { makeList, isSingleWord } from '../../lib'
 
 const path = resolve(homedir(), '.expensive.log')
 
-/** @param {Namecheap} nc */
+/** @param {import('@rqt/namecheap')} nc */
 export default async function check(nc, {
   domains: d,
   free,
