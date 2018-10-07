@@ -8,11 +8,11 @@ const getArgs = () => {
     init: { short: 'I', boolean: true },
     info: { short: 'i', boolean: true },
     // <INFO>
-    sort: 's', // add validation to argufy
-    desc: { short: 'd', boolean: true },
-    filter: { short: 'f' },
-    pageSize: { short: 'p' },
-    type: 't', // add description to argufy, so that usage can be passed to usually
+    sort: 'S', // add validation to argufy
+    desc: { short: 'D', boolean: true },
+    filter: { short: 'F' },
+    pageSize: { short: 'P' },
+    type: 'T', // add description to argufy, so that usage can be passed to usually
     // </INFO>
     register: { short: 'r', boolean: true },
     free: { short: 'f', boolean: true },
@@ -20,9 +20,9 @@ const getArgs = () => {
     Whois: { boolean: true },
     whois: { short: 'w', boolean: true },
     whitelistIP: { short: 'W', boolean: true },
-    sandbox: { short: 'S', boolean: true },
+    sandbox: { short: 's', boolean: true },
     coupon: { boolean: true },
-    promo: { short: 'P' },
+    promo: { short: 'p' },
   })
 }
 
