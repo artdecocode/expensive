@@ -15,7 +15,7 @@
     "doc": "NODE_DEBUG=documentary doc documentary -o README.md",
     "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
     "example/": "yarn e example/simple.js",
-    "b": "alamode src -o build -s -i bin/index.js",
+    "b": "alamode src -o build -s -i bin/index.js,bin/.eslintrc,lib/print/.eslintrc",
     "build": "yarn-s b doc"
   },
   "files": [
