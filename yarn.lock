@@ -309,6 +309,13 @@ reloquent@1.0.6:
   dependencies:
     promto "1.0.1"
 
+reloquent@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/reloquent/-/reloquent-1.2.2.tgz#5be6b3ea4cf4c2f6115f4bce752ccbc4e4b5c436"
+  integrity sha512-3uG1JqNDW5RoB/ywcEu2oGMTFZsvgkzDuRuDEiaalayXzfnnoQ7AggGQSvkIYQ1qYkPD5WP9QI1m69jPfUkFBw==
+  dependencies:
+    promto "1.0.1"
+
 restream@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/restream/-/restream-3.1.1.tgz#36084997bd3e765c2da484700e16b850c2f9ffb4"
