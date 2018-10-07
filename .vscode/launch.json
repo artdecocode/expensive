@@ -15,10 +15,10 @@
       },
       "args": [
         // "-teststs"
-        "grunge123123.com",
+        "alamode.app",
         // "-i"
         // "tesasdfasdfas1f12.com",
-        "-r",
+        "-i",
         // "-W",
         // "testtt",
         // "-z",
@@ -37,15 +37,15 @@
       "name": "Launch Zoroaster",
       "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
       "args": [
-        // "test/spec/query.js",
-        "test/spec/namecheap/domains/create.js",
-        "-b",
-        "-w"
+        "test/spec",
+        "test/mask",
+        "-a",
+        "-w",
+        "-t",
+        "9999999"
       ],
       "env": {
-        "BABEL_ENV": "debug",
         "NODE_DEBUG": "expensive",
-        "ZOROASTER_TIMEOUT": "9999999"
       },
       "console": "integratedTerminal",
       "skipFiles": [
