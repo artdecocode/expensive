@@ -1,4 +1,4 @@
-import { askSingle } from 'reloquent'
+import { confirm } from 'reloquent'
 import printList from '../../lib/print/list'
 
 /** @param {import('@rqt/namecheap')} nc */
@@ -10,7 +10,7 @@ export default async function list(nc, {
   type,
   pageSize,
 } = {}) {
-  const { domains, CurrentPage, PageSize, TotalItems } = await nc.domains.getList({
+  const { domains, ...pagination } = await nc.domains.getList({
     page,
     sort,
     desc,
@@ -19,15 +19,13 @@ export default async function list(nc, {
     pageSize,
   })
   printList(domains)
-  if (CurrentPage * PageSize < TotalItems) {
-    const t = `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
-    const answer = await askSingle({
-      text: `Page ${t}. Display more`,
-      defaultValue: 'y',
-    })
-    if (answer == 'y') {
+  const nextPage = getNextPage(pagination)
+  if (nextPage) {
+    const t = getNavigation(pagination)
+    const answer = await confirm(`Page ${t}. Display more`)
+    if (answer) {
       await list(nc, {
-        page: CurrentPage + 1,
+        page: nextPage,
         sort,
         desc,
         filter,
@@ -36,4 +34,14 @@ export default async function list(nc, {
       })
     }
   }
+}
+
+const getNextPage = ({ CurrentPage, TotalItems, PageSize }) => {
+  if (CurrentPage * PageSize < TotalItems) {
+    return CurrentPage + 1
+  }
+}
+
+const getNavigation = ({ CurrentPage, TotalItems, PageSize }) => {
+  return `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
 }

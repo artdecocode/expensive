@@ -1,6 +1,6 @@
 import { c, b } from 'erte'
 import NameCheapWeb from '@rqt/namecheap-web'
-import { askSingle } from 'reloquent'
+import { confirm } from 'reloquent'
 
 /**
  * Find a default address ID.
@@ -61,11 +61,8 @@ export default async function register(nc, {
   if (!promo && /\.(com|net|org|info|biz$)/.test(domain)) {
     try {
       const coupon = await getCoupon(sandbox)
-      const cy = await askSingle({
-        text: `Apply coupon ${coupon} (y/n)?`,
-        defaultValue: 'y',
-      })
-      if (cy == 'y') p = coupon
+      const co = await confirm(`Apply coupon ${coupon}`)
+      if (co) p = coupon
     } catch (e) { /**/ }
   }
 
@@ -76,11 +73,8 @@ export default async function register(nc, {
   const address = await nc.address.getInfo(id)
   console.log('Registering %s\nfor %s\nusing:', b(domain, 'green'), pr)
   printAddress(address)
-  const y = await askSingle({
-    text: 'OK (y/n)?',
-    defaultValue: 'y',
-  })
-  if (y != 'y') return
+  const ok = await confirm('OK')
+  if (!ok) return
   const { ChargedAmount } = await nc.domains.create({
     domain,
     address,
