@@ -1,9 +1,9 @@
 import { makeTestSuite } from 'zoroaster'
 import Context from '../context'
-import NameCheap from '@rqt/namecheap'
-import bosom from 'bosom'
-import { homedir } from 'os'
-import { join } from 'path'
+// import NameCheap from '@rqt/namecheap'
+// import bosom from 'bosom'
+// import { homedir } from 'os'
+// import { join } from 'path'
 
 const { BIN } = Context
 
@@ -44,12 +44,7 @@ const fork = {
 //   }
 // }
 
-const check = makeTestSuite('test/result/fork/check.md', {
-  fork,
-  mapActual: ({ stdout }) => strip(stdout),
-})
-
-const info = makeTestSuite('test/result/fork/info.md', {
+const ts = makeTestSuite('test/result/fork/default.md', {
   fork,
   mapActual: ({ stdout }) => strip(stdout),
 })
@@ -122,4 +117,5 @@ const cancelRegister = makeTestSuite('test/result/fork/cancel-register.md', {
 // MIT (c) https://github.com/ivoputzer/m.noansi
 const re = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-PRZcf-nqry=><]/g // eslint-disable-line
 
-export { check, register, cancelRegister, info }
+// export { register, cancelRegister }
+export default ts
