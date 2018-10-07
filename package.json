@@ -4,7 +4,9 @@
   "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
     "t": "zoroaster -a",
-    "test": "yarn t test/spec",
+    "mask": "yarn t test/mask -t 25000",
+    "spec": "yarn t test/spec",
+    "test": "yarn t test/spec test/mask -t 25000",
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "lint": "eslint .",
