@@ -19,6 +19,7 @@ const whitelistIP = async (settings, sandbox, ip) => {
     validation(val) {
       if (!val) throw new Error('Please enter the password.')
     },
+    password: true,
   })
   const nc = new NameCheapWeb({ sandbox })
   await nc.auth(settings.ApiUser, password, settings.phone)

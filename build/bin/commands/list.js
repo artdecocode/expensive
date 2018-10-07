@@ -1,4 +1,4 @@
-const { askSingle } = require('reloquent');
+const { confirm } = require('reloquent');
 let printList = require('../../lib/print/list'); if (printList && printList.__esModule) printList = printList.default;
 
 /** @param {import('@rqt/namecheap')} nc */
@@ -10,7 +10,7 @@ let printList = require('../../lib/print/list'); if (printList && printList.__es
   type,
   pageSize,
 } = {}) {
-  const { domains, CurrentPage, PageSize, TotalItems } = await nc.domains.getList({
+  const { domains, ...pagination } = await nc.domains.getList({
     page,
     sort,
     desc,
@@ -19,15 +19,13 @@ let printList = require('../../lib/print/list'); if (printList && printList.__es
     pageSize,
   })
   printList(domains)
-  if (CurrentPage * PageSize < TotalItems) {
-    const t = `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
-    const answer = await askSingle({
-      text: `Page ${t}. Display more`,
-      defaultValue: 'y',
-    })
-    if (answer == 'y') {
+  const nextPage = getNextPage(pagination)
+  if (nextPage) {
+    const t = getNavigation(pagination)
+    const answer = await confirm(`Page ${t}. Display more`)
+    if (answer) {
       await list(nc, {
-        page: CurrentPage + 1,
+        page: nextPage,
         sort,
         desc,
         filter,
@@ -36,6 +34,16 @@ let printList = require('../../lib/print/list'); if (printList && printList.__es
       })
     }
   }
+}
+
+const getNextPage = ({ CurrentPage, TotalItems, PageSize }) => {
+  if (CurrentPage * PageSize < TotalItems) {
+    return CurrentPage + 1
+  }
+}
+
+const getNavigation = ({ CurrentPage, TotalItems, PageSize }) => {
+  return `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
 }
 
 
