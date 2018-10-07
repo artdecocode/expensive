@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { debuglog, inspect } from 'util'
 import NameCheap from '@rqt/namecheap'
-import getIp from '@rqt/ip'
+import NameCheapWeb from '@rqt/namecheap-web'
 import getUsage from './get-usage'
 import List from './commands/list'
 import Check from './commands/check'
@@ -14,6 +14,7 @@ import getArgs from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
+import coupon from './commands/coupon'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -30,12 +31,14 @@ const {
   type: _type,
   pageSize: _pageSize,
   register: _register,
+  promo: _promo,
   free: _free,
   zones: _zones,
   whitelistIP: _whitelistIP,
   whois: _whois,
   Whois: _Whois,
   sandbox: _sandbox = !!process.env.SANDBOX,
+  coupon: _coupon,
 } = getArgs()
 
 if (_version) {
@@ -52,9 +55,9 @@ if (_version) {
  */
 const run = async (Settings, sandbox) => {
   try {
-    if (_whitelistIP) return whitelistIP(Settings, _sandbox)
+    if (_whitelistIP) return await whitelistIP(Settings, _sandbox)
 
-    const ip = Settings.ClientIp || await getIp()
+    const ip = Settings.ClientIp || await NameCheapWeb.LOOKUP_IP()
     const nc = new NameCheap({
       user: Settings.ApiUser,
       key: Settings.ApiKey,
@@ -62,7 +65,7 @@ const run = async (Settings, sandbox) => {
       sandbox,
     })
 
-    if (!_domains) return List(nc, {
+    if (!_domains) return await List(nc, {
       sort: _sort,
       desc: _desc,
       filter: _filter,
@@ -72,10 +75,14 @@ const run = async (Settings, sandbox) => {
 
     const [domain] = _domains
 
-    if (_info) return Info(nc, domain)
-    if (_register) return Register(nc, domain)
+    if (_info) return await Info(nc, domain)
+    if (_register) return await Register(nc, {
+      domain,
+      promo: _promo,
+      sandbox,
+    })
 
-    return Check(nc, {
+    await Check(nc, {
       domains: _domains,
       zones: _zones,
       free: _free,
@@ -107,8 +114,13 @@ const handler = async ({ stack, message, props }, Settings, sandbox) => {
 }
 
 (async () => {
-  if (_whois || _Whois) return whois(_domains, _Whois)
-  if (_init) return initConfig(_sandbox)
+  try {
+    if (_coupon) return await coupon(_sandbox)
+    if (_whois || _Whois) return await whois(_domains, _Whois)
+    if (_init) return await initConfig(_sandbox)
+  } catch (err) {
+    return handler(err)
+  }
   const Settings = await getConfig(_sandbox)
   await run(Settings, _sandbox)
 })()

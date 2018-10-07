@@ -2,14 +2,8 @@ import argufy from 'argufy'
 
 const getArgs = () => {
   return argufy({
-    domains: {
-      command: true,
-      multiple: true,
-    },
-    version: {
-      short: 'v',
-      boolean: true,
-    },
+    domains: { command: true, multiple: true },
+    version: { short: 'v', boolean: true },
     help: { short: 'h', boolean: true },
     init: { short: 'I', boolean: true },
     info: { short: 'i', boolean: true },
@@ -27,6 +21,8 @@ const getArgs = () => {
     whois: { short: 'w', boolean: true },
     whitelistIP: { short: 'W', boolean: true },
     sandbox: { short: 'S', boolean: true },
+    coupon: { boolean: true },
+    promo: { short: 'P' },
   })
 }
 

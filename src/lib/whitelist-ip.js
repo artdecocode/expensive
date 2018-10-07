@@ -2,7 +2,6 @@ import bosom from 'bosom'
 import { homedir } from 'os'
 import { join } from 'path'
 import { debuglog } from 'util'
-import getIp from '@rqt/ip'
 import { askSingle } from 'reloquent'
 import NameCheapWeb from '@rqt/namecheap-web'
 import { getAppName } from '.'
@@ -14,8 +13,13 @@ const LOG = debuglog('expensive')
  * @param {Settings} settings
  */
 const whitelistIP = async (settings, sandbox, ip) => {
-  const IP = ip || await getIp()
-  const password = await askSingle(`Enter the password to white-list ${IP}`)
+  const IP = ip || await NameCheapWeb.LOOKUP_IP()
+  const password = await askSingle({
+    text: `Enter the password to white-list ${IP}`,
+    validation(val) {
+      if (!val) throw new Error('Please enter the password.')
+    },
+  })
   const nc = new NameCheapWeb({ sandbox })
   await nc.auth(settings.ApiUser, password, settings.phone)
   await nc.whitelistIP(IP)

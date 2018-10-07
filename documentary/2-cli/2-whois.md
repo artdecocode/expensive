@@ -11,7 +11,7 @@ expensive test.org -w
 To request the extended form, the `--Whois` argument needs to be supplied.
 
 <details>
-<code>expensive test.org --Whois</code>
+<summary><code>expensive test.org --Whois</code></summary>
 
 %FORK-fs src/bin test.org --Whois%
 </details>

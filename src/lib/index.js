@@ -60,6 +60,6 @@ export const getWhois = (value) => {
 }
 
 export const getAppName = (sandbox) => {
-  const n = sandbox ? 'expensive-sandbox' : 'namecheap'
+  const n = sandbox ? 'expensive-sandbox' : 'expensive'
   return n
 }

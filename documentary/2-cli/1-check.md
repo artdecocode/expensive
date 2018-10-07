@@ -31,7 +31,7 @@ expensive domain[ domain2 ...domainN] [-f] [-z com,co,etc]
   </td></tr>
   </table>
 </details>
-
+<br/>
 
 To check a single domain, pass the domain name, e.g.,
 

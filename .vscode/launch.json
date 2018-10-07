@@ -14,10 +14,11 @@
         "SANDBOX": "1",
       },
       "args": [
-        "grunge.software",
+        // "-teststs"
+        "grunge123123.com",
         // "-i"
         // "tesasdfasdfas1f12.com",
-        // "-r",
+        "-r",
         // "-W",
         // "testtt",
         // "-z",
