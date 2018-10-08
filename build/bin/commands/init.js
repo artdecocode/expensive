@@ -1,6 +1,6 @@
 let africa = require('africa'); if (africa && africa.__esModule) africa = africa.default;
 const { getAppName } = require('../../lib');
-let questions = require('../../questions'); if (questions && questions.__esModule) questions = questions.default;
+const questions = require('../../questions');
 
 const initConfig = async (sandbox) => {
   const n = getAppName(sandbox)

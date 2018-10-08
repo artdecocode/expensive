@@ -1,4 +1,4 @@
-let printInfo = require('../../lib/print/info'); if (printInfo && printInfo.__esModule) printInfo = printInfo.default;
+const printInfo = require('../../lib/print/info');
 
 /**
  * @param {import('@rqt/namecheap')} client

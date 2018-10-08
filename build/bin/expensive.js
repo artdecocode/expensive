@@ -2,19 +2,19 @@
 const { debuglog, inspect } = require('util');
 let NameCheap = require('@rqt/namecheap'); if (NameCheap && NameCheap.__esModule) NameCheap = NameCheap.default;
 let NameCheapWeb = require('@rqt/namecheap-web'); if (NameCheapWeb && NameCheapWeb.__esModule) NameCheapWeb = NameCheapWeb.default;
-let getUsage = require('./get-usage'); if (getUsage && getUsage.__esModule) getUsage = getUsage.default;
-let List = require('./commands/list'); if (List && List.__esModule) List = List.default;
-let Check = require('./commands/check'); if (Check && Check.__esModule) Check = Check.default;
-let Register = require('./commands/reg'); if (Register && Register.__esModule) Register = Register.default;
-let getConfig = require('../lib/get-config'); if (getConfig && getConfig.__esModule) getConfig = getConfig.default;
-let whitelistIP = require('../lib/whitelist-ip'); if (whitelistIP && whitelistIP.__esModule) whitelistIP = whitelistIP.default;
-let Errors = require('./errors.json'); if (Errors && Errors.__esModule) Errors = Errors.default;
+const getUsage = require('./get-usage');
+const List = require('./commands/list');
+const Check = require('./commands/check');
+const Register = require('./commands/reg');
+const getConfig = require('../lib/get-config');
+const whitelistIP = require('../lib/whitelist-ip');
+const Errors = require('./errors.json');
 const { version } = require('../../package.json');
-let getArgs = require('./get-args'); if (getArgs && getArgs.__esModule) getArgs = getArgs.default;
-let whois = require('./commands/whois'); if (whois && whois.__esModule) whois = whois.default;
-let initConfig = require('./commands/init'); if (initConfig && initConfig.__esModule) initConfig = initConfig.default;
-let Info = require('./commands/info'); if (Info && Info.__esModule) Info = Info.default;
-let coupon = require('./commands/coupon'); if (coupon && coupon.__esModule) coupon = coupon.default;
+const getArgs = require('./get-args');
+const whois = require('./commands/whois');
+const initConfig = require('./commands/init');
+const Info = require('./commands/info');
+const coupon = require('./commands/coupon');
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)

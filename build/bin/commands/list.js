@@ -1,5 +1,5 @@
 const { confirm } = require('reloquent');
-let printList = require('../../lib/print/list'); if (printList && printList.__esModule) printList = printList.default;
+const printList = require('../../lib/print/list');
 
 /** @param {import('@rqt/namecheap')} nc */
                async function list(nc, {

@@ -1,6 +1,6 @@
 let africa = require('africa'); if (africa && africa.__esModule) africa = africa.default;
 const { debuglog } = require('util');
-let questions = require('../questions'); if (questions && questions.__esModule) questions = questions.default;
+const questions = require('../questions');
 const { getAppName } = require('.');
 
 const LOG = debuglog('expensive')
