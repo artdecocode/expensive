@@ -61,7 +61,7 @@ export default async function register(nc, {
   if (!promo && /\.(com|net|org|info|biz$)/.test(domain)) {
     try {
       const coupon = await getCoupon(sandbox)
-      const co = await confirm(`Apply coupon ${coupon}`)
+      const co = await confirm(`Apply coupon ${coupon}?`)
       if (co) p = coupon
     } catch (e) { /**/ }
   }
@@ -73,7 +73,7 @@ export default async function register(nc, {
   const address = await nc.address.getInfo(id)
   console.log('Registering %s\nfor %s\nusing:', b(domain, 'green'), pr)
   printAddress(address)
-  const ok = await confirm('OK')
+  const ok = await confirm('OK?')
   if (!ok) return
   const { ChargedAmount } = await nc.domains.create({
     domain,
