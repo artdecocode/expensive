@@ -17,6 +17,6 @@ Client IP is required for requests, but if not given, the it will be acquired au
 
 ## Sandbox
 
-To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-S` flags should be passed.
+To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-s` flags should be passed.
 
 %~%

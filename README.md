@@ -48,7 +48,7 @@ Client IP is required for requests, but if not given, the it will be acquired au
 
 ## Sandbox
 
-To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-S` flags should be passed.
+To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-s` flags should be passed.
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true"></a></p>
 
@@ -62,20 +62,34 @@ expensive -h
 
 ```fs
 A CLI application to access namecheap.com domain name registrar API.
-See man expensive for more information.
 
-  expensive [domain.co [domain.cc]] -f -z co[,io,app] -i -IHhv
+  expensive [domain [domain.co]]
+  [--info[ -fz]|register[ -p]|whois|Whois]
+  [-SDFPT] [-Ihv]
 
-	domain        	check a domain name in a number of zones
-	              	(com, net, org, biz, co, cc, io, bz, nu, app)
-	domain.co     	check a domain name
-	-f            	display only free domains when checking
-	-z co,io      	check in these zones only
-	-i, --info    	display info on domain
-	-r, --register	register a domain
-	-I, --init    	interactively initialise the configuration
-	-h, --help    	print usage information
-	-v, --version 	print package's version
+	<empty>         	Display the list of domains on account.
+	| -f, --free    	Display only free domains when checking.
+	| -z, --zones   	Check in these zones only.
+	| [co,io,...]   	
+	domain[.co]     	Check a domain name for availability,
+	                	or use the domain as input for commands bellow.
+	                	Checks the following zones when no TLD is given:
+	                	com, net, org, biz, co, cc, io, bz, nu, app.
+	-i, --info      	Display info on the domain.
+	| -S, --sort    	Sort by this field (name, expire, create).
+	| -D, --desc    	Sort in descending order.
+	| -F, --filter  	Filter by this word.
+	| -P, --pageSize	The page size.
+	| -T, --type    	Domain type (ALL, EXPIRING, EXPIRED).
+	-r, --register  	Register the domain.
+	| -p, --promo   	Use this promo code on registration.
+	-w, --whois     	Display brief WHOIS data.
+	--Whois         	Display full WHOIS data.
+	-I, --init      	Interactively initialise the configuration.
+	-h, --help      	Print usage information.
+	-v, --version   	Print package's version.
+	-s, --sandbox   	Use the sandbox API.
+	--coupon        	Find this month's coupon.
 ```
 
 
@@ -121,7 +135,7 @@ expensive domain[ domain2 ...domainN] [-f] [-z com,co,etc]
   </td></tr>
   </table>
 </details>
-
+<br/>
 
 To check a single domain, pass the domain name, e.g.,
 
@@ -147,9 +161,9 @@ expensive test.org -w
 ```fs
 Domain Name: TEST.ORG
 Registrar URL: http://www.psi-usa.info
-Updated Date: 2018-7-27 04:28:31 (71 days ago)
-Creation Date: 1997-7-27 08:00:00 (7741 days ago)
-Registry Expiry Date: 2019-7-26 07:00:00 (in 293 days)
+Updated Date: 2018-7-27 04:28:31 (74 days ago)
+Creation Date: 1997-7-27 08:00:00 (7744 days ago)
+Registry Expiry Date: 2019-7-26 07:00:00 (in 290 days)
 Name Server: NS0.TMT.DE
  NS4.TMT.DE
  NS3.TMT.DE
@@ -160,7 +174,7 @@ Name Server: NS0.TMT.DE
 To request the extended form, the `--Whois` argument needs to be supplied.
 
 <details>
-<code>expensive test.org --Whois</code>
+<summary><code>expensive test.org --Whois</code></summary>
 
 ```fs
 Domain Name: TEST.ORG
@@ -187,7 +201,7 @@ Name Server: NS2.TMT.DE
 Name Server: NS1.TMT.DE
 DNSSEC: unsigned
 URL of the ICANN Whois Inaccuracy Complaint Form https://www.icann.org/wicf/)
-&gt;&gt;&gt; Last update of WHOIS database: 2018-10-06T01:22:28Z
+&gt;&gt;&gt; Last update of WHOIS database: 2018-10-08T22:34:12Z
 ```
 </details>
 
