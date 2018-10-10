@@ -15,6 +15,7 @@ export const allZones = [
   'bz',
   'nu',
   'app',
+  'page',
 ]
 
 export const isSingleWord = d => !/\./.test(d)
