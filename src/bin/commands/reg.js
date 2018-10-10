@@ -72,35 +72,56 @@ const findAndApplyPromo = async (promo, sandbox, zone) => {
 }
 
 const confirmPremiumPrice = async ({ IsPremiumName, PremiumRegistrationPrice, EapFee }) => {
-  if (!IsPremiumName) return
-  const res = await confirm(`Continue with the premium registration price of ${PremiumRegistrationPrice} and ${EapFee} EapFee?`, {
-    defaultYes: false,
-  })
+  let res = true
+  if (IsPremiumName) {
+    res = await confirm(`Continue with the premium registration price of ${PremiumRegistrationPrice}?`, {
+      defaultYes: false,
+    })
+  }
+  if (parseFloat(EapFee)) {
+    res = res && await confirm(`Continue with the early access fee of ${EapFee}?`, {
+      defaultYes: false,
+    })
+  }
   if (!res) throw new Error('No confirmation.')
+}
+
+const skipPrice = (Price) => {
+  return Price.map((p) => {
+    return {
+      ...p,
+      value: `SKIP-${p.value}`,
+    }
+  })
 }
 
 const getTable = async (info, { nc, years, promo, zone }) => {
   const { IcannFee, PremiumRenewalPrice, PremiumTransferPrice, PremiumRegistrationPrice, IsPremiumName, EapFee } = info
   const { Your } = await getPrice(nc, zone, years, promo, PremiumRegistrationPrice, EapFee)
 
-  const Premium = IsPremiumName ? [
-    { name: 'Premium Registration Price', value: PremiumRegistrationPrice, cost: PremiumRegistrationPrice },
-    { name: 'Premium Renewal Price', value: `SKIP-${PremiumRenewalPrice}` },
-    { name: 'Premium Transfer Price', value: `SKIP-${PremiumTransferPrice}` },
-    { name: 'Eap Fee', value: EapFee, cost: EapFee },
-  ] : []
+  const Premium = [
+    { name: 'Premium Registration Price', value: PremiumRegistrationPrice,
+      cost: PremiumRegistrationPrice,
+    },
+    ...skipPrice([
+      { name: 'Premium Renewal Price', value: PremiumRenewalPrice },
+      { name: 'Premium Transfer Price', value: PremiumTransferPrice },
+    ]),
+  ]
+  const hasEap = parseFloat(EapFee) != 0
+  const Eap = [{ name: 'Eap Fee', value: EapFee, cost: EapFee }]
+  let CoolStoryBro = []
+  if (IsPremiumName) CoolStoryBro.push(...Premium)
+  if (hasEap) CoolStoryBro.push(...Eap)
   const Price = [
     { name: 'Price', value: Your.Price, cost: Your.Price },
-    { name: 'Icann Fee', value: IcannFee }, // in additional cost
-    { name: 'Additional Cost', value: Your.AdditionalCost, cost: Your.AdditionalCost },
+    { name: 'Icann Fee', value: `${IcannFee}` }, // in additional cost
+    { name: 'Additional Cost', value: `${Your.AdditionalCost}`, cost: Your.AdditionalCost },
   ]
-  const Data = [...Premium, ...(IsPremiumName ? Price.map((p) => {
-    return {
-      ...p,
-      value: `SKIP-${p.value}`,
-    }
-  }) : Price)]
-  const total = (IsPremiumName ? Premium : Price).reduce((acc, { cost = 0 }) => {
+  const hasCoolStory = CoolStoryBro.length
+  const Data = hasCoolStory ? [...CoolStoryBro, ...skipPrice(Price)] : Price
+
+  const total = (hasCoolStory ? CoolStoryBro : Price).reduce((acc, { cost = 0 }) => {
     const f = parseFloat(cost)
     return acc + f
   }, 0)
@@ -114,7 +135,7 @@ const getTable = async (info, { nc, years, promo, zone }) => {
     headings: ['Price', 'Value'],
     replacements: {
       value(value) {
-        const [, val] = value.split('SKIP-')
+        const [, val] = `${value}`.split('SKIP-')
         if (val) {
           return {
             value: c(val, 'grey'),
@@ -128,6 +149,22 @@ const getTable = async (info, { nc, years, promo, zone }) => {
   return tt
 }
 
+
+// if (correctEap) {
+//   console.log('Found correct EAP, retrying...: %s', correctEap)
+//   debugger
+//   ({ ChargedAmount } = await nc.domains.create({
+//     domain,
+//     address,
+//     promo: PROMO,
+//     premium: IsPremiumName ? {
+//       IsPremiumDomain: true,
+//       PremiumPrice: parseFloat(PremiumRegistrationPrice),
+//       EapFee: parseFloat(correctEap),
+//     } : {},
+//   }))
+// debugger
+
 /**
  * @param {import('@rqt/namecheap')} nc
  */
@@ -140,6 +177,7 @@ export default async function register(nc, {
   const INFO = (await nc.domains.check(domain))[0]
   const { Available, EapFee, PremiumRegistrationPrice, Domain, IsPremiumName,
   } = INFO
+  console.log(require('util').inspect(INFO, { colors: true }))
 
   if (!Available) throw new Error(`Domain ${Domain} is not available.`)
   const zone = getZone(domain)
@@ -170,16 +208,35 @@ export default async function register(nc, {
   printAddress(address)
   const ok = await confirm('OK?')
   if (!ok) return
-  const { ChargedAmount } = await nc.domains.create({
-    domain,
-    address,
-    promo: PROMO,
-    premium: IsPremiumName ? {
-      IsPremiumDomain: true,
-      PremiumPrice: parseFloat(PremiumRegistrationPrice),
-      EapFee: parseFloat(EapFee),
-    } : undefined,
-  })
+  let ChargedAmount
+  try {
+    ({ ChargedAmount } = await nc.domains.create({
+      domain,
+      address,
+      promo: PROMO,
+      premium: IsPremiumName ? {
+        IsPremiumDomain: true,
+        PremiumPrice: parseFloat(PremiumRegistrationPrice),
+        EapFee: parseFloat(EapFee),
+      } : {},
+    }))
+  } catch (err) {
+    const { props = {}, message } = err
+    const { Number: N } = props
+    // console.log(require('util').inspect({ Number: N, message }, { colors: true }))
+
+    if (N == 2515610) {
+      console.warn('[!] Bug: cannot register a premium with Eap.')
+      console.warn(' -  Response when requesting w/out EapFee:')
+      console.log('    %s', message)
+    } else if (N == 3028166) {
+      console.warn('[!] Possible Bug (e.g., after sending without Eap)')
+      console.log('    %s', message)
+    }
+
+    throw err
+  }
+
   console.log(
     'Successfully registered %s! Charged amount: $%s.',
     c(domain, 'green'),

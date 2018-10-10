@@ -14,7 +14,7 @@
         // "SANDBOX": "1",
       },
       "args": [
-        "metadata.page",
+        "doula.page",
         "-r",
         // "-W",
         // "testtt",
