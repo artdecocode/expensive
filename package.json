@@ -1,6 +1,6 @@
 {
   "name": "expensive",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
     "t": "zoroaster -a",
