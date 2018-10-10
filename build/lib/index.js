@@ -15,6 +15,7 @@ const { c } = require('erte');
   'bz',
   'nu',
   'app',
+  'page',
 ]
 
        const isSingleWord = d => !/\./.test(d)
