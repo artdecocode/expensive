@@ -1,3 +1,10 @@
+## 10 October 2018
+
+### 1.6.0
+
+- [fix] Cancel domain registration.
+- [feature] Check `.page` domain.
+
 ## 9 October 2018
 
 ### 1.5.0
