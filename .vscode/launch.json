@@ -10,11 +10,11 @@
       "name": "Launch Expensive",
       "program": "${workspaceFolder}/src/bin/index.js",
       "env": {
-        "NODE_DEBUG": "expensive",
-        "SANDBOX": "1",
+        "NODE_DEBUG": "expensive,aqt",
+        // "SANDBOX": "1",
       },
       "args": [
-        "expensive.page",
+        "metadata.page",
         "-r",
         // "-W",
         // "testtt",
