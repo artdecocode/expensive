@@ -14,11 +14,8 @@
         "SANDBOX": "1",
       },
       "args": [
-        // "-teststs"
-        "alamode.app",
-        // "-i"
-        // "tesasdfasdfas1f12.com",
-        "-i",
+        "expensive.page",
+        "-r",
         // "-W",
         // "testtt",
         // "-z",

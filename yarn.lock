@@ -331,10 +331,10 @@ reloquent@1.0.6:
   dependencies:
     promto "1.0.1"
 
-reloquent@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/reloquent/-/reloquent-1.2.2.tgz#5be6b3ea4cf4c2f6115f4bce752ccbc4e4b5c436"
-  integrity sha512-3uG1JqNDW5RoB/ywcEu2oGMTFZsvgkzDuRuDEiaalayXzfnnoQ7AggGQSvkIYQ1qYkPD5WP9QI1m69jPfUkFBw==
+reloquent@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/reloquent/-/reloquent-1.2.3.tgz#d6f8aec7bbf13c4acee61973f09b40ce34c860bf"
+  integrity sha512-ArNXaQQicvG/ZgccVV0N29HyzkiCATNBwV3Y0GBI/bHoj/oLaEzUHE3c6RPVSmudAGvc9+hUhpDiDB/EDATymg==
   dependencies:
     promto "1.0.1"
 
