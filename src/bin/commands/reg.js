@@ -2,6 +2,13 @@ import { c, b } from 'erte'
 import NameCheapWeb from '@rqt/namecheap-web'
 import { confirm } from 'reloquent'
 import t from 'tablature'
+import { debuglog, inspect } from 'util'
+
+const LOG = debuglog('expensive')
+const LOG_OBJ = (obj) => {
+  const i = inspect(obj, { colors: true })
+  LOG(i)
+}
 
 /**
  * Find a default address ID.
@@ -35,6 +42,7 @@ const getPrice = async (nc, zone, years, promoCode, PremiumRegistrationPrice, Ea
     product: zone,
   })
   const price = pp.domains.register[zone].find(({ Duration }) => Duration == years)
+  LOG_OBJ(price)
   const PC = getPriceWithCurrency.bind(null, price.Currency)
   let p = price.YourPrice != price.RegularPrice
     ? `${c(PC(price.YourPrice), 'green')} (regular ${price.RegularPrice})`
@@ -49,6 +57,7 @@ const getPrice = async (nc, zone, years, promoCode, PremiumRegistrationPrice, Ea
     Price: price.YourPrice,
     PriceType: price.YourPriceType,
     AdditionalCostType: price.YourAdditonalCostType,
+    Currency: price.Currency,
   }, p }
 }
 
@@ -127,7 +136,7 @@ const getTable = async (info, { nc, years, promo, zone }) => {
   }, 0)
   const Total = [
     { name: '----', value: '-----' },
-    { name: 'Total', value: `${Math.round(total * 100000) / 100000}` },
+    { name: 'Total', value: `${Math.round(total * 100000) / 100000} ${Your.Currency}` },
   ]
   const tt = t({
     keys: ['name', 'value'],
@@ -177,7 +186,7 @@ export default async function register(nc, {
   const INFO = (await nc.domains.check(domain))[0]
   const { Available, EapFee, PremiumRegistrationPrice, Domain, IsPremiumName,
   } = INFO
-  console.log(require('util').inspect(INFO, { colors: true }))
+  LOG_OBJ(INFO)
 
   if (!Available) throw new Error(`Domain ${Domain} is not available.`)
   const zone = getZone(domain)

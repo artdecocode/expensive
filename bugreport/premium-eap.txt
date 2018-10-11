@@ -1,0 +1,22 @@
+4562 i'm trying to register a premium domain on sandbox, I get the following info
+AQT 58987: https://api.sandbox.namecheap.com/xml.response?ApiUser=zavr&ApiKey=abcdefg&UserName=zavr&ClientIp=10.0.0.1&Command=namecheap.domains.check&DomainList=metadata.page 694 B (raw 515 B)
+{ Domain: 'metadata.page',
+  Available: true,
+  ErrorNo: 0,
+  Description: '',
+  IsPremiumName: true,
+  PremiumRegistrationPrice: '140.4000',
+  PremiumRenewalPrice: '10.4000',
+  PremiumRestorePrice: '140.4000',
+  PremiumTransferPrice: '10.4000',
+  IcannFee: '0.18',
+  EapFee: '100.0' }
+then i'm trying to register the domain it comes back with
+EXPENSIVE 58987: { Number: 3028166 }
+EXPENSIVE 58987: undefined
+EXPENSIVE 58987: Error: The fees passed in the transform command do not contain expected fee type"CREATE".
+so then I try without EapFree
+{ IsPremiumDomain: true, PremiumPrice: 140.4 }
+And I get the error:
+{ Number: 2515610,
+  message: 'EAP fee is incorrect, should be 150.00' }

@@ -10,6 +10,7 @@
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "start": "NODE_DEBUG=expensive node src/bin",
+    "prod": "node src/bin",
     "lint": "eslint .",
     "e": "node example",
     "man": "man man/doc.1",
