@@ -105,6 +105,9 @@ const skipPrice = (Price) => {
   })
 }
 
+const getFloat = n => `${Math.floor(n * 100)}`
+  .replace(/(\d+)(\d\d)$/, (m, p, d) => `${p}.${d}`)
+
 const getTable = async (info, { nc, years, promo, zone }) => {
   const { IcannFee, PremiumRenewalPrice, PremiumTransferPrice, PremiumRegistrationPrice, IsPremiumName, EapFee } = info
   const { Your } = await getPrice(nc, zone, years, promo, PremiumRegistrationPrice, EapFee)
@@ -125,7 +128,8 @@ const getTable = async (info, { nc, years, promo, zone }) => {
   if (hasEap) CoolStoryBro.push(...Eap)
   const Price = [
     { name: 'Price', value: Your.Price, cost: Your.Price },
-    { name: 'Icann Fee', value: `${IcannFee}` }, // in additional cost
+    ...(IcannFee ? [{ name: 'Icann Fee', value: `${IcannFee}` }] : []),
+    // in additional cost
     { name: 'Additional Cost', value: `${Your.AdditionalCost}`, cost: Your.AdditionalCost },
   ]
   const hasCoolStory = CoolStoryBro.length
@@ -135,9 +139,10 @@ const getTable = async (info, { nc, years, promo, zone }) => {
     const f = parseFloat(cost)
     return acc + f
   }, 0)
+  const totalPrice = getPriceWithCurrency(Your.Currency, getFloat(total))
   const Total = [
-    { name: '----', value: '-----' },
-    { name: 'Total', value: `${Math.round(total * 100000) / 100000} ${Your.Currency}` },
+    { name: '-----', value: '-'.repeat(totalPrice.length) },
+    { name: 'Total', value: totalPrice },
   ]
   const tt = t({
     keys: ['name', 'value'],
