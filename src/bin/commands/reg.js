@@ -41,8 +41,9 @@ const getPrice = async (nc, zone, years, promoCode, PremiumRegistrationPrice, Ea
     action: 'REGISTER',
     product: zone,
   })
-  const price = pp.domains.register[zone].find(({ Duration }) => Duration == years)
-  LOG_OBJ(price)
+  const price = pp.domains.register[zone]
+    .find(({ Duration }) => Duration == years)
+  // LOG_OBJ(price)
   const PC = getPriceWithCurrency.bind(null, price.Currency)
   let p = price.YourPrice != price.RegularPrice
     ? `${c(PC(price.YourPrice), 'green')} (regular ${price.RegularPrice})`
@@ -186,7 +187,7 @@ export default async function register(nc, {
   const INFO = (await nc.domains.check(domain))[0]
   const { Available, EapFee, PremiumRegistrationPrice, Domain, IsPremiumName,
   } = INFO
-  LOG_OBJ(INFO)
+  // LOG_OBJ(INFO)
 
   if (!Available) throw new Error(`Domain ${Domain} is not available.`)
   const zone = getZone(domain)
