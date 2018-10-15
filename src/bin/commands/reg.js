@@ -255,7 +255,7 @@ export default async function register(nc, {
   console.log(
     'Successfully registered %s! Charged amount: $%s.',
     c(domain, 'green'),
-    ChargedAmount,
+    getFloat(parseFloat(ChargedAmount)),
   )
 }
 
