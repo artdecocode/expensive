@@ -53,10 +53,10 @@
     reloquent "1.0.6"
     rqt "3.0.0"
 
-"@rqt/namecheap@2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.0.3.tgz#d2a4907fe37aed6b06db487c3103b75e11bf8e38"
-  integrity sha512-AVZYFf/ZcV6nxA50cIUuDW65/NqiXW+/XqvHvpYyoBnOp+0u8zbvpEWlNTsgaQNM1jAyqaOxejpf2kWnBE4kDA==
+"@rqt/namecheap@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.1.0.tgz#80646c68e658a9c9f7d31f58084c760ddd168238"
+  integrity sha512-wBbNN/Lj62WorfnrdCtEjYJNONUsg2p4/iorvwam7ogWgITsUpJcftyqcTFUkcCih8oYIpx6fNUFfsMyltEV6Q==
   dependencies:
     rexml "1.2.0"
     rqt "3.0.0"

@@ -31,35 +31,42 @@ const getZone = (domain) => {
   return zone
 }
 
+/** @type {import('@rqt/namecheap/build/api').Pricing} */
+const findProduct = (pricing, zone, years) => {
+  return pricing.domains
+    .register[zone].find(({ Duration }) => Duration == years)
+}
+
 /**
  * @param {import('@rqt/namecheap')} nc
  */
-const getPrice = async (nc, zone, years, promoCode, PremiumRegistrationPrice, EapFee) => {
+const getPrice = async (nc, zone, years, promoCode) => {
   const pp = await nc.users.getPricing({
     type: 'DOMAIN',
     promoCode,
     action: 'REGISTER',
     product: zone,
   })
-  const price = pp.domains.register[zone]
-    .find(({ Duration }) => Duration == years)
+  let CouponlessPrice
+  if (promoCode) {
+    const cp = await nc.users.getPricing({
+      type: 'DOMAIN',
+      action: 'REGISTER',
+      product: zone,
+    });
+    ({ YourPrice: CouponlessPrice } = findProduct(cp, zone, years))
+  }
+  const price = findProduct(pp, zone, years)
   // LOG_OBJ(price)
-  const PC = getPriceWithCurrency.bind(null, price.Currency)
-  let p = price.YourPrice != price.RegularPrice
-    ? `${c(PC(price.YourPrice), 'green')} (regular ${price.RegularPrice})`
-    : PC(price.RegularPrice)
-  p = price.YourAdditonalCost
-    ? `${p} + ${PC(price.YourAdditonalCost)} fee`
-    : p
-  p += PremiumRegistrationPrice ? `, premium registration ${PC(PremiumRegistrationPrice)}` : ''
-  p += EapFee ? `, eapFee ${PC(EapFee)}` : ''
-  return { Your: {
+  return {
+    PromoCode: promoCode,
     AdditionalCost: price.YourAdditonalCost,
     Price: price.YourPrice,
     PriceType: price.YourPriceType,
     AdditionalCostType: price.YourAdditonalCostType,
     Currency: price.Currency,
-  }, p }
+    CouponlessPrice: CouponlessPrice,
+  }
 }
 
 const getPriceWithCurrency = (currency, price) => {
@@ -71,13 +78,17 @@ const findAndApplyPromo = async (promo, sandbox, zone) => {
     console.log('Using promo %s', promo)
     return promo
   }
-  if (/\.(com|net|org|info|biz$)/.test(zone)) {
-    console.log('Checking coupon online')
+  if (['com', 'net', 'org', 'info', 'biz'].includes(zone)) {
     try {
-      const coupon = await getCoupon(sandbox)
-      const co = await confirm(`Apply coupon ${coupon}?`)
+      const coupon = await loading(
+        'Checking coupon online',
+        getCoupon(sandbox),
+      )
+      const co = await confirm(`\rApply coupon ${coupon}?`)
       if (co) return coupon
-    } catch (e) { /**/ }
+    } catch (e) {
+      console.log('Could not retrieve promo')
+    }
   }
 }
 
@@ -105,12 +116,30 @@ const skipPrice = (Price) => {
   })
 }
 
-const getFloat = n => `${Math.floor(n * 100)}`
-  .replace(/(\d+)(\d\d)$/, (m, p, d) => `${p}.${d}`)
+const getFixed = n => Number(n).toFixed(2)
+
+const loading = async (text, promise) => {
+  const p = typeof promise == 'function' ? promise() : promise
+  let i = 1
+  const getText = () => `${text}${'.'.repeat(i)}`
+  const clear = () => process.stdout.write(`\r${' '.repeat(text.length + 3)}\r`)
+  let s = getText()
+  process.stdout.write(s)
+  const int = setInterval(() => {
+    i = (i + 1) % 4
+    s = getText()
+    clear()
+    process.stdout.write(s)
+  }, 250)
+  const res = await p
+  clearInterval(int)
+  clear()
+  return res
+}
 
 const getTable = async (info, { nc, years, promo, zone }) => {
   const { IcannFee, PremiumRenewalPrice, PremiumTransferPrice, PremiumRegistrationPrice, IsPremiumName, EapFee } = info
-  const { Your } = await getPrice(nc, zone, years, promo, PremiumRegistrationPrice, EapFee)
+  const Your = await getPrice(nc, zone, years, promo)
 
   const Premium = [
     { name: 'Premium Registration Price', value: PremiumRegistrationPrice,
@@ -123,13 +152,14 @@ const getTable = async (info, { nc, years, promo, zone }) => {
   ]
   const hasEap = parseFloat(EapFee) != 0
   const Eap = [{ name: 'Eap Fee', value: EapFee, cost: EapFee }]
-  let CoolStoryBro = []
-  if (IsPremiumName) CoolStoryBro.push(...Premium)
-  if (hasEap) CoolStoryBro.push(...Eap)
+  const CoolStoryBro = [
+    ...(IsPremiumName ? Premium : []),
+    ...(hasEap ? Eap : []),
+  ]
   const Price = [
     { name: 'Price', value: Your.Price, cost: Your.Price },
-    ...(IcannFee ? [{ name: 'Icann Fee', value: `${IcannFee}` }] : []),
-    // in additional cost
+    ...skipPrice(Your.PromoCode ? [{ name: 'Without Promo', value: Your.CouponlessPrice }] : []),
+    ...(IcannFee ? [{ name: 'Icann Fee', value: IcannFee }] : []),
     { name: 'Additional Cost', value: `${Your.AdditionalCost}`, cost: Your.AdditionalCost },
   ]
   const hasCoolStory = CoolStoryBro.length
@@ -139,12 +169,12 @@ const getTable = async (info, { nc, years, promo, zone }) => {
     const f = parseFloat(cost)
     return acc + f
   }, 0)
-  const totalPrice = getPriceWithCurrency(Your.Currency, getFloat(total))
+  const totalPrice = getPriceWithCurrency(Your.Currency, getFixed(total))
   const Total = [
     { name: '-----', value: '-'.repeat(totalPrice.length) },
     { name: 'Total', value: totalPrice },
   ]
-  const tt = t({
+  const table = t({
     keys: ['name', 'value'],
     data: [...Data, ...Total],
     headings: ['Price', 'Value'],
@@ -161,24 +191,14 @@ const getTable = async (info, { nc, years, promo, zone }) => {
       },
     },
   })
-  return tt
+  return { Your, table }
 }
 
-
-// if (correctEap) {
-//   console.log('Found correct EAP, retrying...: %s', correctEap)
-//   debugger
-//   ({ ChargedAmount } = await nc.domains.create({
-//     domain,
-//     address,
-//     promo: PROMO,
-//     premium: IsPremiumName ? {
-//       IsPremiumDomain: true,
-//       PremiumPrice: parseFloat(PremiumRegistrationPrice),
-//       EapFee: parseFloat(correctEap),
-//     } : {},
-//   }))
-// debugger
+const warnExtraPromo = (Your) => {
+  if (Your.PromoCode && parseFloat(Your.Price) > parseFloat(Your.CouponlessPrice)) {
+    console.log('[!] Warning: you will pay more with coupon %s than without it.', Your.PromoCode)
+  }
+}
 
 /**
  * @param {import('@rqt/namecheap')} nc
@@ -196,12 +216,18 @@ export default async function register(nc, {
 
   if (!Available) throw new Error(`Domain ${Domain} is not available.`)
   const zone = getZone(domain)
-  const table = await getTable(INFO, {
+
+  const PROMO = await findAndApplyPromo(promo, sandbox, zone)
+
+  const { Your, table } = await loading('Getting price', getTable(INFO, {
     nc,
-    promo,
+    promo: PROMO,
     years,
     zone,
-  }); console.log(table)
+  }))
+  console.log('\n', table)
+  warnExtraPromo(Your)
+  console.log('')
 
   if (IsPremiumName) {
     await confirmPremiumPrice({
@@ -211,17 +237,20 @@ export default async function register(nc, {
     })
   }
 
-  const PROMO = await findAndApplyPromo(promo, sandbox, zone)
+  const address = await loading('Finding default address', async () => {
+    const addresses = await nc.address.getList()
+    const id = findDefault(addresses)
+    const a = await nc.address.getInfo(id)
+    return a
+  })
 
-  const addresses = await nc.address.getList()
-  const id = findDefault(addresses)
-  const address = await nc.address.getInfo(id)
   console.log(
-    'Registering %s using:',
+    '\rRegistering %s using:',
     b(domain, 'green'),
   )
   printAddress(address)
-  const ok = await confirm('OK?')
+  // default no to prevent accidental enter when waiting for address promise
+  const ok = await confirm('OK?', { defaultYes: false })
   if (!ok) return
   let ChargedAmount
   try {
@@ -255,16 +284,30 @@ export default async function register(nc, {
   console.log(
     'Successfully registered %s! Charged amount: $%s.',
     c(domain, 'green'),
-    getFloat(parseFloat(ChargedAmount)),
+    getFixed(ChargedAmount),
   )
 }
 
 const printAddress = ({
   FirstName, LastName, Address1, Address2, City, Zip, Country, EmailAddress,
 }) => {
-  console.log(' %s %s, %s', FirstName, LastName, EmailAddress)
-  console.log(' %s', Address1)
-  Address2 && console.log(' %s', Address2)
-  console.log(' %s', City)
-  console.log(' %s, %s', Zip, Country)
+  const s = `│ ${FirstName} ${LastName}, ${EmailAddress}
+│  ${Address1}${Address2 ? `\n│  ${Address2}` : ''}
+│  ${City}
+│  ${Zip}, ${Country}`.trimRight()
+  const l = s.split('\n')
+  const w = l.reduce((acc, { length }) => length > acc ? length : acc, 0)
+  const bt = `┌${'─'.repeat(w)}┐`
+  const bb = `└${'─'.repeat(w)}┘`
+  console.log(bt)
+  const p = l.map(line => `${pad(line, w)} │`).join('\n')
+  console.log(p)
+  console.log(bb)
+}
+
+const pad = (string, width) => {
+  const d = Math.max(width - string.length, 0)
+  const p = ' '.repeat(d)
+  const s = `${string}${p}`
+  return s
 }
