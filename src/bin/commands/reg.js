@@ -3,6 +3,7 @@ import NameCheapWeb from '@rqt/namecheap-web'
 import { confirm } from 'reloquent'
 import t from 'tablature'
 import { debuglog, inspect } from 'util'
+import frame from 'frame-of-mind'
 
 const LOG = debuglog('expensive')
 const LOG_OBJ = (obj) => {
@@ -291,23 +292,10 @@ export default async function register(nc, {
 const printAddress = ({
   FirstName, LastName, Address1, Address2, City, Zip, Country, EmailAddress,
 }) => {
-  const s = `│ ${FirstName} ${LastName}, ${EmailAddress}
-│  ${Address1}${Address2 ? `\n│  ${Address2}` : ''}
-│  ${City}
-│  ${Zip}, ${Country}`.trimRight()
-  const l = s.split('\n')
-  const w = l.reduce((acc, { length }) => length > acc ? length : acc, 0)
-  const bt = `┌${'─'.repeat(w)}┐`
-  const bb = `└${'─'.repeat(w)}┘`
-  console.log(bt)
-  const p = l.map(line => `${pad(line, w)} │`).join('\n')
-  console.log(p)
-  console.log(bb)
-}
-
-const pad = (string, width) => {
-  const d = Math.max(width - string.length, 0)
-  const p = ' '.repeat(d)
-  const s = `${string}${p}`
-  return s
+  const s = `${FirstName} ${LastName}, ${EmailAddress}
+ ${Address1}${Address2 ? `\n ${Address2}` : ''}
+ ${City}
+ ${Zip}, ${Country}`
+  const f = frame(s)
+  console.log(f)
 }
