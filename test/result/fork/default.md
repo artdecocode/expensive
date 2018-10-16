@@ -39,18 +39,19 @@ expensive-test-info.org     yes
 test
 
 /* expected */
-Checking domains test.com, test.net, test.org, test.biz, test.co, test.cc, test.io, test.bz, test.nu, test.app
-Domain    Available
-test.com     no
-test.net     no
-test.org     no
-test.biz     no
-test.co      no
-test.cc      no
-test.io      no
-test.bz      no
-test.nu      no
-test.app     yes
+Checking domains test.com, test.net, test.org, test.biz, test.co, test.cc, test.io, test.bz, test.nu, test.app, test.page
+Domain     Available  Premium  Price
+test.com      no
+test.net      no
+test.org      no
+test.biz      no
+test.co       no
+test.cc       no
+test.io       no
+test.bz       no
+test.nu       no
+test.app      yes
+test.page     yes        ✓     140.40
 /**/
 
 // --info

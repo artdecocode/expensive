@@ -3,10 +3,10 @@
   "version": "1.6.0",
   "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
-    "t": "zoroaster -a",
-    "mask": "yarn t test/mask -t 25000",
+    "t": "zoroaster -a -t 25000",
+    "mask": "yarn t test/mask",
     "spec": "yarn t test/spec",
-    "test": "yarn t test/spec test/mask -t 25000",
+    "test": "yarn t test/spec test/mask",
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "start": "node src/bin",
@@ -52,6 +52,7 @@
     "alamode": "1.6.0",
     "documentary": "1.20.1",
     "eslint-config-artdeco": "1.0.1",
+    "forkfeed": "1.0.0",
     "yarn-s": "1.1.0",
     "zoroaster": "3.6.2"
   },

@@ -12,6 +12,7 @@
       "env": {
         "NODE_DEBUG": "expensive,aqt",
         // "SANDBOX": "1",
+        "DEBUG": "1",
       },
       "args": [
         "doula.page",

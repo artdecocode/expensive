@@ -1,7 +1,7 @@
-// can cancel registration
-expensive.page -r
+// !can cancel registration
+expensive1.com -r
 
 /* expected */
-Reading expensive rc
+Reading expensive-sandbox rc
 
 /**/
