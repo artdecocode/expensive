@@ -1,4 +1,4 @@
-// !can cancel registration
+// can cancel registration
 expensive1.com -r
 
 /* expected */
