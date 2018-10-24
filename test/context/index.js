@@ -25,7 +25,6 @@ export default class Context {
     if (TEST_BUILD) console.log('Testing BUILD %s', c(b, 'green'))
     return TEST_BUILD == 'test-build' ? b : 'src/bin'
   }
-  static mapActual({ stdout }) { return Context.strip(stdout) }
 
   static strip(s) {
     return s

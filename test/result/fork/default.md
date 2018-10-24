@@ -1,10 +1,10 @@
 // check: single (free)
-expensive-test-available.org
+expensive-test-random123.org
 
 /* expected */
-Checking domain expensive-test-available.org
+Checking domain expensive-test-random123.org
 Domain                        Available
-expensive-test-available.org     yes
+expensive-test-random123.org     yes
 /**/
 
 // check: single (taken)

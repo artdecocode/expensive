@@ -21,11 +21,9 @@ const stdinEnd = makeTestSuite('test/result/cancel.md', {
       stdio: 'pipe',
       execArgv: [],
     })
-    forkFeed(p.stdout, p.stdin,
-      [
-        [/Apply coupon/, 'y'],
-      ],
-    )
+    forkFeed(p.stdout, p.stdin, [
+      [/Apply coupon/, 'y'],
+    ])
     p.stdout.on('data', (d) => {
       if (/OK/.test(d)) {
         p.stdin.end()
