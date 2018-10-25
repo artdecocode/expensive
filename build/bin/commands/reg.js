@@ -161,7 +161,7 @@ const getTable = async (info, { nc, years, promo, zone }) => {
     { name: 'Price', value: Your.Price, cost: Your.Price },
     ...skipPrice(Your.PromoCode ? [{ name: 'Without Promo', value: Your.CouponlessPrice }] : []),
     ...(IcannFee ? [{ name: 'Icann Fee', value: IcannFee }] : []),
-    { name: 'Additional Cost', value: `${Your.AdditionalCost}`, cost: Your.AdditionalCost },
+    ...(Your.AdditionalCost ? [{ name: 'Additional Cost', value: `${Your.AdditionalCost}`, cost: Your.AdditionalCost }] : []),
   ]
   const hasCoolStory = CoolStoryBro.length
   const Data = hasCoolStory ? [...CoolStoryBro, ...skipPrice(Price)] : Price
@@ -191,7 +191,7 @@ const getTable = async (info, { nc, years, promo, zone }) => {
         return { value, length: value.length }
       },
     },
-  })
+  }).replace(/.+\n/, '')
   return { Your, table }
 }
 
@@ -226,7 +226,7 @@ const warnExtraPromo = (Your) => {
     years,
     zone,
   }))
-  console.log('\n', table)
+  console.log('\n%s', table)
   warnExtraPromo(Your)
   console.log('')
 
