@@ -32,6 +32,25 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch Expensive1",
+      "program": "${workspaceFolder}/src/bin/index.js",
+      "env": {
+        "NODE_DEBUG": "expensive,aqt",
+        "SANDBOX": "1",
+        "DEBUG": "1",
+      },
+      "args": [
+        "aasdfasdfasd123123hjkasdyu.com",
+        "-r",
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Launch Zoroaster",
       "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
       "args": [

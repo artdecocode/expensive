@@ -7,7 +7,7 @@ OK: y
 /**/
 
 /* expected */
-Apply coupon ZOMBIETLD (y/n)? [y] n
+Apply coupon THANXFUL (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18
@@ -35,7 +35,7 @@ OK: n
 /**/
 
 /* expected */
-Apply coupon ZOMBIETLD (y/n)? [y] n
+Apply coupon THANXFUL (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18
@@ -53,31 +53,18 @@ Registering DOMAIN using:
 OK (y/n)? [n] n
 /**/
 
-// can apply coupon
+// cannot apply a coupon
 com
 
 /* inputs */
 Apply coupon: y
-OK: n
 /**/
 
 /* expected */
-Apply coupon ZOMBIETLD (y/n)? [y] y
+Apply coupon THANXFUL (y/n)? [y] y
+/**/
 
-Price            9.95
-Without Promo    8.88
-Additional Cost  0.18
------            ---------
-Total            10.13 USD
-[!] Warning: you will pay more with coupon ZOMBIETLD than without it.
+/* stderr */
+Promotion code is not available
 
-Registering DOMAIN using:
-┌─────────────────────────────────────┐
-│ John Zoidberg, zoidberg@futurama.bz │
-│  Planet Express                     │
-│  57th Street                        │
-│  New New York                       │
-│  10019, US                          │
-└─────────────────────────────────────┘
-OK (y/n)? [n] n
 /**/

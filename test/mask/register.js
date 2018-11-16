@@ -17,7 +17,8 @@ const ts = makeTestSuite('test/result/fork/register.md', {
   },
   mapActual({ stdout }) {
     const st = Context.replaceR(stdout)
-    const s = Context.strip(st)
+    const stt = Context.strip(st)
+    const s = stt
       .replace(/Registering [^ ]+/, 'Registering DOMAIN')
       .replace(/Successfully registered [\w-\d.]+/, 'Successfully registered DOMAIN')
     return s

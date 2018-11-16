@@ -47,14 +47,14 @@
   "bugs": {
     "url": "https://github.com/artdecocode/expensive/issues"
   },
-  "homepage": "https://github.com/artdecocode/expensive#readme",
+  "homepage": "https://expensive.page",
   "devDependencies": {
     "alamode": "1.6.0",
     "documentary": "1.20.1",
     "eslint-config-artdeco": "1.0.1",
     "forkfeed": "1.0.0",
     "yarn-s": "1.1.0",
-    "zoroaster": "3.6.4"
+    "zoroaster": "3.6.6"
   },
   "dependencies": {
     "@rqt/ip": "1.0.0",
@@ -66,9 +66,10 @@
     "erotic": "2.0.1",
     "erte": "1.1.4",
     "frame-of-mind": "1.0.0",
+    "indicatrix": "1.0.0",
     "promto": "1.0.1",
     "reloquent": "1.2.3",
-    "rqt": "3.0.0",
+    "rqt": "3.0.1",
     "tablature": "1.0.0",
     "usually": "1.0.0"
   }

@@ -4,6 +4,7 @@ import { confirm } from 'reloquent'
 import t from 'tablature'
 import { debuglog, inspect } from 'util'
 import frame from 'frame-of-mind'
+import loading from 'indicatrix'
 
 const LOG = debuglog('expensive')
 const LOG_OBJ = (obj) => {
@@ -118,25 +119,6 @@ const skipPrice = (Price) => {
 }
 
 const getFixed = n => Number(n).toFixed(2)
-
-const loading = async (text, promise) => {
-  const p = typeof promise == 'function' ? promise() : promise
-  let i = 1
-  const getText = () => `${text}${'.'.repeat(i)}`
-  const clear = () => process.stdout.write(`\r${' '.repeat(text.length + 3)}\r`)
-  let s = getText()
-  process.stdout.write(s)
-  const int = setInterval(() => {
-    i = (i + 1) % 4
-    s = getText()
-    clear()
-    process.stdout.write(s)
-  }, 250)
-  const res = await p
-  clearInterval(int)
-  clear()
-  return res
-}
 
 const getTable = async (info, { nc, years, promo, zone }) => {
   const { IcannFee, PremiumRenewalPrice, PremiumTransferPrice, PremiumRegistrationPrice, IsPremiumName, EapFee } = info
@@ -255,15 +237,17 @@ export default async function register(nc, {
   if (!ok) return
   let ChargedAmount
   try {
-    ({ ChargedAmount } = await nc.domains.create({
-      domain,
-      address,
-      promo: PROMO,
-      premium: IsPremiumName ? {
-        IsPremiumDomain: true,
-        PremiumPrice: parseFloat(PremiumRegistrationPrice),
-        EapFee: parseFloat(EapFee),
-      } : {},
+    ({ ChargedAmount } = await loading('Registering the domain', async () => {
+      return nc.domains.create({
+        domain,
+        address,
+        promo: PROMO,
+        premium: IsPremiumName ? {
+          IsPremiumDomain: true,
+          PremiumPrice: parseFloat(PremiumRegistrationPrice),
+          EapFee: parseFloat(EapFee),
+        } : {},
+      })
     }))
   } catch (err) {
     const { props = {}, message } = err
@@ -274,6 +258,9 @@ export default async function register(nc, {
       console.warn('[!] Bug: cannot register a premium with Eap.')
       console.warn(' -  Response when requesting w/out EapFee:')
       console.log('    %s', message)
+    } else if (/No free connections to registry./.test(message)) {
+      console.log('    %s', message)
+      console.log('Please try again.')
     } else if (N == 3028166) {
       console.warn('[!] Possible Bug (e.g., after sending without Eap)')
       console.log('    %s', message)

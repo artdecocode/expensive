@@ -16,7 +16,7 @@ Domain                  Available
 expensive-test-info.bz     no
 /**/
 
-// check: zones
+// check: zones -- [!] not reliable as all are not available
 expensive-test-info -z bz,org
 
 /* expected */
@@ -35,12 +35,12 @@ Domain                   Available
 expensive-test-info.org     yes
 /**/
 
-// check: multiple
+// check: multiple -- [!] all are not available
 test
 
 /* expected */
 Checking domains test.com, test.net, test.org, test.biz, test.co, test.cc, test.io, test.bz, test.nu, test.app, test.page
-Domain     Available  Premium  Price
+Domain     Available
 test.com      no
 test.net      no
 test.org      no
@@ -50,8 +50,8 @@ test.cc       no
 test.io       no
 test.bz       no
 test.nu       no
-test.app      yes
-test.page     yes        ✓     140.40
+test.app      no
+test.page     no
 /**/
 
 // --info

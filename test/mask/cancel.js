@@ -22,7 +22,7 @@ const stdinEnd = makeTestSuite('test/result/cancel.md', {
       execArgv: [],
     })
     forkFeed(p.stdout, p.stdin, [
-      [/Apply coupon/, 'y'],
+      [/Apply coupon/, 'n'],
     ])
     p.stdout.on('data', (d) => {
       if (/OK/.test(d)) {
