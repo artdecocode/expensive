@@ -24,11 +24,6 @@
   resolved "https://registry.yarnpkg.com/@artdeco/clean-stack/-/clean-stack-1.0.0.tgz#36ff9c9f66e6cb1eb0bfa90341be21cba70c7ea6"
   integrity sha512-lNrvCAG7xU8z2srq7XSbyDECGEjhXiXlP3CbQ4G0OSTckUBnu7yY7zUcpDK5x1CxyWvDKb3qsUkKKgK703GBeA==
 
-"@rqt/aqt@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@rqt/aqt/-/aqt-1.1.2.tgz#6ee88031222d7a86c0d8be0c5cdb276ccfbcb5e7"
-  integrity sha512-U8YZ2oqZ0djVS7H9PfR97KNdgtHw57NWOPK5wg3jIcG5Xr6Ht4eMsQ8f8mHl9Pa1uUb42w2m+BxpqMRffX0XrA==
-
 "@rqt/aqt@1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@rqt/aqt/-/aqt-1.1.3.tgz#a0acb5eeded94d5063c0fc7d734db7d917835b37"
@@ -37,32 +32,32 @@
     catchment "3.1.1"
     erotic "2.0.1"
 
-"@rqt/ip@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@rqt/ip/-/ip-1.0.0.tgz#bbce34592742b92f3a1f4143ce0b61cc3ce95641"
-  integrity sha512-mjhI1Eq5esrAkbtNikRk1UgY+pFon5LNwrT/lm8AOQoiKotjDATTQG7E9JBCwn1t2c36vKaaJobuiVjXR28Rmg==
+"@rqt/ip@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@rqt/ip/-/ip-1.1.0.tgz#8f34e3304c318f03b436582d4c0d3e73788360af"
+  integrity sha512-iKO4CgF9YE6ZQbsfPAIXcapF4r55M9wNn3zJbGl1Hsx5q/W2fNHrKUDHSEb8L2BaPFoU/EXYvpcxfZ4Y3BMwfQ==
   dependencies:
-    rqt "3.0.0"
+    rqt "3.0.1"
 
-"@rqt/namecheap-web@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@rqt/namecheap-web/-/namecheap-web-1.3.0.tgz#3864523f449f0acbaca4fd9ff7a3f435f86ad4e7"
-  integrity sha512-DDHJqbJY276e1M0YzRLhGa5NpfAa3hwOGnuoPbR8DWm+7OaxMocfJVtcEB5tDgKE9lxHh0ewizjC9eFcn8nsqw==
+"@rqt/namecheap-web@1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@rqt/namecheap-web/-/namecheap-web-1.3.1.tgz#1ac4e7af51a2230c7ddb035b5c7a336938d97a74"
+  integrity sha512-wUMdk4dS/a5i5MM2lXBTpQWFlg98zB31BlpeJ+nk2PyvhyDCFgVAIEKROv/se0BBDN9uAkNzwqw7r6PLeEiC5g==
   dependencies:
-    "@rqt/ip" "1.0.0"
+    "@rqt/ip" "1.1.0"
     bosom "1.0.0"
     erte "1.1.4"
     mismatch "1.0.3"
-    reloquent "1.0.6"
-    rqt "3.0.0"
+    reloquent "1.2.3"
+    rqt "3.0.1"
 
-"@rqt/namecheap@2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.1.0.tgz#80646c68e658a9c9f7d31f58084c760ddd168238"
-  integrity sha512-wBbNN/Lj62WorfnrdCtEjYJNONUsg2p4/iorvwam7ogWgITsUpJcftyqcTFUkcCih8oYIpx6fNUFfsMyltEV6Q==
+"@rqt/namecheap@2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.1.1.tgz#8234b969e4c09439e19247481ceeea16b47384f3"
+  integrity sha512-enJnCnWlEhbG/QfYBsqA0O3JuwTDbu5HBjfyCEALMX4csvs7FjdFq2hJZfkWfL8ahO1I4aA/LtzDcRgy3lePDQ==
   dependencies:
     rexml "1.2.0"
-    rqt "3.0.0"
+    rqt "3.0.1"
 
 "@wrote/clone@1.0.1":
   version "1.0.1"
@@ -381,13 +376,6 @@ rexml@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/rexml/-/rexml-1.2.0.tgz#f78ada4db77b77b5ade1c16ba9e7da6975192438"
   integrity sha512-kXVHg5xCKMgtuy9jiCHHzwVQyokla58YQ9Y5JIK6cLcuUWx9dh+D91RRzHybN/4UfEY9QC93C/gP+btRM99EaQ==
-
-rqt@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/rqt/-/rqt-3.0.0.tgz#51ef0cd42de03961970a1e27a992ebb1de8838dc"
-  integrity sha512-zPvZAgLncDoJFE97OAAol8gUBaaLqE2yblDocPZ+uf1EF1uUb7GxnpyyDYpd0IE8v0/9brDCBNN/RqAECkRcww==
-  dependencies:
-    "@rqt/aqt" "1.1.2"
 
 rqt@3.0.1:
   version "3.0.1"
