@@ -10,7 +10,10 @@ import getConfig from '../lib/get-config'
 import whitelistIP from '../lib/whitelist-ip'
 import Errors from './errors.json'
 import { version } from '../../package.json'
-import getArgs from './get-args'
+import { _help, _version, _domains, _whitelistIP, _sandbox, _init,
+  _info, _register, _promo, _coupon,
+  _whois, _Whois, _free, _zones,
+  _sort, _desc, _filter, _type, _pageSize } from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
@@ -18,28 +21,6 @@ import coupon from './commands/coupon'
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
-
-const {
-  domains: _domains,
-  help: _help,
-  init: _init,
-  version: _version,
-  info: _info,
-  sort: _sort, // name, expire, create
-  desc: _desc,
-  filter: _filter,
-  type: _type,
-  pageSize: _pageSize,
-  register: _register,
-  promo: _promo,
-  free: _free,
-  zones: _zones,
-  whitelistIP: _whitelistIP,
-  whois: _whois,
-  Whois: _Whois,
-  sandbox: _sandbox = !!process.env.SANDBOX,
-  coupon: _coupon,
-} = getArgs()
 
 if (_version) {
   console.log(version)

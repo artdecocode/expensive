@@ -1,4 +1,4 @@
-import { ok } from 'zoroaster/assert'
+import { ok } from '@zoroaster/assert'
 import Context from '../context'
 import { validateDomains, isSingleWord } from '../../src/lib'
 

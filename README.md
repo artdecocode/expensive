@@ -8,7 +8,7 @@
 
 | Package Manager |          Command          |
 | --------------- | ------------------------- |
-| Yarn            | yarn add global expensive |
+| Yarn            | yarn global add expensive |
 | Npm             | npm i -g expensive        |
 
 ## Table Of Contents
@@ -27,7 +27,7 @@
 - [Result Log](#result-log)
 - [Copyright](#copyright)
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
 
 ## Configuration
 
@@ -44,13 +44,13 @@ After they've been answered, `expensive` will remember the answers and store the
 
 Client IP is required for requests, but if not given, the it will be acquired automatically each time prior to calls. The last 3 digits will be used to during the second-stage of the 2-factor web auth required to white-list unknown IP addresses.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
 ## Sandbox
 
 To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-s` flags should be passed.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true"></a></p>
 
 ## CLI
 
@@ -61,35 +61,47 @@ expensive -h
 ```
 
 ```fs
+expensive
 A CLI application to access namecheap.com domain name registrar API.
 
-  expensive [domain [domain.co]]
-  [--info[ -fz]|register[ -p]|whois|Whois]
-  [-SDFPT] [-Ihv]
+	domains          	The domain name for operations, or multiple domain names
+	                 	for checking availability.
+	--init, -I       	Initialise package configuration interactively, i.e.,
+	                 	the API key and ip address.
+	--info, -i       	Show the information for the domain.
+	--register, -r   	Register the domain.
+	--whois, -w      	Display brief WHOIS data.
+	--Whois          	Display full WHOIS data.
+	--coupon         	Find this month's coupon.
+	--sandbox, -s    	Use the sandbox API.
+	--whitelistIP, -W	Add current IP address to the list of white-listed ones.
+	--version, -v    	Display the current version number.
+	--help, -h       	Show help information.
 
-	<empty>         	Display the list of domains on account.
-	| -f, --free    	Display only free domains when checking.
-	| -z, --zones   	Check in these zones only.
-	| [co,io,...]   	
-	domain[.co]     	Check a domain name for availability,
-	                	or use the domain as input for commands bellow.
-	                	Checks the following zones when no TLD is given:
-	                	com, net, org, biz, co, cc, io, bz, nu, app.
-	-i, --info      	Display info on the domain.
-	| -S, --sort    	Sort by this field (name, expire, create).
-	| -D, --desc    	Sort in descending order.
-	| -F, --filter  	Filter by this word.
-	| -P, --pageSize	The page size.
-	| -T, --type    	Domain type (ALL, EXPIRING, EXPIRED).
-	-r, --register  	Register the domain.
-	| -p, --promo   	Use this promo code on registration.
-	-w, --whois     	Display brief WHOIS data.
-	--Whois         	Display full WHOIS data.
-	-I, --init      	Interactively initialise the configuration.
-	-h, --help      	Print usage information.
-	-v, --version   	Print package's version.
-	-s, --sandbox   	Use the sandbox API.
-	--coupon        	Find this month's coupon.
+expensive domain.com --info
+Display the information about the domain on the account.
+
+expensive
+Print the list of domains belonging to the account.
+
+	--sort, -S    	Sort by this field (name, expire, create).
+	--desc, -D    	Sort in descending order.
+	--filter, -F  	Filter by this word.
+	--pageSize, -P	The page size.
+	--type, -T    	Domain type (ALL, EXPIRING, EXPIRED).
+
+expensive domain.com -r [-p PROMO]
+Register the domain name. Expensive will attempt to find the promo
+code online, and compare its price to the normal price.
+
+	--promo, -p	Use this promo code on registration.
+
+expensive domain|domain.com [domain.org] [-f] [-z app,page]
+Check domains for availability. When no TLD is given,
+com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
+
+	--free, -f 	Display only free domains.
+	--zones, -z	Check in these zones only.
 ```
 
 
@@ -103,7 +115,7 @@ A CLI application to access namecheap.com domain name registrar API.
 | [`--version`](#print-version)           | Print version.                                                  |
 | [`--help`](#display-usage)              | Show help.                                                      |
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true" width="15"></a></p>
 
 ### Check Availability
 
@@ -148,7 +160,7 @@ To check a single domain, pass the domain name, e.g.,
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true" width="15"></a></p>
 
 ### Whois
 
@@ -161,9 +173,9 @@ expensive test.org -w
 ```fs
 Domain Name: TEST.ORG
 Registrar URL: http://www.psi-usa.info
-Updated Date: 2018-7-27 04:28:31 (74 days ago)
-Creation Date: 1997-7-27 08:00:00 (7744 days ago)
-Registry Expiry Date: 2019-7-26 07:00:00 (in 290 days)
+Updated Date: 2018-7-27 04:28:31 (293 days ago)
+Creation Date: 1997-7-27 08:00:00 (7962 days ago)
+Registry Expiry Date: 2019-7-26 07:00:00 (in 72 days)
 Name Server: NS0.TMT.DE
  NS4.TMT.DE
  NS3.TMT.DE
@@ -201,11 +213,11 @@ Name Server: NS2.TMT.DE
 Name Server: NS1.TMT.DE
 DNSSEC: unsigned
 URL of the ICANN Whois Inaccuracy Complaint Form https://www.icann.org/wicf/)
-&gt;&gt;&gt; Last update of WHOIS database: 2018-10-08T22:34:12Z
+&gt;&gt;&gt; Last update of WHOIS database: 2019-05-15T15:56:16Z
 ```
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/5.svg?sanitize=true" width="15"></a></p>
 
 ### Show Domain Information
 
@@ -220,7 +232,7 @@ View the domain information associated with the account.
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/6.svg?sanitize=true" width="15"></a></p>
 
 ### Register Domain
 
@@ -235,7 +247,7 @@ Domain registration from the command-line is made easy with [`expensive`](https:
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/7.svg?sanitize=true" width="15"></a></p>
 
 ### Initialise/Update Settings
 
@@ -250,7 +262,7 @@ To update or initialise stored configuration values (e.g., on the first use, or 
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/8.svg?sanitize=true" width="15"></a></p>
 
 ### Print Version
 
@@ -265,7 +277,7 @@ Version number can be displayed with `--version` or `-v`.
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="15"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/9.svg?sanitize=true" width="15"></a></p>
 
 ### Display Usage
 
@@ -280,7 +292,7 @@ Prints the help information with `-h` or `--help`.
   </table>
 </details>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/10.svg?sanitize=true"></a></p>
 
 
 
@@ -299,7 +311,7 @@ Prints the help information with `-h` or `--help`.
 
 A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/11.svg?sanitize=true"></a></p>
 
 ## Copyright
 
@@ -307,4 +319,4 @@ A log of search queries and found free domains is written to `HOMEDIR/.expensive
 
 [1]: https://artd.eco
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/-1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/-1.svg?sanitize=true"></a></p>

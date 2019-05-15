@@ -1,0 +1,42 @@
+<arguments>
+  <arg command multiple name="domains">
+    The domain name for operations, or multiple domain names
+    for checking availability.
+  </arg>
+
+  <arg boolean name="init" short="I">
+    Initialise package configuration interactively, i.e.,
+    the API key and ip address.
+  </arg>
+
+  <arg boolean name="info" short="i">
+    Show the information for the domain.
+  </arg>
+  <arg boolean name="register" short="r">
+    Register the domain.
+  </arg>
+
+  <arg boolean name="whois" short="w">
+    Display brief WHOIS data.
+  </arg>
+  <arg boolean name="Whois">
+    Display full WHOIS data.
+  </arg>
+
+  <arg boolean name="coupon">
+    Find this month's coupon.
+  </arg>
+  <arg boolean name="sandbox" short="s">
+    Use the sandbox API.
+  </arg>
+  <arg boolean name="whitelistIP" short="W">
+    Add current IP address to the list of white-listed ones.
+  </arg>
+
+  <arg boolean name="version" short="v">
+    Display the current version number.
+  </arg>
+  <arg boolean name="help" short="h">
+    Show help information.
+  </arg>
+</arguments>

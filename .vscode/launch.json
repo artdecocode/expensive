@@ -8,20 +8,44 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Expensive",
-      "program": "${workspaceFolder}/src/bin/index.js",
+      "program": "${workspaceFolder}/node_modules/.bin/alanode",
       "env": {
-        "NODE_DEBUG": "expensive",
-        "SANDBOX": "1",
+        "NODE_DEBUG": "expensive,aqt",
+        // "SANDBOX": "1",
+        "DEBUG": "1",
       },
       "args": [
-        "expensive.page",
-        "-r",
+        "src/bin/expensive.js",
+        "logs.page",
+        "static.page",
+        // "expensive-test-random123.org",
+        // "-r",
         // "-W",
         // "testtt",
         // "-z",
         // "com,cc,co,io",
         // "-f"
         // "-i"
+      ],
+      "console": "integratedTerminal",
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Expensive1",
+      "program": "${workspaceFolder}/src/bin/index.js",
+      "env": {
+        "NODE_DEBUG": "expensive,aqt",
+        "SANDBOX": "1",
+        "DEBUG": "1",
+      },
+      "args": [
+        // "aasdfasdfasd123123hjkasdyu.com",
+        // "-r",
+        "expensive-test-info", "-z", "bz,org", "-f"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

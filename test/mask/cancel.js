@@ -1,17 +1,28 @@
-import { makeTestSuite } from 'zoroaster'
+import makeTestSuite from '@zoroaster/mask'
 import { fork } from 'spawncommand'
 import Context from '../context'
+import forkFeed from 'forkfeed'
 
 const BIN = Context.BIN
 
-const ts = makeTestSuite('test/result/cancel.md', {
-  context: { BIN },
-  getReadable(input, { BIN: bin }) {
-    const p = fork(bin, input.split(' '), {
+const ENV = { NODE_DEBUG: 'expensive', SANDBOX: '1' }
+
+const context = { bin: BIN, env: ENV }
+
+const stdinEnd = makeTestSuite('test/result/cancel.md', {
+  context,
+  /**
+   * @param {context} param
+   */
+  getReadable({ bin, env }) {
+    const p = fork(bin, this.input.split(' '), {
+      env,
       stdio: 'pipe',
       execArgv: [],
-      env: { NODE_DEBUG: 'expensive' },
     })
+    forkFeed(p.stdout, p.stdin, [
+      [/Apply coupon/, 'n'],
+    ])
     p.stdout.on('data', (d) => {
       if (/OK/.test(d)) {
         p.stdin.end()
@@ -19,12 +30,10 @@ const ts = makeTestSuite('test/result/cancel.md', {
     })
     return p.stderr
   },
-  mapActual(act) {
-    return act
+  mapActual(stderr) {
+    return stderr
       .replace(/EXPENSIVE \d+: /, '')
   },
 })
 
-// const re = /\033\[.+?m/g
-
-export default ts
+export default stdinEnd

@@ -1,4 +1,4 @@
-// does not register when cancelled
+## does not register when cancelled
 bz
 
 /* expected */

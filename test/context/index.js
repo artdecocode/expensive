@@ -1,7 +1,6 @@
 import { c } from 'erte'
-/**
- * A testing context for the package.
- */
+import clearr from 'clearr'
+
 export default class Context {
   constructor() {
     const d = new Date().toLocaleString().replace(/[ :]/g, '-')
@@ -10,16 +9,25 @@ export default class Context {
   /**
    * Example method.
    */
-  example() {
-    return 'OK'
+  get module() {
+    return Context.BIN
+  }
+  get options() {
+    return Context.OPTIONS
+  }
+  static get OPTIONS() {
+    return { env: { SANDBOX: '1' } }
+  }
+  static trimRight(s) {
+    const r = clearr(s)
+    return r
+      .split('\n').map(l => l.trimRight()).join('\n')
+      .trim()
   }
   static get BIN() {
     const b = 'build/bin/expensive'
     if (TEST_BUILD) console.log('Testing BUILD %s', c(b, 'green'))
     return TEST_BUILD == 'test-build' ? b : 'src/bin'
-  }
-
-  async _destroy() {
   }
 }
 

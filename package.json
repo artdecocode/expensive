@@ -3,20 +3,21 @@
   "version": "1.6.0",
   "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
-    "t": "zoroaster -a",
-    "mask": "yarn t test/mask -t 25000",
+    "t": "SANDBOX=1 zoroaster -a -t 100000",
+    "mask": "yarn t test/mask",
     "spec": "yarn t test/spec",
-    "test": "yarn t test/spec test/mask -t 25000",
+    "test": "yarn t test/spec test/mask",
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
+    "start": "node src/bin",
     "lint": "eslint .",
-    "e": "node example",
+    "e": "alanode",
     "man": "man man/doc.1",
-    "doc": "NODE_DEBUG=documentary doc documentary -o README.md",
-    "rec": "NODE_DEBUG=appshot appshot -T 23 -a Terminal -y 150 -f",
+    "doc": "NODE_DEBUG=documentary doc -o README.md",
     "example/": "yarn e example/simple.js",
     "b": "alamode src -o build -s -i bin/index.js,bin/.eslintrc,lib/print/.eslintrc",
-    "build": "yarn-s b doc"
+    "build": "yarn-s b doc",
+    "args": "argufy types/args/* -o src/bin/get-args.js"
   },
   "files": [
     "build"
@@ -46,27 +47,32 @@
   "bugs": {
     "url": "https://github.com/artdecocode/expensive/issues"
   },
-  "homepage": "https://github.com/artdecocode/expensive#readme",
+  "homepage": "https://expensive.page",
   "devDependencies": {
-    "alamode": "1.6.0",
-    "documentary": "1.20.1",
+    "alamode": "2.2.0",
+    "clearr": "^1.0.0",
+    "documentary": "1.27.3",
     "eslint-config-artdeco": "1.0.1",
+    "forkfeed": "1.1.1",
+    "spawncommand": "^2.2.0",
     "yarn-s": "1.1.0",
-    "zoroaster": "3.6.2"
+    "zoroaster": "4.1.1-alpha"
   },
   "dependencies": {
-    "@rqt/ip": "1.0.0",
-    "@rqt/namecheap": "2.0.3",
-    "@rqt/namecheap-web": "1.3.0",
+    "@rqt/ip": "1.1.0",
+    "@rqt/namecheap": "2.1.1",
+    "@rqt/namecheap-web": "1.3.1",
     "africa": "1.2.0",
-    "argufy": "1.2.1",
+    "argufy": "^1.7.0",
     "bosom": "1.0.0",
-    "erotic": "2.0.1",
-    "erte": "1.1.4",
-    "promto": "1.0.1",
-    "reloquent": "1.2.3",
-    "rqt": "3.0.0",
-    "tablature": "1.0.0",
-    "usually": "1.0.0"
+    "erotic": "2.1.1",
+    "erte": "1.2.0",
+    "frame-of-mind": "1.2.3",
+    "indicatrix": "1.2.0",
+    "promto": "1.1.2",
+    "reloquent": "1.3.1",
+    "rqt": "3.1.3",
+    "tablature": "^1.1.1",
+    "usually": "1.2.0"
   }
 }
