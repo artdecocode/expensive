@@ -9,7 +9,7 @@
 ```table
 [
   ["Package Manager", "Command"],
-  ["Yarn", "yarn add global expensive"],
+  ["Yarn", "yarn global add expensive"],
   ["Npm", "npm i -g expensive"]
 ]
 ```
