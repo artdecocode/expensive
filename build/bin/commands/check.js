@@ -30,52 +30,25 @@ const path = resolve(homedir(), '.expensive.log')
   const res = await nc.domains.check({
     domains,
   })
-  const data = domains
-    .map((domain) => {
-      const found = res.find(({ Domain }) => Domain == domain)
-      return found
-    })
-    .filter(({ Available }) => {
-      if (!free) return true
-      return Available
-    })
+  const data = res.filter(({ Available }) => {
+    if (!free) return true
+    return Available
+  })
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
-  const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) => PremiumRegistrationPrice != '0.0000')
+  const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) => PremiumRegistrationPrice)
   const t = tablature({
     keys: ['Domain', 'Available',
       ...(hasPremium ? ['IsPremiumName'] : []),
       ...(hasPremiumRegPrice ? ['PremiumRegistrationPrice'] : []),
     ],
-    data,
-    replacements: {
-      Available(v) {
-        if (v) {
-          return {
-            value: c('yes', 'green'),
-            length: 3,
-          }
-        }
-        return {
-          value: c('no', 'red'),
-          length: 2,
-        }
-      },
-      IsPremiumName(v) {
-        if (!v) return empty
-        return { value: c('\u2713', 'green'), length: 1 }
-      },
-      PremiumRegistrationPrice(value) {
-        if (value == '0.0000') return empty
-        if (value) {
-          const newValue = value.replace(/(\d+)\.(\d\d)\d\d$/, (match, p1, p2) => `${p1}.${p2}`)
-          return {
-            value: newValue,
-            length: newValue.length,
-          }
-        }
-        return empty
-      },
-    },
+    data: data.map((domain) => {
+      return {
+        ...domain,
+        Available: domain.Available ? c('yes', 'green') : c('no', 'red'),
+        IsPremiumName: domain.IsPremiumName ? c('\u2713', 'green') : '',
+        PremiumRegistrationPrice: parseFloat(domain.PremiumRegistrationPrice).toFixed(2),
+      }
+    }),
     headings: {
       IsPremiumName: 'Premium',
       PremiumRegistrationPrice: 'Price',
@@ -100,11 +73,5 @@ const log = async (domain, data) => {
   ]
   await bosom(path, newData, { space: 2 })
 }
-
-const empty = {
-  value: '',
-  length: 0,
-}
-
 
 module.exports = check

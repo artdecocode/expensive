@@ -10,7 +10,10 @@ const getConfig = require('../lib/get-config');
 const whitelistIP = require('../lib/whitelist-ip');
 const Errors = require('./errors.json');
 const { version } = require('../../package.json');
-const getArgs = require('./get-args');
+const { _help, _version, _domains, _whitelistIP, _sandbox, _init,
+  _info, _register, _promo, _coupon,
+  _whois, _Whois, _free, _zones,
+  _sort, _desc, _filter, _type, _pageSize } = require('./get-args');
 const whois = require('./commands/whois');
 const initConfig = require('./commands/init');
 const Info = require('./commands/info');
@@ -18,28 +21,6 @@ const coupon = require('./commands/coupon');
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
-
-const {
-  domains: _domains,
-  help: _help,
-  init: _init,
-  version: _version,
-  info: _info,
-  sort: _sort, // name, expire, create
-  desc: _desc,
-  filter: _filter,
-  type: _type,
-  pageSize: _pageSize,
-  register: _register,
-  promo: _promo,
-  free: _free,
-  zones: _zones,
-  whitelistIP: _whitelistIP,
-  whois: _whois,
-  Whois: _Whois,
-  sandbox: _sandbox = !!process.env.SANDBOX,
-  coupon: _coupon,
-} = getArgs()
 
 if (_version) {
   console.log(version)
