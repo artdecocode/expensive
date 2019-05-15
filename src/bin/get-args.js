@@ -24,7 +24,7 @@ export const argsConfig = {
   'whois': {
     description: 'Display brief WHOIS data.',
     boolean: true,
-    short: 'W',
+    short: 'w',
   },
   'Whois': {
     description: 'Display full WHOIS data.',

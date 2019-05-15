@@ -16,7 +16,7 @@
     Register the domain.
   </arg>
 
-  <arg boolean name="whois" short="W">
+  <arg boolean name="whois" short="w">
     Display brief WHOIS data.
   </arg>
   <arg boolean name="Whois">
