@@ -154,7 +154,7 @@ alamode@2.2.0, alamode@^2.1.2, alamode@^2.2.0:
   resolved "https://registry.yarnpkg.com/alamode/-/alamode-2.2.0.tgz#723f81246b19c966b3b819fcff6debb39228dbd2"
   integrity sha512-+TLcQ4iKjs7zIUBzuchPlhna3TS2XAz2Lk2NMsSfnI/XrnUfSAUKyk67Wbaf9+hQ4wSxXguIrbBC/VV/vhE5Vg==
 
-argufy@1.7.0, argufy@^1.7.0:
+argufy@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.7.0.tgz#189109155b6200c283350b1c23dbeee2a7519f7b"
   integrity sha512-iK7Nx5wv4XXbid/udPVu54EN6pA8w1RqkPp6NOZqBB/8cmpaxdjuWszw8VpPYQN6WWqAXJuLMNXZHEgFTvm0eA==

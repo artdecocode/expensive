@@ -1,0 +1,8 @@
+<arguments name="Check">
+  <arg boolean name="free" short="f">
+    Display only free domains.
+  </arg>
+  <arg name="zones" short="z">
+    Check in these zones only.
+  </arg>
+</arguments>

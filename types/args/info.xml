@@ -1,0 +1,17 @@
+<arguments name="Info">
+  <arg name="sort" short="S">
+    Sort by this field (name, expire, create).
+  </arg>
+  <arg boolean name="desc" short="D">
+    Sort in descending order.
+  </arg>
+  <arg name="filter" short="F">
+    Filter by this word.
+  </arg>
+  <arg name="pageSize" short="P">
+    The page size.
+  </arg>
+  <arg name="type" short="T">
+    Domain type (ALL, EXPIRING, EXPIRED).
+  </arg>
+</arguments>

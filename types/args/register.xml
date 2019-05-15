@@ -1,0 +1,5 @@
+<arguments name="Register">
+  <arg name="promo" short="p">
+    Use this promo code on registration.
+  </arg>
+</arguments>
