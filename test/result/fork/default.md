@@ -1,63 +1,63 @@
-// check: single (free)
-expensive-test-random123.org
+## check: single (free)
+expensive-test-random123.com
 
-/* expected */
-Checking domain expensive-test-random123.org
+/* stdout */
+Checking domain expensive-test-random123.com
 Domain                        Available
-expensive-test-random123.org     yes
+expensive-test-random123.com     yes
 /**/
 
-// check: single (taken)
+## check: single (taken)
 expensive-test-info.bz
 
-/* expected */
+/* stdout */
 Checking domain expensive-test-info.bz
 Domain                  Available
 expensive-test-info.bz     no
 /**/
 
-// check: zones -- [!] not reliable as all are not available
-expensive-test-info -z bz,org
+## check: zones
+expensive-test-info -z bz,com
 
-/* expected */
-Checking domains expensive-test-info.org, expensive-test-info.bz
+/* stdout */
+Checking domains expensive-test-info.com, expensive-test-info.bz
 Domain                   Available
-expensive-test-info.org     yes
+expensive-test-info.com     yes
 expensive-test-info.bz      no
 /**/
 
-// check: free
-expensive-test-info -z bz,org -f
+## check: free
+expensive-test-info -z bz,com -f
 
-/* expected */
-Checking domains expensive-test-info.org, expensive-test-info.bz
+/* stdout */
+Checking domains expensive-test-info.com, expensive-test-info.bz
 Domain                   Available
-expensive-test-info.org     yes
+expensive-test-info.com     yes
 /**/
 
-// check: multiple -- [!] all are not available
+## check: multiple
 test
 
-/* expected */
+/* stdout */
 Checking domains test.com, test.net, test.org, test.biz, test.co, test.cc, test.io, test.bz, test.nu, test.app, test.page
 Domain     Available
 test.com      no
+test.co       no
 test.net      no
 test.org      no
-test.biz      no
-test.co       no
 test.cc       no
 test.io       no
 test.bz       no
-test.nu       no
-test.app      no
+test.app      yes
 test.page     no
+test.biz      no
+test.nu       no
 /**/
 
-// --info
+## --info
 expensive-test-info.bz --info
 
-/* expected */
+/* stdout */
 Created:        10/06/2018
 Expires on:     10/07/2019
 Whois enabled:  True
@@ -67,10 +67,10 @@ Nameservers:    dns1.registrar-servers.com, dns2.registrar-servers.com
 Created:        10/06/2018
 /**/
 
-// -i
+## -i
 expensive-test-info.bz -i
 
-/* expected */
+/* stdout */
 Created:        10/06/2018
 Expires on:     10/07/2019
 Whois enabled:  True

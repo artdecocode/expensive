@@ -8,15 +8,18 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Expensive",
-      "program": "${workspaceFolder}/src/bin/index.js",
+      "program": "${workspaceFolder}/node_modules/.bin/alanode",
       "env": {
         "NODE_DEBUG": "expensive,aqt",
         // "SANDBOX": "1",
         "DEBUG": "1",
       },
       "args": [
-        "doula.page",
-        "-r",
+        "src/bin/expensive.js",
+        "logs.page",
+        "static.page",
+        // "expensive-test-random123.org",
+        // "-r",
         // "-W",
         // "testtt",
         // "-z",
@@ -40,8 +43,9 @@
         "DEBUG": "1",
       },
       "args": [
-        "aasdfasdfasd123123hjkasdyu.com",
-        "-r",
+        // "aasdfasdfasd123123hjkasdyu.com",
+        // "-r",
+        "expensive-test-info", "-z", "bz,org", "-f"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

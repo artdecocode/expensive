@@ -1,4 +1,4 @@
-import { makeTestSuite } from 'zoroaster'
+import makeTestSuite from '@zoroaster/mask'
 import { fork } from 'spawncommand'
 import Context from '../context'
 import forkFeed from 'forkfeed'
@@ -12,11 +12,10 @@ const context = { bin: BIN, env: ENV }
 const stdinEnd = makeTestSuite('test/result/cancel.md', {
   context,
   /**
-   * @param {string} input
    * @param {context} param
    */
-  getReadable(input, { bin, env }) {
-    const p = fork(bin, input.split(' '), {
+  getReadable({ bin, env }) {
+    const p = fork(bin, this.input.split(' '), {
       env,
       stdio: 'pipe',
       execArgv: [],
