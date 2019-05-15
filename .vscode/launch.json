@@ -16,8 +16,9 @@
       },
       "args": [
         "src/bin/expensive.js",
-        "logs.page",
-        "static.page",
+        "artd.eco",
+        "-i",
+        // "static.page",
         // "expensive-test-random123.org",
         // "-r",
         // "-W",

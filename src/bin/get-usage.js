@@ -14,7 +14,8 @@ A CLI application to access namecheap.com domain name registrar API.`,
   })
   const info = usually({
     description: c('expensive domain.com --info', 'magenta') + `
-Display the information about the domain on the account.`,
+Display the information about the domain on the account.
+Also displays DNS hosts if using Namecheap's DNS.`,
   }).trim() + '\n'
   const list = usually({
     description: c('expensive', 'red') + `
