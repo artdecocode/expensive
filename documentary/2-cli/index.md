@@ -39,8 +39,8 @@ expensive -h
     "expensive --init",
     "Initialises or updates settings such as API key. <kbd>🔏[Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>"
   ],
-  ["expensive --version", "print-version", "Print version. <kbd>[Version Wiki](../../wiki/Version)</kbd>"],
-  ["expensive --help", "display-usage", "Show help. <kbd>[Usage Wiki](../../wiki/Usage)</kbd>"]
+  ["expensive --version", "Print version. <kbd>[Version Wiki](../../wiki/Version)</kbd>"],
+  ["expensive --help", "Show help. <kbd>[Usage Wiki](../../wiki/Usage)</kbd>"]
 ]
 ```
 

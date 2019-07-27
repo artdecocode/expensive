@@ -77,7 +77,6 @@ Also displays DNS hosts if using Namecheap's DNS.
 
 expensive
 Print the list of domains belonging to the account.
-https://github.com/ardecocode/expensive/wiki/List%20Domains
 
 	--sort, -S    	Sort by this field (name, expire, create).
 	--desc, -D    	Sort in descending order.
@@ -108,8 +107,8 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 | `expensive example.com -w`          | Request WHOIS data. <kbd>👁[Show Whois Wiki](../../wiki/Whois)</kbd>                                                                    |
 | `expensive example.com -r`          | Register a domain name. <kbd>💵[Registration Wiki](../../wiki/Registration)</kbd>                                                       |
 | `expensive --init`                  | Initialises or updates settings such as API key. <kbd>🔏[Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>                    |
-| `expensive --version`               | print-version                                                                                                                           |
-| `expensive --help`                  | display-usage                                                                                                                           |
+| `expensive --version`               | Print version. <kbd>[Version Wiki](../../wiki/Version)</kbd>                                                                            |
+| `expensive --help`                  | Show help. <kbd>[Usage Wiki](../../wiki/Usage)</kbd>                                                                                    |
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true"></a></p>
 
