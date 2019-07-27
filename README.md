@@ -100,24 +100,16 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 ```
 
 
-|                 Command                 |                             Meaning                             |
-| --------------------------------------- | --------------------------------------------------------------- |
-| [`example ex.com`](#check-availability) | Check domain availability.                                      |
-| [`desired.com -w`](#whois)              | Request WHOIS data.                                             |
-| [`ex.com -i`](#show-domain-information) | Display information about a domain associated with the account. |
-| [`create.com -r`](#register-domain)     | Register a domain name.                                         |
-| [`--init`](#initialiseupdate-settings)  | Initialises or updates settings such as API key.                |
-| [`--version`](#print-version)           | Print version.                                                  |
-| [`--help`](#display-usage)              | Show help.                                                      |
-
-<kbd>✅ [Check Availability](../../wiki/Check%20Availability)</kbd>
-<kbd>ℹ️ Domain Information</kbd>
-<kbd>🔏 Initialise Config</kbd>
-<kbd>📜 List Domains</kbd>
-<kbd>💵 Registration</kbd>
-<kbd>👁 Show Whois</kbd>
-
-<kbd>Usage</kbd><kbd>Version</kbd>
+|               Command               |                                                                 Meaning                                                                  |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `expensive`                         | Check domain(s)' availability. <kbd>✅ [Check Availability Wiki](../../wiki/Check%20Availability)</kbd>                                   |
+| `expensive hello world example.com` | Check domain(s)' availability. <kbd>✅ [Check Availability Wiki](../../wiki/Check%20Availability)</kbd>                                   |
+| `expensive example.com -i`          | Display information about a domain associated with the account. <kbd>ℹ️ [Domain Information Wiki](../../wiki/Domain%20Information)</kbd> |
+| `expensive example.com -w`          | Request WHOIS data. <kbd>👁 [Show Whois Wiki](../../wiki/Whois)</kbd>                                                                    |
+| `expensive example.com -r`          | Register a domain name. <kbd>💵 [Registration Wiki](../../wiki/Registration)</kbd>                                                       |
+| `expensive --init`                  | Initialises or updates settings such as API key. <kbd>🔏 [Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>                    |
+| `expensive --version`               | print-version                                                                                                                            |
+| `expensive --help`                  | display-usage                                                                                                                            |
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true"></a></p>
 

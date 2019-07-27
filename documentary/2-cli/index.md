@@ -9,33 +9,41 @@ expensive -h
 %FORK-fs src/bin -h%
 
 %TABLE-MACRO commands
-[`$1`](#$2), $3
+`$1`, $2
 %
 
 ```table commands
 [
   ["Command", "Meaning"],
-  ["example ex.com", "check-availability", "Check domain availability."],
-  ["desired.com -w", "whois", "Request WHOIS data."],
   [
-    "ex.com -i",
-    "show-domain-information",
-    "Display information about a domain associated with the account."
+    "expensive",
+    "Check domain(s)' availability. <kbd>✅ [Check Availability Wiki](../../wiki/Check%20Availability)</kbd>"
   ],
-  ["create.com -r", "register-domain", "Register a domain name."],
-  ["--init", "initialiseupdate-settings", "Initialises or updates settings such as API key."],
-  ["--version", "print-version", "Print version."],
-  ["--help", "display-usage", "Show help."]
+  [
+    "expensive hello world example.com",
+    "Check domain(s)' availability. <kbd>✅ [Check Availability Wiki](../../wiki/Check%20Availability)</kbd>"
+  ],
+  [
+    "expensive example.com -i",
+    "Display information about a domain associated with the account. <kbd>ℹ️ [Domain Information Wiki](../../wiki/Domain%20Information)</kbd>"
+  ],
+  [
+    "expensive example.com -w",
+    "Request WHOIS data. <kbd>👁 [Show Whois Wiki](../../wiki/Whois)</kbd>"
+  ],
+  [
+    "expensive example.com -r",
+    "Register a domain name. <kbd>💵 [Registration Wiki](../../wiki/Registration)</kbd>"
+  ],
+  [
+    "expensive --init",
+    "Initialises or updates settings such as API key. <kbd>🔏 [Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>"
+  ],
+  ["expensive --version", "print-version", "Print version. <kbd>[Version Wiki](../../wiki/Version)</kbd>"],
+  ["expensive --help", "display-usage", "Show help. <kbd>[Usage Wiki](../../wiki/Usage)</kbd>"]
 ]
 ```
 
-<kbd>✅ [Check Availability](../../wiki/Check%20Availability)</kbd>
-<kbd>ℹ️ Domain Information</kbd>
-<kbd>🔏 Initialise Config</kbd>
-<kbd>📜 List Domains</kbd>
-<kbd>💵 Registration</kbd>
-<kbd>👁 Show Whois</kbd>
-
-<kbd>Usage</kbd><kbd>Version</kbd>
+<!-- <kbd>Usage</kbd><kbd>Version</kbd> -->
 
 %~%
