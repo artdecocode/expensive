@@ -30,10 +30,12 @@ export default async function check(nc, {
   const res = await nc.domains.check({
     domains,
   })
-  const data = res.filter(({ Available }) => {
-    if (!free) return true
-    return Available
+  const ordered = domains.map((domain) => {
+    const found = res.find(({ Domain }) => Domain == domain)
+    return found
   })
+  let data = free ? ordered.filter(({ Available }) => Available) : ordered
+
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
   const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) => PremiumRegistrationPrice)
   const t = tablature({
@@ -46,7 +48,7 @@ export default async function check(nc, {
         ...domain,
         Available: domain.Available ? c('yes', 'green') : c('no', 'red'),
         IsPremiumName: domain.IsPremiumName ? c('\u2713', 'green') : '',
-        PremiumRegistrationPrice: parseFloat(domain.PremiumRegistrationPrice).toFixed(2),
+        PremiumRegistrationPrice: domain.PremiumRegistrationPrice ? parseFloat(domain.PremiumRegistrationPrice).toFixed(2) : '',
       }
     }),
     headings: {
