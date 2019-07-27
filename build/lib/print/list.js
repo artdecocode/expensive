@@ -1,7 +1,7 @@
 let tablature = require('tablature'); if (tablature && tablature.__esModule) tablature = tablature.default;
 const { mapDomains, getWhois: WhoisGuard } = require('..');
 
-               function printList(domains = []) {
+function printList(domains = []) {
   if (!domains.length) {
     console.log('No domains')
     return

@@ -1,10 +1,10 @@
 const { c } = require('erte');
 
-       const validateDomains = (arr) => arr.reduce((acc, current) => {
+const validateDomains = (arr) => arr.reduce((acc, current) => {
   return acc && typeof current == 'string'
 }, true)
 
-       const allZones = [
+const allZones = [
   'com',
   'net',
   'org',
@@ -18,9 +18,9 @@ const { c } = require('erte');
   'page',
 ]
 
-       const isSingleWord = d => !/\./.test(d)
+const isSingleWord = d => !/\./.test(d)
 
-       const makeList = (d, zones) => {
+const makeList = (d, zones) => {
   const z = zones.length ? allZones.filter(zone => {
     return zones.includes(zone)
   }) : allZones
@@ -34,7 +34,7 @@ const DASH = c('-', 'grey')
 
 const day = 24*60*60*1000
 
-       const mapDomains = (domains) => {
+const mapDomains = (domains) => {
   return domains.map(domain => {
     const { Created, Expires, IsOurDNS } = domain
     const cr = Date.parse(Created)
@@ -54,13 +54,13 @@ const day = 24*60*60*1000
   })
 }
 
-       const getWhois = (value) => {
+const getWhois = (value) => {
   if (value == 'ENABLED') return { value: TICK, length: 1 }
   if (value == 'NOTPRESENT') return { value: DASH, length: 1 }
   return { value, length: value.length }
 }
 
-       const getAppName = (sandbox) => {
+const getAppName = (sandbox) => {
   const n = sandbox ? 'expensive-sandbox' : 'expensive'
   return n
 }

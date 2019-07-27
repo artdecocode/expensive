@@ -2,7 +2,7 @@ const { confirm } = require('reloquent');
 const printList = require('../../lib/print/list');
 
 /** @param {import('@rqt/namecheap')} nc */
-               async function list(nc, {
+async function list(nc, {
   sort,
   desc,
   page,

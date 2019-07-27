@@ -17,7 +17,7 @@ const LOG_OBJ = (obj) => {
  * @param {Address[]} addresses A list of addresses.
  * @returns {number} A default address ID.
  */
-       const findDefault = (addresses) => {
+const findDefault = (addresses) => {
   const { AddressId } = addresses.find(({ IsDefault }) => IsDefault) || {}
   return AddressId
 }
@@ -186,7 +186,7 @@ const warnExtraPromo = (Your) => {
 /**
  * @param {import('@rqt/namecheap')} nc
  */
-               async function register(nc, {
+async function register(nc, {
   domain,
   promo,
   sandbox,

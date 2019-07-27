@@ -6,13 +6,14 @@ const getUsage = require('./get-usage');
 const List = require('./commands/list');
 const Check = require('./commands/check');
 const Register = require('./commands/reg');
+const GitHub = require('./commands/github');
 const getConfig = require('../lib/get-config');
 const whitelistIP = require('../lib/whitelist-ip');
 const Errors = require('./errors.json');
 const { version } = require('../../package.json');
 const { _help, _version, _domains, _whitelistIP, _sandbox, _init,
   _info, _register, _promo, _coupon,
-  _whois, _Whois, _free, _zones,
+  _whois, _Whois, _free, _zones, _github,
   _sort, _desc, _filter, _type, _pageSize } = require('./get-args');
 const whois = require('./commands/whois');
 const initConfig = require('./commands/init');
@@ -55,7 +56,7 @@ const run = async (Settings, sandbox) => {
     })
 
     const [domain] = _domains
-
+    if (_github) return await GitHub(nc, domain)
     if (_info) return await Info(nc, domain)
     if (_register) return await Register(nc, {
       domain,

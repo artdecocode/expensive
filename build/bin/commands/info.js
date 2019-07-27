@@ -4,7 +4,7 @@ const printInfo = require('../../lib/print/info');
 /**
  * @param {import('@rqt/namecheap')} client
  */
-               async function info(client, domain) {
+async function info(client, domain) {
   const [i, hosts] = await Promise.all([
     client.domains.getInfo(domain),
     client.dns.getHosts(domain),
