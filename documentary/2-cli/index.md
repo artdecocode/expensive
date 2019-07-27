@@ -39,6 +39,10 @@ expensive -h
     "expensive --init",
     "Initialises or updates settings such as API key.", "<kbd>🔏[Initialise Config](../../wiki/Initialise-Config)</kbd>"
   ],
+  [
+    "expensive domain.com --github",
+    "Updates hosts records to include GitHub apex records.", "<kbd><img src=\"doc/github.png\" width=\"16\"> [GitHub](../../wiki/GitHub)</kbd>"
+  ],
   ["expensive --version", "Print version.", "<kbd>[Version](../../wiki/Version)</kbd>"],
   ["expensive --help", "Show help.", "<kbd>[Usage](../../wiki/Usage)</kbd>"]
 ]

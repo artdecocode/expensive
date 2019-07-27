@@ -65,6 +65,7 @@ A CLI application to access namecheap.com domain name registrar API.
 	                 	the API key and ip address.
 	--info, -i       	Show the information for the domain.
 	--register, -r   	Register the domain.
+	--github, -g     	Setup GitHub pages for the apex domain, according to the docs (https://help.github.com/en/articles/setting-up-an-apex-domain). Also removes the parking page and URL redirect hosts, if present. All other hosts will be kept itact.
 	--whois, -w      	Display brief WHOIS data.
 	--Whois          	Display full WHOIS data.
 	--coupon         	Find this month's coupon.
@@ -101,16 +102,17 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 ```
 
 
-|               Command               |                             Meaning                             |                                Wiki                                |
-| ----------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `expensive`                         | List all domains.                                               | <kbd>📜[List Domains](../../wiki/List%20Domains)</kbd>             |
-| `expensive hello world example.com` | Check domain(s)' availability.                                  | <kbd>✅[Check Availability](../../wiki/Check%20Availability)</kbd>  |
-| `expensive example.com -i`          | Display information about a domain associated with the account. | <kbd>ℹ️[Domain Information](../../wiki/Domain%20Information)</kbd> |
-| `expensive example.com -w`          | Request WHOIS data.                                             | <kbd>👁[Show Whois](../../wiki/Whois)</kbd>                        |
-| `expensive example.com -r`          | Register a domain name.                                         | <kbd>💵[Registration](../../wiki/Registration)</kbd>               |
-| `expensive --init`                  | Initialises or updates settings such as API key.                | <kbd>🔏[Initialise Config](../../wiki/Initialise-Config)</kbd>     |
-| `expensive --version`               | Print version.                                                  | <kbd>[Version](../../wiki/Version)</kbd>                           |
-| `expensive --help`                  | Show help.                                                      | <kbd>[Usage](../../wiki/Usage)</kbd>                               |
+|               Command               |                             Meaning                             |                                     Wiki                                     |
+| ----------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `expensive`                         | List all domains.                                               | <kbd>📜[List Domains](../../wiki/List%20Domains)</kbd>                       |
+| `expensive hello world example.com` | Check domain(s)' availability.                                  | <kbd>✅[Check Availability](../../wiki/Check%20Availability)</kbd>            |
+| `expensive example.com -i`          | Display information about a domain associated with the account. | <kbd>ℹ️[Domain Information](../../wiki/Domain%20Information)</kbd>           |
+| `expensive example.com -w`          | Request WHOIS data.                                             | <kbd>👁[Show Whois](../../wiki/Whois)</kbd>                                  |
+| `expensive example.com -r`          | Register a domain name.                                         | <kbd>💵[Registration](../../wiki/Registration)</kbd>                         |
+| `expensive --init`                  | Initialises or updates settings such as API key.                | <kbd>🔏[Initialise Config](../../wiki/Initialise-Config)</kbd>               |
+| `expensive domain.com --github`     | Updates hosts records to include GitHub apex records.           | <kbd><img src="doc/github.png" width="16"> [GitHub](../../wiki/GitHub)</kbd> |
+| `expensive --version`               | Print version.                                                  | <kbd>[Version](../../wiki/Version)</kbd>                                     |
+| `expensive --help`                  | Show help.                                                      | <kbd>[Usage](../../wiki/Usage)</kbd>                                         |
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true"></a></p>
 
