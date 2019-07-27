@@ -41,7 +41,7 @@ expensive -h
   ],
   [
     "expensive domain.com --github",
-    "Updates hosts records to include GitHub apex records.", "<kbd><img src=\"doc/github.png\" width=\"16\"> [GitHub](../../wiki/GitHub)</kbd>"
+    "Updates hosts records to include GitHub apex records.", "<kbd><img src=\"doc/github.png\" width=\"16\"> [GitHub Pages](../../wiki/GitHub)</kbd>"
   ],
   ["expensive --version", "Print version.", "<kbd>[Version](../../wiki/Version)</kbd>"],
   ["expensive --help", "Show help.", "<kbd>[Usage](../../wiki/Usage)</kbd>"]
