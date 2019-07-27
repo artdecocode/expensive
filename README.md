@@ -35,7 +35,9 @@ Last 3 digit of phone to use for 2 factor auth: <055>
 
 After they've been answered, `expensive` will remember the answers and store them in the `.expensiverc` file in the home directory (or `.expensive-sandboxrc`), and use this data for all calls to the API.
 
-Client IP is required for requests, but if not given, the it will be acquired automatically each time prior to calls. The last 3 digits will be used to during the second-stage of the 2-factor web auth required to white-list unknown IP addresses.
+Client IP is required for requests, but if not given, it will be acquired automatically each time prior to calls.
+
+The last 3 digits will be used to during the second-stage of the 2-factor web auth required to white-list unknown IP addresses.
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
@@ -99,16 +101,16 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 ```
 
 
-|               Command               |                                                                 Meaning                                                                 |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `expensive`                         | List all domains. <kbd>📜[List Wiki](../../wiki/List%20Domains)</kbd>                                                                   |
-| `expensive hello world example.com` | Check domain(s)' availability. <kbd>✅[Check Availability Wiki](../../wiki/Check%20Availability)</kbd>                                   |
-| `expensive example.com -i`          | Display information about a domain associated with the account. <kbd>ℹ️[Domain Information Wiki](../../wiki/Domain%20Information)</kbd> |
-| `expensive example.com -w`          | Request WHOIS data. <kbd>👁[Show Whois Wiki](../../wiki/Whois)</kbd>                                                                    |
-| `expensive example.com -r`          | Register a domain name. <kbd>💵[Registration Wiki](../../wiki/Registration)</kbd>                                                       |
-| `expensive --init`                  | Initialises or updates settings such as API key. <kbd>🔏[Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>                    |
-| `expensive --version`               | Print version. <kbd>[Version Wiki](../../wiki/Version)</kbd>                                                                            |
-| `expensive --help`                  | Show help. <kbd>[Usage Wiki](../../wiki/Usage)</kbd>                                                                                    |
+|               Command               |                             Meaning                             |                                  Wiki                                   |
+| ----------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `expensive`                         | List all domains.                                               | <kbd>📜[List Wiki](../../wiki/List%20Domains)</kbd>                     |
+| `expensive hello world example.com` | Check domain(s)' availability.                                  | <kbd>✅[Check Availability Wiki](../../wiki/Check%20Availability)</kbd>  |
+| `expensive example.com -i`          | Display information about a domain associated with the account. | <kbd>ℹ️[Domain Information Wiki](../../wiki/Domain%20Information)</kbd> |
+| `expensive example.com -w`          | Request WHOIS data.                                             | <kbd>👁[Show Whois Wiki](../../wiki/Whois)</kbd>                        |
+| `expensive example.com -r`          | Register a domain name.                                         | <kbd>💵[Registration Wiki](../../wiki/Registration)</kbd>               |
+| `expensive --init`                  | Initialises or updates settings such as API key.                | <kbd>🔏[Initialise Config Wiki](../../wiki/Initialise-Config)</kbd>     |
+| `expensive --version`               | Print version.                                                  | <kbd>[Version Wiki](../../wiki/Version)</kbd>                           |
+| `expensive --help`                  | Show help.                                                      | <kbd>[Usage Wiki](../../wiki/Usage)</kbd>                               |
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true"></a></p>
 
