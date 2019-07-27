@@ -29,4 +29,13 @@ expensive -h
 ]
 ```
 
-%~ width="15"%
+<kbd>✅ [Check Availability](../../wiki/Check%20Availability)</kbd>
+<kbd>ℹ️ Domain Information</kbd>
+<kbd>🔏 Initialise Config</kbd>
+<kbd>📜 List Domains</kbd>
+<kbd>💵 Registration</kbd>
+<kbd>👁 Show Whois</kbd>
+
+<kbd>Usage</kbd><kbd>Version</kbd>
+
+%~%
