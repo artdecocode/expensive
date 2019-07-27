@@ -65,7 +65,9 @@ A CLI application to access namecheap.com domain name registrar API.
 	                 	the API key and ip address.
 	--info, -i       	Show the information for the domain.
 	--register, -r   	Register the domain.
-	--github, -g     	Setup GitHub pages for the apex domain, according to the docs (https://help.github.com/en/articles/setting-up-an-apex-domain). Also removes the parking page and URL redirect hosts, if present. All other hosts will be kept itact.
+	--github, -g     	Setup GitHub pages for the apex domain as per docs
+	                 	https://git.io/fjyr7 Also removes the parking page
+	                 	and URL redirect. All other hosts are kept itact.
 	--whois, -w      	Display brief WHOIS data.
 	--Whois          	Display full WHOIS data.
 	--coupon         	Find this month's coupon.

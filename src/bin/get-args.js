@@ -22,7 +22,7 @@ export const argsConfig = {
     short: 'r',
   },
   'github': {
-    description: 'Setup GitHub pages for the apex domain, according to the docs (https://help.github.com/en/articles/setting-up-an-apex-domain). Also removes the parking page and URL redirect hosts, if present. All other hosts will be kept itact.',
+    description: 'Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.',
     boolean: true,
     short: 'g',
   },
@@ -85,7 +85,9 @@ export const _info = /** @type {boolean} */ (args['info'])
 export const _register = /** @type {boolean} */ (args['register'])
 
 /**
- * Setup GitHub pages for the apex domain, according to the docs (https://help.github.com/en/articles/setting-up-an-apex-domain). Also removes the parking page and URL redirect hosts, if present. All other hosts will be kept itact.
+ * Setup GitHub pages for the apex domain as per docs
+    https://git.io/fjyr7 Also removes the parking page
+    and URL redirect. All other hosts are kept itact.
  */
 export const _github = /** @type {boolean} */ (args['github'])
 
