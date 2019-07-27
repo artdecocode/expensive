@@ -6,13 +6,14 @@ import getUsage from './get-usage'
 import List from './commands/list'
 import Check from './commands/check'
 import Register from './commands/reg'
+import GitHub from './commands/github'
 import getConfig from '../lib/get-config'
 import whitelistIP from '../lib/whitelist-ip'
 import Errors from './errors.json'
 import { version } from '../../package.json'
 import { _help, _version, _domains, _whitelistIP, _sandbox, _init,
   _info, _register, _promo, _coupon,
-  _whois, _Whois, _free, _zones,
+  _whois, _Whois, _free, _zones, _github,
   _sort, _desc, _filter, _type, _pageSize } from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
@@ -55,7 +56,7 @@ const run = async (Settings, sandbox) => {
     })
 
     const [domain] = _domains
-
+    if (_github) return await GitHub(nc, domain)
     if (_info) return await Info(nc, domain)
     if (_register) return await Register(nc, {
       domain,
