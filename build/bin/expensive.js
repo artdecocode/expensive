@@ -11,14 +11,16 @@ const getConfig = require('../lib/get-config');
 const whitelistIP = require('../lib/whitelist-ip');
 const Errors = require('./errors.json');
 const { version } = require('../../package.json');
-const { _help, _version, _domains, _whitelistIP, _sandbox, _init,
+const { _help, _version, _domains, _whitelistIP, _sandbox: __sandbox, _init,
   _info, _register, _promo, _coupon,
-  _whois, _Whois, _free, _zones, _github,
+  _whois, _Whois, _free, _zones, _github, _years,
   _sort, _desc, _filter, _type, _pageSize } = require('./get-args');
 const whois = require('./commands/whois');
 const initConfig = require('./commands/init');
 const Info = require('./commands/info');
 const coupon = require('./commands/coupon');
+
+const _sandbox = __sandbox || !!process.env.SANDBOX
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -62,6 +64,7 @@ const run = async (Settings, sandbox) => {
       domain,
       promo: _promo,
       sandbox,
+      years: _years,
     })
 
     await Check(nc, {

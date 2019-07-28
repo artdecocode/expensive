@@ -204,6 +204,10 @@ const argsConfigRegister = {
     description: 'Use this promo code on registration.',
     short: 'p',
   },
+  'years': {
+    description: 'The number of years that the domain should be registered for.',
+    short: 'y',
+  },
 }
 const argsRegister = argufy(argsConfigRegister, [process.argv[0], process.argv[1], ...argsInfo._argv])
 
@@ -211,6 +215,11 @@ const argsRegister = argufy(argsConfigRegister, [process.argv[0], process.argv[1
  * Use this promo code on registration.
  */
 const _promo = /** @type {string} */ (argsRegister['promo'])
+
+/**
+ * The number of years that the domain should be registered for.
+ */
+const _years = /** @type {string} */ (argsRegister['years'])
 
 /**
  * The additional arguments passed to the program.
@@ -241,4 +250,5 @@ module.exports._pageSize = _pageSize
 module.exports._type = _type
 module.exports.argsConfigRegister = argsConfigRegister
 module.exports._promo = _promo
+module.exports._years = _years
 module.exports._argv = _argv

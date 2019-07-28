@@ -32,12 +32,15 @@ async function check(nc, {
   })
   const ordered = domains.map((domain) => {
     const found = res.find(({ Domain }) => Domain == domain)
+    if (found.PremiumRegistrationPrice) found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
     return found
   })
   let data = free ? ordered.filter(({ Available }) => Available) : ordered
 
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
-  const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) => PremiumRegistrationPrice)
+  const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) =>
+    PremiumRegistrationPrice
+  )
   const t = tablature({
     keys: ['Domain', 'Available',
       ...(hasPremium ? ['IsPremiumName'] : []),
