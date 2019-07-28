@@ -94,6 +94,7 @@ Register the domain name. Expensive will attempt to find the promo
 code online, and compare its price to the normal price.
 
 	--promo, -p	Use this promo code on registration.
+	--years, -y	The number of years that the domain should be registered for.
 
 expensive domain|domain.com [domain.org] [-f] [-z app,page]
 Check domains for availability. When no TLD is given,
