@@ -1,3 +1,12 @@
+## 28 July 2019
+
+### [1.7.0](https://github.com/artdecocode/expensive/compare/v1.6.0...v1.7.0)
+
+- [feature] GitHub pages DNS hosts template.
+- [feature] Register promo domains.
+- [feature] Show DNS hosts if using Namecheap DNS.
+- [doc] Wiki documentation.
+
 ## 10 October 2018
 
 ### 1.6.0
