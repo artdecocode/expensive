@@ -1,4 +1,4 @@
-import rqt from 'rqt'
+import ip from '@rqt/ip'
 
 export default {
   ApiUser: {
@@ -16,10 +16,7 @@ export default {
   ClientIp: {
     text: 'Client ip',
     // validation: a => { if (!a) throw new Error('Please give the Client Ip and whitelist it.') },
-    async getDefault() {
-      const ip = await rqt('https://api.ipify.org')
-      return ip
-    },
+    getDefault: ip,
   },
   phone: {
     text: 'Last 3 digit of phone to use for 2 factor auth',

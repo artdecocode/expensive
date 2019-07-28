@@ -384,7 +384,7 @@ rqt@3.0.1:
   dependencies:
     "@rqt/aqt" "1.1.3"
 
-rqt@3.1.3, rqt@^3.1.3:
+rqt@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/rqt/-/rqt-3.1.3.tgz#12ad757350a9c8f66d3b741429e1a483002b7e35"
   integrity sha512-0lMHyxKcQZWXF3yizQ5YoTa7WYHmV+rnC7wFpyZ0JT3bEn+odUhVMB5IlSUy1iQObxEuAqgMuqd4QKVB3EynKQ==
