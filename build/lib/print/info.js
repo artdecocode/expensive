@@ -1,5 +1,5 @@
 const { c } = require('erte');
-let t = require('tablature'); if (t && t.__esModule) t = t.default;
+const t = require('tablature');
 
 /** @param {import('@rqt/namecheap/build/api').DomainInfo} info */
 const printInfo = (info) => {

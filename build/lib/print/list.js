@@ -1,4 +1,4 @@
-let tablature = require('tablature'); if (tablature && tablature.__esModule) tablature = tablature.default;
+const tablature = require('tablature');
 const { mapDomains, getWhois: WhoisGuard } = require('..');
 
 function printList(domains = []) {

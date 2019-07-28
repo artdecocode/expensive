@@ -1,10 +1,10 @@
 const { c, b } = require('erte');
-let NameCheapWeb = require('@rqt/namecheap-web'); if (NameCheapWeb && NameCheapWeb.__esModule) NameCheapWeb = NameCheapWeb.default;
+const NameCheapWeb = require('@rqt/namecheap-web');
 const { confirm } = require('reloquent');
-let t = require('tablature'); if (t && t.__esModule) t = t.default;
+const t = require('tablature');
 const { debuglog, inspect } = require('util');
-let frame = require('frame-of-mind'); if (frame && frame.__esModule) frame = frame.default;
-let loading = require('indicatrix'); if (loading && loading.__esModule) loading = loading.default;
+const frame = require('frame-of-mind');
+const loading = require('indicatrix');
 
 const LOG = debuglog('expensive')
 const LOG_OBJ = (obj) => {

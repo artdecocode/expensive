@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { debuglog, inspect } = require('util');
-let NameCheap = require('@rqt/namecheap'); if (NameCheap && NameCheap.__esModule) NameCheap = NameCheap.default;
-let NameCheapWeb = require('@rqt/namecheap-web'); if (NameCheapWeb && NameCheapWeb.__esModule) NameCheapWeb = NameCheapWeb.default;
+const NameCheap = require('@rqt/namecheap');
+const NameCheapWeb = require('@rqt/namecheap-web');
 const getUsage = require('./get-usage');
 const List = require('./commands/list');
 const Check = require('./commands/check');

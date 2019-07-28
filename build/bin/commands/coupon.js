@@ -1,4 +1,4 @@
-let NameCheapWeb = require('@rqt/namecheap-web'); if (NameCheapWeb && NameCheapWeb.__esModule) NameCheapWeb = NameCheapWeb.default;
+const NameCheapWeb = require('@rqt/namecheap-web');
 
 async function coupon(sandbox) {
   const res = await (sandbox ? NameCheapWeb.SANDBOX_COUPON() : NameCheapWeb.COUPON())

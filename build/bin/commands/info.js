@@ -1,4 +1,4 @@
-let t = require('tablature'); if (t && t.__esModule) t = t.default;
+const t = require('tablature');
 const printInfo = require('../../lib/print/info');
 
 /**

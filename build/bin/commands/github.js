@@ -1,6 +1,4 @@
-// import t from 'tablature'
-// import printInfo from '../../lib/print/info'
-let loading = require('indicatrix'); if (loading && loading.__esModule) loading = loading.default;
+const loading = require('indicatrix');
 const { confirm } = require('reloquent');
 const { c } = require('erte');
 

@@ -1,9 +1,9 @@
-let bosom = require('bosom'); if (bosom && bosom.__esModule) bosom = bosom.default;
+const bosom = require('bosom');
 const { homedir } = require('os');
 const { join } = require('path');
 const { debuglog } = require('util');
 const { askSingle } = require('reloquent');
-let NameCheapWeb = require('@rqt/namecheap-web'); if (NameCheapWeb && NameCheapWeb.__esModule) NameCheapWeb = NameCheapWeb.default;
+const NameCheapWeb = require('@rqt/namecheap-web');
 const { getAppName } = require('.');
 
 const LOG = debuglog('expensive')

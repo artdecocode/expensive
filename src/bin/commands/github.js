@@ -1,5 +1,3 @@
-// import t from 'tablature'
-// import printInfo from '../../lib/print/info'
 import loading from 'indicatrix'
 import { confirm } from 'reloquent'
 import { c } from 'erte'

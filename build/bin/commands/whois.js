@@ -1,4 +1,4 @@
-let NamecheapWeb = require('@rqt/namecheap-web'); if (NamecheapWeb && NamecheapWeb.__esModule) NamecheapWeb = NamecheapWeb.default;
+const NamecheapWeb = require('@rqt/namecheap-web');
 
 const getDays = (date) => {
   const d = new Date().getTime() - date.getTime()

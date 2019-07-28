@@ -1,4 +1,4 @@
-let usually = require('usually'); if (usually && usually.__esModule) usually = usually.default;
+const usually = require('usually');
 const { reduceUsage } = require('argufy');
 const { c } = require('erte');
 const { argsConfig, argsConfigCheck, argsConfigRegister, argsConfigInfo } = require('./get-args');

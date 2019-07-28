@@ -1,6 +1,6 @@
 const { c } = require('erte');
-let tablature = require('tablature'); if (tablature && tablature.__esModule) tablature = tablature.default;
-let bosom = require('bosom'); if (bosom && bosom.__esModule) bosom = bosom.default;
+const tablature = require('tablature');
+const bosom = require('bosom');
 const { homedir } = require('os');
 const { resolve } = require('path');
 const { existsSync } = require('fs');
@@ -35,7 +35,7 @@ async function check(nc, {
     if (found.PremiumRegistrationPrice) found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
     return found
   })
-  let data = free ? ordered.filter(({ Available }) => Available) : ordered
+  const data = free ? ordered.filter(({ Available }) => Available) : ordered
 
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
   const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) =>

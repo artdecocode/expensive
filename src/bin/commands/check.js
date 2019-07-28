@@ -35,7 +35,7 @@ export default async function check(nc, {
     if (found.PremiumRegistrationPrice) found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
     return found
   })
-  let data = free ? ordered.filter(({ Available }) => Available) : ordered
+  const data = free ? ordered.filter(({ Available }) => Available) : ordered
 
   const hasPremium = data.some(({ IsPremiumName }) => IsPremiumName)
   const hasPremiumRegPrice = data.some(({ PremiumRegistrationPrice }) =>
