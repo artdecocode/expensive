@@ -2,4 +2,7 @@
   <arg name="promo" short="p">
     Use this promo code on registration.
   </arg>
+  <arg name="years" short="y">
+    The number of years that the domain should be registered for.
+  </arg>
 </arguments>

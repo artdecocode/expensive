@@ -1,7 +1,7 @@
 import makeTestSuite from '@zoroaster/mask'
 import Context from '../context'
 
-const ts = makeTestSuite('test/result/fork/register.md', {
+const ts = makeTestSuite('test/result/fork/register', {
   fork: {
     module: Context.BIN,
     options: Context.OPTIONS,

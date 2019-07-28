@@ -42,16 +42,16 @@ test
 Checking domains test.com, test.net, test.org, test.biz, test.co, test.cc, test.io, test.bz, test.nu, test.app, test.page
 Domain     Available
 test.com      no
-test.co       no
 test.net      no
 test.org      no
+test.biz      no
+test.co       no
 test.cc       no
 test.io       no
 test.bz       no
+test.nu       no
 test.app      yes
 test.page     no
-test.biz      no
-test.nu       no
 /**/
 
 ## --info
@@ -65,6 +65,10 @@ Whois email:    zoidberg@futurama.bz
 DNS:            FREE
 Nameservers:    dns1.registrar-servers.com, dns2.registrar-servers.com
 Created:        10/06/2018
+
+Name  Type   Address
+www   CNAME  parkingpage.namecheap.com.
+@     URL    http://www.expensive-test-info.bz?from=@
 /**/
 
 ## -i
@@ -78,4 +82,8 @@ Whois email:    zoidberg@futurama.bz
 DNS:            FREE
 Nameservers:    dns1.registrar-servers.com, dns2.registrar-servers.com
 Created:        10/06/2018
+
+Name  Type   Address
+www   CNAME  parkingpage.namecheap.com.
+@     URL    http://www.expensive-test-info.bz?from=@
 /**/

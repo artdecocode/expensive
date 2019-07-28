@@ -7,7 +7,7 @@ const LOG = debuglog('expensive')
 
 /**
  * An authentication function that will read the `~/.expensiverc` or `~/.expensive-standboxrc` file.
- * @param {sandbox} sandbox Whether to use the sandbox rc.
+ * @param {boolean} sandbox Whether to use the sandbox rc.
  * @returns {Settings} An object read from local rc file.
  */
 const getConfig = async (sandbox) => {

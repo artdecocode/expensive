@@ -7,7 +7,7 @@ OK: y
 /**/
 
 /* stdout */
-Apply coupon TLDSPROUT (y/n)? [y] n
+Apply coupon HEATUP5 (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18
@@ -35,7 +35,7 @@ OK: n
 /**/
 
 /* stdout */
-Apply coupon TLDSPROUT (y/n)? [y] n
+Apply coupon HEATUP5 (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18
@@ -62,7 +62,7 @@ OK: y
 /**/
 
 /* stdout */
-Apply coupon TLDSPROUT (y/n)? [y] y
+Apply coupon HEATUP5 (y/n)? [y] y
 
 Price            8.88
 Without Promo    8.88

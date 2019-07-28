@@ -202,7 +202,7 @@ export default async function register(nc, {
 
   const PROMO = await findAndApplyPromo(promo, sandbox, zone)
 
-  const { Your, table } = await loading('Getting price', getTable(INFO, {
+  const { Your, table } = await loading(`Getting ${years}-year price`, getTable(INFO, {
     nc,
     promo: PROMO,
     years,
@@ -241,6 +241,7 @@ export default async function register(nc, {
       return nc.domains.create({
         domain,
         address,
+        years,
         promo: PROMO,
         premium: IsPremiumName ? {
           IsPremiumDomain: true,

@@ -11,14 +11,16 @@ import getConfig from '../lib/get-config'
 import whitelistIP from '../lib/whitelist-ip'
 import Errors from './errors.json'
 import { version } from '../../package.json'
-import { _help, _version, _domains, _whitelistIP, _sandbox, _init,
+import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
   _info, _register, _promo, _coupon,
-  _whois, _Whois, _free, _zones, _github,
+  _whois, _Whois, _free, _zones, _github, _years,
   _sort, _desc, _filter, _type, _pageSize } from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
 import coupon from './commands/coupon'
+
+const _sandbox = __sandbox || !!process.env.SANDBOX
 
 const LOG = debuglog('expensive')
 const DEBUG = /expensive/.test(process.env.NODE_DEBUG)
@@ -62,6 +64,7 @@ const run = async (Settings, sandbox) => {
       domain,
       promo: _promo,
       sandbox,
+      years: _years,
     })
 
     await Check(nc, {
