@@ -7,7 +7,7 @@ OK: y
 /**/
 
 /* stdout */
-Apply coupon HEATUP5 (y/n)? [y] n
+Apply coupon STEAMYDEALZ (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18
@@ -35,7 +35,7 @@ OK: n
 /**/
 
 /* stdout */
-Apply coupon HEATUP5 (y/n)? [y] n
+Apply coupon STEAMYDEALZ (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18

@@ -8,7 +8,9 @@ import { makeList, isSingleWord } from '../../lib'
 
 const path = resolve(homedir(), '.expensive.log')
 
-/** @param {import('@rqt/namecheap')} nc */
+/**
+ * @param {!_namecheap.NameCheap} nc
+ */
 export default async function check(nc, {
   domains: d,
   free,
@@ -78,3 +80,8 @@ const log = async (domain, data) => {
   ]
   await bosom(path, newData, { space: 2 })
 }
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */
