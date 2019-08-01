@@ -35,7 +35,10 @@ export default async function check(nc, {
   /** @type {!Array<!_namecheap.DomainCheck>} */
   const ordered = domains.map((domain) => {
     const found = res.find(({ Domain }) => Domain == domain)
-    if (found.PremiumRegistrationPrice) found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
+    if (found.PremiumRegistrationPrice) {
+      /** @suppress {checkTypes} */
+      found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
+    }
     return found
   })
   const data = free ? ordered.filter(({ Available }) => Available) : ordered

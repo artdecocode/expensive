@@ -24,7 +24,7 @@ export const findDefault = (addresses) => {
 }
 
 const getCoupon = async (sandbox) => {
-  const coupon = await (sandbox ? NameCheapWeb.SANDBOX_COUPON() : NameCheapWeb.COUPON())
+  const coupon = await (sandbox ? NameCheapWeb['SANDBOX_COUPON']() : NameCheapWeb['COUPON']())
   return coupon
 }
 
@@ -187,7 +187,9 @@ const warnExtraPromo = (Your) => {
 }
 
 /**
- * @param {_namecheap.NameCheap} nc
+ * @param {!_namecheap.NameCheap} nc
+ * @param {Object} options
+ * @param {string} [options.domain] The domain to register.
  */
 export default async function register(nc, {
   domain,
@@ -223,12 +225,13 @@ export default async function register(nc, {
     })
   }
 
-  const address = await loading('Finding default address', async () => {
+  const address = /** @type {!_namecheap.AddressDetail} */ (await loading('Finding default address', async () => {
     const addresses = await nc.address.getList()
     const id = findDefault(addresses)
+    if (!id) throw new Error('Could not find the default address.')
     const a = await nc.address.getInfo(id)
     return a
-  })
+  }))
 
   console.log(
     '\rRegistering %s using:',
@@ -241,17 +244,17 @@ export default async function register(nc, {
   let ChargedAmount
   try {
     ({ ChargedAmount } = await loading('Registering the domain', async () => {
-      return nc.domains.create({
-        domain,
+      return nc.domains.create(/** @type {!_namecheap.Create} */ ({
         address,
+        domain,
         years,
         promo: PROMO,
-        premium: IsPremiumName ? {
+        ...(IsPremiumName ? { premium: {
           IsPremiumDomain: true,
           PremiumPrice: parseFloat(PremiumRegistrationPrice),
           EapFee: parseFloat(EapFee),
-        } : {},
-      })
+        } } : {}),
+      }))
     }))
   } catch (err) {
     const { props = {}, message } = err
@@ -280,6 +283,9 @@ export default async function register(nc, {
   )
 }
 
+/**
+ * @param {!_namecheap.AddressDetail} address
+ */
 const printAddress = ({
   FirstName, LastName, Address1, Address2, City, Zip, Country, EmailAddress,
 }) => {
@@ -302,4 +308,12 @@ const printAddress = ({
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('@rqt/namecheap/types/typedefs/address').Address} _namecheap.Address
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/address').AddressDetail} _namecheap.AddressDetail
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/domains').Create} _namecheap.Create
  */

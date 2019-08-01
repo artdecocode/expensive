@@ -49,10 +49,10 @@
   resolved "https://registry.yarnpkg.com/@rqt/namecheap-web/-/namecheap-web-1.4.2.tgz#a9eee9857ae114d71aa517e7e0101510f6f96e3a"
   integrity sha512-ju3Fiq6EKcEm9rxqRediPTkXNVSCy/ju8fcVci/Vq8pPhP3y+ROc52usxue1rC1McYef8Mtd77WkVWwlyRZHag==
 
-"@rqt/namecheap@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.4.0.tgz#79763691c140d202be8464ba2203966cab2a341a"
-  integrity sha512-80NNJ4PNWforOhl813W62XgaSRv+7fNQodHzM7FI/5+qKAHiazKas3fsyQpCSH7SBZ1lDA+qVN8RDjry92cYMw==
+"@rqt/namecheap@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@rqt/namecheap/-/namecheap-2.4.2.tgz#8537eea6efbe7ac4fd449e3aee5f2c1d80986fcf"
+  integrity sha512-RfrK7ywOraz0nR/BlQt8fJQDcOfI9cLSTpa6l9JS9ER0HJ6t1FQ8Pxmplj/lVQv8rkczuVADdZVC3HlL98Q31w==
 
 "@typedefs/parser@^1.3.2":
   version "1.3.2"

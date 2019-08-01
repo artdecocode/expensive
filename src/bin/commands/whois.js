@@ -13,7 +13,7 @@ const getItem = (whois, item, key, type, print) => {
     const allRes = []
     let res
     while ((res = re.exec(whois)) !== null) {
-      const [, val] = res
+      const [, val] = /** @type {!RegExpResult} */ (res)
       const v = isDate ? new Date(val) : val
       allRes.push(v)
     }
@@ -45,7 +45,7 @@ const days = (n) => {
 }
 
 export default async (domain, full) => {
-  const res = await NamecheapWeb.WHOIS(domain)
+  const res = await NamecheapWeb['WHOIS'](domain)
   if (full) return console.log(res)
   const data = getData(res)
   Object.values(data).forEach(v => console.log(v))

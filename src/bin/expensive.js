@@ -17,7 +17,6 @@ import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
-// import { Settings } from '../lib/get-config'
 import coupon from './commands/coupon'
 
 const version = require('../../package.json')['version']
@@ -37,13 +36,14 @@ if (_version) {
 }
 
 /**
- * @param {_expensive.Settings} settings
+ * @param {!_expensive.Settings} settings
+ * @param {boolean} [sandbox]
  */
-const run = async (settings, sandbox) => {
+const run = async (settings, sandbox = false) => {
   try {
-    if (_whitelistIP) return await whitelistIP(settings, _sandbox)
+    if (_whitelistIP) return await whitelistIP(settings, sandbox)
 
-    const ip = settings.ClientIp || await NameCheapWeb.LOOKUP_IP()
+    const ip = settings.ClientIp || await NameCheapWeb['LOOKUP_IP']()
     const nc = new NameCheap({
       user: settings.ApiUser,
       key: settings.ApiKey,
@@ -106,10 +106,12 @@ const handler = async ({ stack, message, props }, Settings, sandbox) => {
     if (_whois || _Whois) return await whois(_domains, _Whois)
     if (_init) return await initConfig(_sandbox)
   } catch (err) {
-    return handler(err)
+    const { stack, message } = err
+    DEBUG ? LOG(stack) : console.error(message)
+    return
   }
-  const Settings = await getConfig(_sandbox)
-  await run(Settings, _sandbox)
+  const settings = await getConfig(_sandbox)
+  await run(settings, _sandbox)
 })()
 
 /**

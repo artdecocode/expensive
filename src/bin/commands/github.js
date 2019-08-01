@@ -25,11 +25,12 @@ export default async function (client, domain) {
     if (Name == '@' && Type == 'URL') return false
     return true
   })
-  hosts.forEach((h) => {
-    h.RecordType = h.Type
-    h.HostName = h.Name
+  /** @type {!Array<!_namecheap.HostParams>} */
+  const newhosts = hosts.map((h) => {
+    const { TTL, Type: RecordType, Address, Name: HostName, MXPref } = h
+    return { TTL, RecordType, Address, HostName, MXPref }
   })
-  hosts.push({
+  newhosts.push({
     Address: '185.199.108.153',
     RecordType: 'A',
     HostName: '@',
@@ -47,8 +48,8 @@ export default async function (client, domain) {
     HostName: '@',
   })
 
-  const r = await loading(`Setting ${c(hosts.length, 'yellow')} host records`, async () => {
-    const res = await client.dns.setHosts(domain, hosts)
+  const r = await loading(`Setting ${c(`${newhosts.length}`, 'yellow')} host records`, async () => {
+    const res = await client.dns.setHosts(domain, newhosts)
     return res
   })
   if (!r.IsSuccess)
@@ -58,4 +59,8 @@ export default async function (client, domain) {
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/dns').HostParams} _namecheap.HostParams
  */

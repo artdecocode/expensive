@@ -10,10 +10,12 @@ const LOG = debuglog('expensive')
 
 /**
  * A handler to make sure that an IP address is allowed.
- * @param {_expensive.Settings} settings
+ * @param {!_expensive.Settings} settings
+ * @param {boolean} [sandbox]
+ * @param {string} [ip]
  */
 const whitelistIP = async (settings, sandbox, ip) => {
-  const IP = ip || await NameCheapWeb.LOOKUP_IP()
+  const IP = ip || await NameCheapWeb['LOOKUP_IP']()
   const password = await askSingle({
     text: `Enter the password to white-list ${IP}`,
     validation(val) {
