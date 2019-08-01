@@ -8,7 +8,7 @@
     "spec": "yarn t test/spec",
     "test": "yarn t test/spec test/mask",
     "test-compile": "ALAMODE_ENV=test-compile yarn test",
-    "compile": "depack-dev src/bin/expensive -o compile/bin/expensive.js -a -c -p -s -O 2018 --externs types/externs.js",
+    "compile": "depack-dev src/bin/expensive -o compile/bin/expensive.js -a -c -p -s -O 2018 --externs types/externs.js --source_map_include_content",
     "dev": "SANDBOX=1 NODE_DEBUG=expensive node src/bin",
     "start": "node src/bin",
     "lint": "eslint .",

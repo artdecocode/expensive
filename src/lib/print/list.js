@@ -6,6 +6,7 @@ export default function printList(domains = []) {
     console.log('No domains')
     return
   }
+  // adds the [Since, Expiry, Years, DNS] properties
   const data = mapDomains(domains)
   const s = tablature({
     keys: ['Name', 'Expiry', 'Years', 'WhoisGuard', 'DNS'],
@@ -15,11 +16,11 @@ export default function printList(domains = []) {
     },
     replacements: {
       WhoisGuard,
-      DNS(val) {
+      'DNS'(val) {
         if (val) return { value: 'yes', length: 3 }
         return { value: '', length: 0 }
       },
-      Years(value) {
+      'Years'(value) {
         if (value) return { value, length: `${value}`.length }
         return { value: '', length: 0 }
       },

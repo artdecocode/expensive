@@ -46,10 +46,10 @@ export const mapDomains = (domains) => {
     const Years = Math.abs(new Date(d).getUTCFullYear() - 1970)
     return {
       ...domain,
-      Since: since,
-      Expiry,
-      Years,
-      DNS: IsOurDNS,
+      'Since': since,
+      'Expiry': Expiry,
+      'Years': Years,
+      'DNS': IsOurDNS,
     }
   })
 }

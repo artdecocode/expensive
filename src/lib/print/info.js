@@ -1,7 +1,7 @@
 import { c } from 'erte'
 import t from 'tablature'
 
-/** @param {_namecheap.DomainInfo} info */
+/** @param {!_namecheap.DomainInfo} info */
 const printInfo = (info) => {
   const { DomainDetails, Whoisguard, DnsDetails } = info
   const data = [

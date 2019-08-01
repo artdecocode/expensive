@@ -65,7 +65,7 @@ class pa extends na {
     const {binary:b = !1, rs:c = null, ...d} = a || {}, {i:e = y(!0), proxyError:f} = a || {}, g = (h, k) => e(k);
     super(d);
     this.b = [];
-    this.F = new Promise((h, k) => {
+    this.B = new Promise((h, k) => {
       this.on("finish", () => {
         let l;
         b ? l = Buffer.concat(this.b) : l = this.b.join("");
@@ -90,7 +90,7 @@ class pa extends na {
     c();
   }
   get j() {
-    return this.F;
+    return this.B;
   }
 }
 const qa = async(a, b = {}) => {
@@ -125,15 +125,15 @@ const va = a => {
     }).on("timeout", () => {
       g.abort();
     });
-  })).then(() => ({body:l, headers:h, ...k, I:m, byteLength:n, w:null}));
-  return {J:g, j:c};
+  })).then(() => ({body:l, headers:h, ...k, G:m, byteLength:n, w:null}));
+  return {H:g, j:c};
 };
 const xa = (a = {}) => Object.keys(a).reduce((b, c) => {
   const d = a[c];
   c = `${encodeURIComponent(c)}=${encodeURIComponent(d)}`;
   return [...b, c];
 }, []).join("&").replace(/%20/g, "+"), ya = async(a, b, {data:c, justHeaders:d, binary:e, i:f = y(!0)}) => {
-  const {J:g, j:h} = wa(a, b, {justHeaders:d, binary:e, i:f});
+  const {H:g, j:h} = wa(a, b, {justHeaders:d, binary:e, i:f});
   g.end(c);
   a = await h;
   ({"content-type":b = ""} = a.headers);
@@ -176,7 +176,7 @@ const za = q("aqt"), A = async(a, b = {}) => {
     "Content-Length" in u.headers || (u.headers["Content-Length"] = Buffer.byteLength(x));
   }
   !f || "Accept-Encoding" in u.headers || (u.headers["Accept-Encoding"] = "gzip, deflate");
-  const {body:H, headers:D, byteLength:ra, statusCode:sb, statusMessage:tb, I:sa, w:ta} = await ya(r, u, {data:x, justHeaders:h, binary:g, i:b});
+  const {body:H, headers:D, byteLength:ra, statusCode:sb, statusMessage:tb, G:sa, w:ta} = await ya(r, u, {data:x, justHeaders:h, binary:g, i:b});
   za("%s %s B%s", a, ra, `${ra != sa ? ` (raw ${sa} B)` : ""}`);
   return {body:ta ? ta : H, headers:D, statusCode:sb, statusMessage:tb};
 };
@@ -340,7 +340,7 @@ async function Pa(a, b) {
   return a;
 }
 const Sa = "JobTitle FirstName LastName Address1 Address2 City StateProvince StateProvinceChoice Country Phone PhoneExt Fax EmailAddress".split(" "), E = (a, b) => Sa.reduce((c, d) => ({...c, [`${b}${d}`]:"StateProvince" != d || a[d] ? a[d] : "NA"}), {[`${b}OrganizationName`]:a.Organization, [`${b}PostalCode`]:a.Zip});
-async function Ta(a, {K:b, M:c}) {
+async function Ta(a, {I:b, J:c}) {
   a = await a("namecheap.domains.dns.getHosts", {SLD:b, TLD:c});
   const [{content:d, f:e}] = C("DomainDNSGetHostsResult", a);
   a = F(d, "Host");
@@ -427,7 +427,7 @@ class cb {
     this.dns = {async getHosts(g) {
       const [h, ...k] = g.split(".");
       g = k.join(".");
-      return await Ta(f, {K:h, M:g});
+      return await Ta(f, {I:h, J:g});
     }, async setHosts(g, h, k = {}) {
       const [l, ...m] = g.split(".");
       g = m.join(".");
@@ -1027,7 +1027,7 @@ short:"S"}, desc:{description:"Sort in descending order.", boolean:!0, short:"D"
 short:"y"}}, Ec = Q(Dc, [process.argv[0], process.argv[1], ...U.h]), Fc = Ec.promo, Gc = Ec.years;
 const Hc = "com net org biz co cc io bz nu app page".split(" "), Ic = (a, b) => (b.length ? Hc.filter(c => b.includes(c)) : Hc).map(c => `${a}.${c}`), Jc = L("\u2713", "green"), Kc = L("-", "grey"), Lc = a => a.map(b => {
   const {Created:c, Expires:d, IsOurDNS:e} = b, f = Date.parse(c), g = Date.parse(d), h = (new Date).getTime();
-  return {...b, W:Math.round(Math.abs((h - f) / 864E5)), S:Math.round(Math.abs((g - h) / 864E5)), B:Math.abs((new Date(h - (new Date(f)).getTime())).getUTCFullYear() - 1970), A:e};
+  return {...b, Since:Math.round(Math.abs((h - f) / 864E5)), Expiry:Math.round(Math.abs((g - h) / 864E5)), Years:Math.abs((new Date(h - (new Date(f)).getTime())).getUTCFullYear() - 1970), DNS:e};
 }), Mc = a => "ENABLED" == a ? {value:Jc, length:1} : "NOTPRESENT" == a ? {value:Kc, length:1} : {value:a, length:a.length}, Nc = a => a ? "expensive-sandbox" : "expensive";
 const Oc = Hc.join(", ");
 const Pc = a => ({value:`\x1b[1m${a}\x1b[0m`, length:a.length}), Qc = a => a.reduce((b, c) => ({...b, [c]:!0}), {});
@@ -1092,9 +1092,9 @@ const Tc = (a, b, c, d) => {
   }).join("  ");
 };
 function Uc(a = []) {
-  a.length ? (a = Lc(a), a = V({keys:["Name", "Expiry", "Years", "WhoisGuard", "DNS"], data:a, headings:{WhoisGuard:"Whois"}, replacements:{WhoisGuard:Mc, A(b) {
+  a.length ? (a = Lc(a), a = V({keys:["Name", "Expiry", "Years", "WhoisGuard", "DNS"], data:a, headings:{WhoisGuard:"Whois"}, replacements:{WhoisGuard:Mc, ["DNS"](b) {
     return b ? {value:"yes", length:3} : {value:"", length:0};
-  }, B(b) {
+  }, ["Years"](b) {
     return b ? {value:b, length:`${b}`.length} : {value:"", length:0};
   }}, centerValues:["WhoisGuard"]}), console.log(a)) : console.log("No domains");
 }
@@ -1111,7 +1111,7 @@ const Wc = ({CurrentPage:a, TotalItems:b, PageSize:c}) => {
 const {join:Yc, resolve:Zc} = path;
 const W = Zc(w(), ".expensive.log");
 async function $c(a) {
-  var {domains:b, G:c, P:d = ""} = {domains:T, P:wc, G:vc}, e = b.reduce((h, k) => /\./.test(k) ? [...h, k] : (k = Ic(k, d ? d.split(",") : []), [...h, ...k]), []);
+  var {domains:b, D:c, M:d = ""} = {domains:T, M:wc, D:vc}, e = b.reduce((h, k) => /\./.test(k) ? [...h, k] : (k = Ic(k, d ? d.split(",") : []), [...h, ...k]), []);
   console.log("Checking domain%s %s", 1 < e.length ? "s" : "", e.join(", "));
   const f = await a.domains.check({domains:e});
   a = e.map(h => {
@@ -1178,7 +1178,7 @@ const ed = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, fd = as
     ({YourPrice:f} = hd(f, b, c));
   }
   b = hd(e, b, c);
-  return {m:d, AdditionalCost:b.YourAdditonalCost, Price:b.YourPrice, V:b.YourPriceType, R:b.YourAdditonalCostType, Currency:b.Currency, v:f};
+  return {m:d, AdditionalCost:b.YourAdditonalCost, Price:b.YourPrice, S:b.YourPriceType, N:b.YourAdditonalCostType, Currency:b.Currency, v:f};
 }, jd = async(a, b, c) => {
   if (a) {
     return console.log("Using promo %s", a), a;
@@ -1200,7 +1200,7 @@ const ed = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, fd = as
   if (!d) {
     throw Error("No confirmation.");
   }
-}, ld = a => a.map(b => ({...b, value:`SKIP-${b.value}`})), md = async(a, {H:b, years:c, promo:d, N:e}) => {
+}, ld = a => a.map(b => ({...b, value:`SKIP-${b.value}`})), md = async(a, {F:b, years:c, promo:d, K:e}) => {
   const {IcannFee:f, PremiumRenewalPrice:g, PremiumTransferPrice:h, PremiumRegistrationPrice:k, IsPremiumName:l, EapFee:m} = a;
   a = await id(b, e, c, d);
   b = [{name:"Premium Registration Price", value:k, l:k}, ...ld([{name:"Premium Renewal Price", value:g}, {name:"Premium Transfer Price", value:h}])];
@@ -1216,14 +1216,14 @@ const ed = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, fd = as
     const [, p] = `${n}`.split("SKIP-");
     return p ? {value:L(p, "grey"), length:p.length} : {value:n, length:n.length};
   }}}).replace(/.+\n/, "");
-  return {D:a, table:b};
+  return {A:a, table:b};
 };
 async function nd(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
   const f = (await a.domains.check(b))[0], {Available:g, EapFee:h, PremiumRegistrationPrice:k, Domain:l, IsPremiumName:m} = f;
   if (!g) {
     throw Error(`Domain ${l} is not available.`);
   }
-  const n = gd(b), p = await jd(c, d, n), {D:t, table:r} = await X(`Getting ${e}-year price`, md(f, {H:a, promo:p, years:e, N:n}));
+  const n = gd(b), p = await jd(c, d, n), {A:t, table:r} = await X(`Getting ${e}-year price`, md(f, {F:a, promo:p, years:e, K:n}));
   console.log("\n%s", r);
   t.m && parseFloat(t.Price) > parseFloat(t.v) && console.log("[!] Warning: you will pay more with coupon %s than without it.", t.m);
   console.log("");
@@ -1241,7 +1241,7 @@ async function nd(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
   if (await K("OK?", {defaultYes:!1})) {
     var x;
     try {
-      ({ChargedAmount:x} = await X("Registering the domain", async() => a.domains.create({address:u, domain:b, years:e, promo:p, ...m ? {premium:{T:!0, U:parseFloat(k), EapFee:parseFloat(h)}} : {}})));
+      ({ChargedAmount:x} = await X("Registering the domain", async() => a.domains.create({address:u, domain:b, years:e, promo:p, ...m ? {premium:{P:!0, R:parseFloat(k), EapFee:parseFloat(h)}} : {}})));
     } catch (v) {
       const {f:H = {}, message:D} = v;
       ({Number:c} = H);
