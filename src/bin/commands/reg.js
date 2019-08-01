@@ -14,12 +14,13 @@ const LOG_OBJ = (obj) => {
 
 /**
  * Find a default address ID.
- * @param {Address[]} addresses A list of addresses.
- * @returns {number} A default address ID.
+ * @param {!Array<_namecheap.Address>} addresses A list of addresses.
+ * @returns {?number} A default address ID.
  */
 export const findDefault = (addresses) => {
-  const { AddressId } = addresses.find(({ IsDefault }) => IsDefault) || {}
-  return AddressId
+  const found = addresses.find(({ IsDefault }) => IsDefault)
+  if (!found) return null
+  return found.AddressId
 }
 
 const getCoupon = async (sandbox) => {
@@ -33,14 +34,16 @@ const getZone = (domain) => {
   return zone
 }
 
-/** @type {import('@rqt/namecheap/build/api').Pricing} */
+/**
+ * @param {_namecheap.Pricing} pricing
+ */
 const findProduct = (pricing, zone, years) => {
   return pricing.domains
     .register[zone].find(({ Duration }) => Duration == years)
 }
 
 /**
- * @param {import('@rqt/namecheap')} nc
+ * @param {_namecheap.NameCheap} nc
  */
 const getPrice = async (nc, zone, years, promoCode) => {
   const pp = await nc.users.getPricing({
@@ -184,7 +187,7 @@ const warnExtraPromo = (Your) => {
 }
 
 /**
- * @param {import('@rqt/namecheap')} nc
+ * @param {_namecheap.NameCheap} nc
  */
 export default async function register(nc, {
   domain,
@@ -287,3 +290,16 @@ const printAddress = ({
   const f = frame(s)
   console.log(f)
 }
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/users').Pricing} _namecheap.Pricing
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/address').Address} _namecheap.Address
+ */

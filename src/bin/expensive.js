@@ -9,8 +9,7 @@ import Register from './commands/reg'
 import GitHub from './commands/github'
 import getConfig from '../lib/get-config'
 import whitelistIP from '../lib/whitelist-ip'
-import Errors from './errors.json'
-import { version } from '../../package.json'
+import Errors from './errors'
 import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
   _info, _register, _promo, _coupon,
   _whois, _Whois, _free, _zones, _github, _years,
@@ -18,7 +17,10 @@ import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
+// import { Settings } from '../lib/get-config'
 import coupon from './commands/coupon'
+
+const version = require('../../package.json')['version']
 
 const _sandbox = __sandbox || !!process.env.SANDBOX
 
@@ -35,16 +37,16 @@ if (_version) {
 }
 
 /**
- * @param {import('../lib/get-config').Settings} Settings
+ * @param {_expensive.Settings} settings
  */
-const run = async (Settings, sandbox) => {
+const run = async (settings, sandbox) => {
   try {
-    if (_whitelistIP) return await whitelistIP(Settings, _sandbox)
+    if (_whitelistIP) return await whitelistIP(settings, _sandbox)
 
-    const ip = Settings.ClientIp || await NameCheapWeb.LOOKUP_IP()
+    const ip = settings.ClientIp || await NameCheapWeb.LOOKUP_IP()
     const nc = new NameCheap({
-      user: Settings.ApiUser,
-      key: Settings.ApiKey,
+      user: settings.ApiUser,
+      key: settings.ApiKey,
       ip,
       sandbox,
     })
@@ -73,7 +75,7 @@ const run = async (Settings, sandbox) => {
       free: _free,
     })
   } catch (error) {
-    await handler(error, Settings, sandbox)
+    await handler(error, settings, sandbox)
   }
 }
 
@@ -109,3 +111,8 @@ const handler = async ({ stack, message, props }, Settings, sandbox) => {
   const Settings = await getConfig(_sandbox)
   await run(Settings, _sandbox)
 })()
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('../../types').Settings} _expensive.Settings
+ */

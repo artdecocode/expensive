@@ -1,5 +1,5 @@
 import tablature from 'tablature'
-import { mapDomains, getWhois as WhoisGuard } from '..'
+import { mapDomains, getWhois as WhoisGuard } from '../'
 
 export default function printList(domains = []) {
   if (!domains.length) {

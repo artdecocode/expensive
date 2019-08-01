@@ -1,7 +1,7 @@
 import { c } from 'erte'
 import t from 'tablature'
 
-/** @param {import('@rqt/namecheap/build/api').DomainInfo} info */
+/** @param {_namecheap.DomainInfo} info */
 const printInfo = (info) => {
   const { DomainDetails, Whoisguard, DnsDetails } = info
   const data = [
@@ -23,3 +23,8 @@ const printInfo = (info) => {
 }
 
 export default printInfo
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/domains').DomainInfo} _namecheap.DomainInfo
+ */

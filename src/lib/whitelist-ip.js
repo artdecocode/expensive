@@ -4,13 +4,13 @@ import { join } from 'path'
 import { debuglog } from 'util'
 import { askSingle } from 'reloquent'
 import NameCheapWeb from '@rqt/namecheap-web'
-import { getAppName } from '.'
+import { getAppName } from './'
 
 const LOG = debuglog('expensive')
 
 /**
  * A handler to make sure that an IP address is allowed.
- * @param {Settings} settings
+ * @param {_expensive.Settings} settings
  */
 const whitelistIP = async (settings, sandbox, ip) => {
   const IP = ip || await NameCheapWeb.LOOKUP_IP()
@@ -39,5 +39,6 @@ const whitelistIP = async (settings, sandbox, ip) => {
 export default whitelistIP
 
 /**
- * @typedef {import('../lib/get-config').Settings} Settings
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('../../types').Settings} _expensive.Settings
  */

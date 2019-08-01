@@ -1,4 +1,4 @@
-import ip from '@rqt/ip'
+import NamecheapWeb from '@rqt/namecheap-web'
 
 export default {
   ApiUser: {
@@ -16,7 +16,7 @@ export default {
   ClientIp: {
     text: 'Client ip',
     // validation: a => { if (!a) throw new Error('Please give the Client Ip and whitelist it.') },
-    getDefault: ip,
+    getDefault: NamecheapWeb.LOOKUP_IP,
   },
   phone: {
     text: 'Last 3 digit of phone to use for 2 factor auth',

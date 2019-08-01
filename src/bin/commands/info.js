@@ -2,7 +2,8 @@ import t from 'tablature'
 import printInfo from '../../lib/print/info'
 
 /**
- * @param {import('@rqt/namecheap')} client
+ * @param {!_namecheap.NameCheap} client
+ * @param {string} domain
  */
 export default async function info(client, domain) {
   const [i, hosts] = await Promise.all([
@@ -19,3 +20,8 @@ export default async function info(client, domain) {
     }))
   }
 }
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */

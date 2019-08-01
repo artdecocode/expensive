@@ -32,6 +32,7 @@ export default async function check(nc, {
   const res = await nc.domains.check({
     domains,
   })
+  /** @type {!Array<!_namecheap.DomainCheck>} */
   const ordered = domains.map((domain) => {
     const found = res.find(({ Domain }) => Domain == domain)
     if (found.PremiumRegistrationPrice) found.PremiumRegistrationPrice = parseFloat(found.PremiumRegistrationPrice)
@@ -66,6 +67,10 @@ export default async function check(nc, {
   await log(d.join(','), data)
 }
 
+/**
+ * @param {string} domain
+ * @param {!Array<_namecheap.DomainCheck>} data
+ */
 const log = async (domain, data) => {
   const exists = existsSync(path)
   if (!exists) {
@@ -84,4 +89,8 @@ const log = async (domain, data) => {
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/domains').DomainCheck} _namecheap.DomainCheck
  */

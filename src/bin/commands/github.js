@@ -3,7 +3,8 @@ import { confirm } from 'reloquent'
 import { c } from 'erte'
 
 /**
- * @param {import('@rqt/namecheap')} client
+ * @param {!_namecheap.NameCheap} client
+ * @param {string} domain
  */
 export default async function (client, domain) {
   let { hosts, IsUsingOurDNS } = await client.dns.getHosts(domain)
@@ -53,3 +54,8 @@ export default async function (client, domain) {
   if (!r.IsSuccess)
     throw new Error('Operation wasn\'t successful.')
 }
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */

@@ -1,7 +1,7 @@
 import { confirm } from 'reloquent'
 import printList from '../../lib/print/list'
 
-/** @param {import('@rqt/namecheap')} nc */
+/** @param {_namecheap.NameCheap} nc */
 export default async function list(nc, {
   sort,
   desc,
@@ -45,3 +45,8 @@ const getNextPage = ({ CurrentPage, TotalItems, PageSize }) => {
 const getNavigation = ({ CurrentPage, TotalItems, PageSize }) => {
   return `${CurrentPage}/${Math.ceil(TotalItems/PageSize)}`
 }
+
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap')} _namecheap.NameCheap
+ */

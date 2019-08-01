@@ -1,0 +1,16 @@
+<types namespace="_expensive">
+  <type record name="Settings" desc="Settings saved in ~/.namecheaprc file.">
+    <prop string name="ApiUser">
+      Namecheap user.
+    </prop>
+    <prop string name="ApiKey">
+      Namecheap API key.
+    </prop>
+    <prop string name="ClientIp">
+      Client IP.
+    </prop>
+    <prop string name="phone">
+      Last 3 digits of the phone number.
+    </prop>
+  </type>
+</types>
