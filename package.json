@@ -52,7 +52,7 @@
   "devDependencies": {
     "alamode": "2.3.6",
     "clearr": "^1.0.0",
-    "documentary": "1.28.0",
+    "documentary": "1.29.0",
     "eslint-config-artdeco": "1.0.1",
     "forkfeed": "1.1.1",
     "spawncommand": "^2.2.0",
@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "@rqt/ip": "1.1.0",
-    "@rqt/namecheap": "^2.3.0",
+    "@rqt/namecheap": "^2.4.0",
     "@rqt/namecheap-web": "1.3.1",
     "africa": "1.2.0",
     "argufy": "^1.7.1",
