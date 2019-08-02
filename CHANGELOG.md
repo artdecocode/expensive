@@ -1,5 +1,10 @@
 ## 2 August 2019
 
+### [2.0.1](https://github.com/artdecocode/expensive/compare/v2.0.0...v2.0.1)
+
+- [doc] Add a demo gif.
+- [fix] Display loading indicator at the start of the _Register_ command.
+
 ### [2.0.0](https://github.com/artdecocode/expensive/compare/v1.7.0...v2.0.0)
 
 - [package] Compile with [_Depack_](https://compiler.page).
