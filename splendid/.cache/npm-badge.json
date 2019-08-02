@@ -1,0 +1,10 @@
+{
+  "splendid": {
+    "v": "1.6.1",
+    "d": "Static Web Site Generator With JSX As HTML."
+  },
+  "expensive": {
+    "v": "2.0.1",
+    "d": "A Namecheap.com Client To Register And Manage Domains From The CLI."
+  }
+}

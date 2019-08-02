@@ -1,0 +1,43 @@
+## Installation & Setup
+
+_Expensive_ can be installed globally, and it has 0 dependencies. Use the following commands:
+
+<p>
+  ``yarn`` `global add expensive`
+</p>
+<p>
+  ``npm`` `i -g expensive`
+</p>
+
+You will need the Namecheap account, so create one now (affiliate link, thank you 😊)!
+
+<p><a href="https://bit.ly/31boSJg">
+  <img style="max-width:100%" src="img/nc.gif" alt="Cheap domain registration at namecheap.">
+</p></a>
+
+Then go to your _Profile_ > _Tools_ > _API Access_ and apply for an API key.
+If you don't receive with soon, contact support to help you get
+access activated. Once the API key is ready, `expensive` can be initialised
+by running it, and answering configuration questions in interactive mode.
+
+<section-break />
+
+## Usage
+
+These are the main commands:
+
+<ul>
+  * `expensive`: show the list of domains on the account, and navigate pages (20 domains per page)
+  * `expensive` ``domain[.com][ domainN]``: check if domains are available. If the TLD is not supplied, the domain will be checked in 10 top zones. Can list any number of domains separated by spaces.
+  * `expensive` ``domain.com -i``: display information about the owned domain, including DNS records if using Namecheap DNS.
+  * `expensive` ``domain.com -r``: register the domain name via CLI. If applicable, will try to look up the coupon to get discount.
+  * `expensive` ``domain.com -g``: point domain's DNS host records to GitHub DNS to switch on _GitHub Pages_.
+</ul>
+
+For more information about the usage of `expensive`, please consult the
+[GitHub](https://github.com/artdecocode/expensive)
+project page, as well as its [Wiki](https://github.com/artdecocode/expensive/wiki).
+
+<p>
+<img src="img/demo.gif" alt="Expensive Domain Registration In CLI Demo">
+</p>

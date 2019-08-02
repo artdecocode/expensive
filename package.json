@@ -20,7 +20,9 @@
     "externs": "typal types/externs.js",
     "d": "typal types/index.js -c",
     "build": "yarn-s b doc",
-    "args": "argufy types/args/* -o src/bin/get-args.js"
+    "args": "argufy types/args/* -o src/bin/get-args.js",
+    "splendid": "splendid",
+    "web": "splendid -s"
   },
   "files": [
     "compile"
@@ -74,7 +76,8 @@
     "tablature": "^1.2.0",
     "usually": "^1.2.0",
     "yarn-s": "1.1.0",
-    "zoroaster": "^4.1.1-alpha"
+    "zoroaster": "^4.1.1-alpha",
+    "preact": "8.4.2"
   },
   "dependencies": {}
 }

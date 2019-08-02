@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <block-head />
+  <body>
+    <ajax-loader />
+    <div class="table">
+      <div class="left-column">
+        <div class="logo">
+          <img src="img/expensive.svg" alt="expensive logo" width="200">
+        </div>
+        <div class="badges">
+          <github-badge name="expensive" org="artdecocode" />
+          <npm-badge package="expensive"><em>Expensive</em></npm-badge>
+        </div>
+
+        ### Pages
+
+        <Pages />
+
+        ### Other Packages
+
+        <ul>
+          * [documentary](https://www.npmjs.com/package/documentary): <br>documentation pre-processor
+          * [zoroaster](https://www.npmjs.com/package/zoroaster): <br>context-testing framework
+          * [depack](https://www.npmjs.com/package/depack): <br>Node.JS compiler
+        </ul>
+      </div>
+      <div class="right-column" id="Content">
+        {{ content }}
+      </div>
+    </div>
+    <block-footer />
+  </body>
+</html>

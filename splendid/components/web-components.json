@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "tags": [{
+    "name": "github-badge",
+    "description": "The grey GitHub badge with the link to the GitHub page.",
+    "attributes": [{
+      "name": "org",
+      "description": "The GitHub organisation."
+    }, {
+      "name": "name",
+      "description": "The name of the repository."
+    }]
+  }]
+}

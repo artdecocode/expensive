@@ -1,0 +1,86 @@
+.SimpleBadge {
+  text-decoration: none;
+  display: inline-block !important;
+  color: white;
+  background-color: #545454;
+  border-radius: 2px;
+  padding: 0 0.2em 0 0.2em;
+}
+.hljs {
+  font-size: larger;
+}
+.right-column {
+  line-height: 1.5rem;
+}
+.table {
+  display: table;
+  margin: 1em auto 2em auto;
+}
+.table > .left-column {
+  display: inline-block;
+  text-align: center;
+}
+.table > .right-column {
+  display: inline-block;
+  vertical-align: top;
+  margin-left: 4em;
+}
+@media (min-width: 786px) {
+  .table > .right-column {
+    width: 550px;
+  }
+}
+@media (min-width: 986px) {
+  .table > .right-column {
+    width: 720px;
+    margin-left: 5em;
+  }
+}
+@media (max-width: 785px) {
+  .table {
+    display: block;
+  }
+  .table > .left-column {
+    display: block;
+    text-align: center;
+  }
+  .table > .right-column {
+    display: block;
+    margin-right: 4em;
+  }
+}
+@media (max-width: 520px) {
+  .table > .right-column {
+    margin-right: 2em;
+    margin-left: 2em;
+  }
+}
+
+.left-column ul {
+  list-style-type: none;
+  padding: 0;
+}
+.logo > img {
+  max-width: 170px;
+}
+
+.tm, .tm2 {
+  font-family: 'Source Code Pro', monospace;
+}
+.tm {
+  background-color: lightgreen;
+}
+.tm2 {
+  background-color: lightcoral;
+}
+body {
+  margin: 0;
+  font-family: 'Ruda', sans-serif;
+}
+footer {
+  padding: 1em;
+  border-top: 1px dashed;
+}
+.SectionBreak {
+  text-align: center;
+}

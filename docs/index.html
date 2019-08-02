@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Main Page</title>
+    <link href="styles/app.css" rel="stylesheet">
+    <!-- Custom Prism Style -->
+    <!-- <link href="styles/prism.css" rel="stylesheet"> -->
+    <link href="img/co.png" rel="shortcut icon">
+    <link href="https://fonts.googleapis.com/css?family=Ruda" rel="stylesheet">
+    <link href="css/npm-badge.css" rel="stylesheet">
+    <link href="css/loaders/inner-circles.css" rel="stylesheet">
+  </head>
+  <body>
+    <span class="inner-circles-loader" style="display:none;" id="SplendidLoader">Loading...</span>
+    <div class="table">
+      <div class="left-column">
+        <div class="logo">
+          <img src="img/expensive.svg" alt="expensive logo" width="200">
+        </div>
+        <div class="badges">
+          <a class="SimpleBadge" href="https://github.com/artdecocode/expensive">
+            GitHub</a>
+          <a title="A Namecheap.com Client To Register And Manage Domains From The CLI." class="NPMBadge" href="https://npmjs.com/package/expensive">
+            <span class="name"><em>Expensive</em></span><span class="version">2.0.1</span></a>
+        </div>
+
+        <h3>Pages</h3>
+
+        <ul class="AjaxNav"><li class="Active"><a data-file="index" href="/">Main Page</a></li></ul>
+
+        <h3>Other Packages</h3>
+
+        <ul>
+          <li><a href="https://www.npmjs.com/package/documentary">
+   documentary</a>: <br>documentation pre-processor</li>
+          <li><a href="https://www.npmjs.com/package/zoroaster">
+   zoroaster</a>: <br>context-testing framework</li>
+          <li><a href="https://www.npmjs.com/package/depack">
+   depack</a>: <br>Node.JS compiler</li>
+        </ul>
+      </div>
+      <div class="right-column" id="Content">
+        <h1>Expensive: CLI Domain Manager</h1>
+        
+        Expensive is a tool that provides access to <a href="https://namecheap.com">
+           namecheap.com</a> service via
+        the CLI. It can be used to quickly retrieve the list of registered domains, view more precise
+        information about each of them, update host records by pointing the Apex domain to GitHub DNS
+        servers to enable GitHub pages integration, and also register domains.
+        
+        <p class="SectionBreak">
+          <a title="Back To Top" href="#top">
+            <img src="section-breaks/0.svg" alt="Back To Top"></a>
+        </p>
+        
+        <h2>Installation & Setup</h2>
+        
+        <em>Expensive</em> can be installed globally, and it has 0 dependencies. Use the following commands:
+        
+        <p><span class="tm2">yarn</span> <span class="tm">global add expensive</span></p>
+        <p><span class="tm2">npm</span> <span class="tm">i -g expensive</span></p>
+        
+        You will need the Namecheap account, so create one now (affiliate link, thank you 😊)!
+        
+        <p>
+          <a href="https://bit.ly/31boSJg">
+            <img style="max-width:100%" src="img/nc.gif" alt="Cheap domain registration at namecheap.">
+            </p></a>
+        
+        Then go to your <em>Profile</em> > <em>Tools</em> > <em>API Access</em> and apply for an API key.
+        If you don't receive with soon, contact support to help you get
+        access activated. Once the API key is ready, <span class="tm">expensive</span> can be initialised
+        by running it, and answering configuration questions in interactive mode.
+        
+        <p class="SectionBreak">
+          <a title="Back To Top" href="#top">
+            <img src="section-breaks/1.svg" alt="Back To Top"></a>
+        </p>
+        
+        <h2>Usage</h2>
+        
+        These are the main commands:
+        
+        <ul>
+          <li><span class="tm">expensive</span>: show the list of domains on the account, and navigate pages (20 domains per page)</li>
+          <li><span class="tm">expensive</span> <span class="tm2">domain[.com][ domainN]</span>: check if domains are available. If the TLD is not supplied, the domain will be checked in 10 top zones. Can list any number of domains separated by spaces.</li>
+          <li><span class="tm">expensive</span> <span class="tm2">domain.com -i</span>: display information about the owned domain, including DNS records if using Namecheap DNS.</li>
+          <li><span class="tm">expensive</span> <span class="tm2">domain.com -r</span>: register the domain name via CLI. If applicable, will try to look up the coupon to get discount.</li>
+          <li><span class="tm">expensive</span> <span class="tm2">domain.com -g</span>: point domain's DNS host records to GitHub DNS to switch on <em>GitHub Pages</em>.</li>
+        </ul>
+        
+        For more information about the usage of <span class="tm">expensive</span>, please consult the
+        <a href="https://github.com/artdecocode/expensive">
+          GitHub</a>
+        project page, as well as its <a href="https://github.com/artdecocode/expensive/wiki">
+           Wiki</a>.
+        
+        <p>
+          <img src="img/demo.gif" alt="Expensive Domain Registration In CLI Demo">
+        </p>
+      </div>
+    </div>
+    <footer>
+      &copy; <a href="https://expensive.page">Expensive</a>, by <a href="https://artd.eco">Art Deco</a> 2019. Supported by <a href="https://technation.sucks">Tech Nation Visa Sucks</a>.
+    </footer>
+    <script src="js/ajax-loader.js"></script>
+    <script>window.AjaxLoader()</script>
+  </body>
+</html>

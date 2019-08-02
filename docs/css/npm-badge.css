@@ -1,0 +1,17 @@
+.NPMBadge {
+  text-decoration: none;
+  display: inline-block !important;
+  color: white;
+}
+.NPMBadge > span {
+  padding: 0 0.2em 0 0.2em;
+}
+.NPMBadge > .name {
+  margin-top: 1em;
+  background-color: #545454;
+  border-radius: 2px 0 0 2px;
+}
+.NPMBadge > .version {
+  background-color: #c12127;
+  border-radius: 0 2px 2px 0;
+}

@@ -1,6 +1,17 @@
 {
-  "extends": "artdeco",
+  "extends": [
+    "a",
+    "r",
+    "t",
+    "d",
+    "e",
+    "c",
+    "o",
+    "plugin:react/recommended"
+  ],
   "rules": {
-    "quote-props": "off"
+    "quote-props": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 }
