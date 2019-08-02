@@ -15,7 +15,7 @@ const config = {
   ],
   output: BUILD_DIR,
   // to generate sitemaps:
-  /* url: https://website.github.io/splendid */
+  url: 'https://expensive.page',
 }
 
 export default config
