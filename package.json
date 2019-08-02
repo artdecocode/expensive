@@ -1,6 +1,6 @@
 {
   "name": "expensive",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Namecheap.com Client To Register And Manage Domains From The CLI.",
   "scripts": {
     "t": "SANDBOX=1 zoroaster -a -t 100000",
