@@ -25,10 +25,10 @@ export default class Context {
       .trim()
   }
   static get BIN() {
-    const b = 'build/bin/expensive'
-    if (TEST_BUILD) console.log('Testing BUILD %s', c(b, 'green'))
-    return TEST_BUILD == 'test-build' ? b : 'src/bin'
+    const b = 'compile/bin/expensive'
+    if (TEST_BUILD) console.log('Testing COMPILE %s', c(b, 'green'))
+    return TEST_BUILD ? b : 'src/bin'
   }
 }
 
-const TEST_BUILD = process.env.ALAMODE_ENV == 'test-build'
+const TEST_BUILD = process.env.ALAMODE_ENV == 'test-compile'
