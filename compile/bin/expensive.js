@@ -113,7 +113,7 @@ const va = a => {
         r.destroy();
       } else {
         var v = va(r);
-        r.on("data", H => m += H.byteLength);
+        r.on("data", I => m += I.byteLength);
         r = v ? r.pipe(ua()) : r;
         l = await qa(r, {binary:e});
         n = l.length;
@@ -176,9 +176,9 @@ const za = q("aqt"), A = async(a, b = {}) => {
     "Content-Length" in u.headers || (u.headers["Content-Length"] = Buffer.byteLength(x));
   }
   !f || "Accept-Encoding" in u.headers || (u.headers["Accept-Encoding"] = "gzip, deflate");
-  const {body:H, headers:D, byteLength:ra, statusCode:sb, statusMessage:tb, G:sa, w:ta} = await ya(r, u, {data:x, justHeaders:h, binary:g, i:b});
+  const {body:I, headers:D, byteLength:ra, statusCode:sb, statusMessage:tb, G:sa, w:ta} = await ya(r, u, {data:x, justHeaders:h, binary:g, i:b});
   za("%s %s B%s", a, ra, `${ra != sa ? ` (raw ${sa} B)` : ""}`);
-  return {body:ta ? ta : H, headers:D, statusCode:sb, statusMessage:tb};
+  return {body:ta ? ta : I, headers:D, statusCode:sb, statusMessage:tb};
 };
 const {stringify:Aa} = querystring;
 function B(a, b, c) {
@@ -479,7 +479,7 @@ const lb = async(a, b = {}) => {
   ({body:a} = await A(a, b));
   return a;
 };
-async function I(a, b, c = {}) {
+async function H(a, b, c = {}) {
   {
     const {headers:d = {}, ...e} = c;
     c = {...e, headers:{...a.headers, ...d, Cookie:a.Cookie}};
@@ -497,19 +497,19 @@ class nb {
     this.cookies = {};
   }
   async rqt(a, b = {}) {
-    ({body:a} = await I(this, a, b));
+    ({body:a} = await H(this, a, b));
     return a;
   }
   async bqt(a, b = {}) {
-    ({body:a} = await I(this, a, {...b, binary:!0}));
+    ({body:a} = await H(this, a, {...b, binary:!0}));
     return a;
   }
   async jqt(a, b = {}) {
-    ({body:a} = await I(this, a, b));
+    ({body:a} = await H(this, a, b));
     return a;
   }
   async aqt(a, b = {}) {
-    return await I(this, a, b);
+    return await H(this, a, b);
   }
   get Cookie() {
     return ob(this.cookies);
@@ -1219,7 +1219,10 @@ const ed = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, fd = as
   return {A:a, table:b};
 };
 async function nd(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
-  const f = (await a.domains.check(b))[0], {Available:g, EapFee:h, PremiumRegistrationPrice:k, Domain:l, IsPremiumName:m} = f;
+  const f = await X(`Confirming availability of ${b}`, async() => {
+    const [v] = await a.domains.check(b);
+    return v;
+  }), {Available:g, EapFee:h, PremiumRegistrationPrice:k, Domain:l, IsPremiumName:m} = f;
   if (!g) {
     throw Error(`Domain ${l} is not available.`);
   }
@@ -1243,8 +1246,8 @@ async function nd(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
     try {
       ({ChargedAmount:x} = await X("Registering the domain", async() => a.domains.create({address:u, domain:b, years:e, promo:p, ...m ? {premium:{P:!0, R:parseFloat(k), EapFee:parseFloat(h)}} : {}})));
     } catch (v) {
-      const {f:H = {}, message:D} = v;
-      ({Number:c} = H);
+      const {f:I = {}, message:D} = v;
+      ({Number:c} = I);
       2515610 == c ? (console.warn("[!] Bug: cannot register a premium with Eap."), console.warn(" -  Response when requesting w/out EapFee:"), console.log("    %s", D)) : /No free connections to registry./.test(D) ? (console.log("    %s", D), console.log("Please try again.")) : 3028166 == c && (console.warn("[!] Possible Bug (e.g., after sending without Eap)"), console.log("    %s", D));
       throw v;
     }

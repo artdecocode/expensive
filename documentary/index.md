@@ -14,6 +14,8 @@
 ]
 ```
 
+![demo.gif][Expensive Demo Of Registering A Domain Name In CLI]
+
 ## Table Of Contents
 
 %TOC%

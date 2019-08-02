@@ -11,6 +11,8 @@
 | Yarn            | yarn global add expensive |
 | Npm             | npm i -g expensive        |
 
+![demo.gif][Expensive Demo Of Registering A Domain Name In CLI]
+
 ## Table Of Contents
 
 - [Table Of Contents](#table-of-contents)

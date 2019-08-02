@@ -62,7 +62,7 @@ OK: y
 /**/
 
 /* stdout */
-Apply coupon HEATUP5 (y/n)? [y] y
+Apply coupon STEAMYDEALZ (y/n)? [y] y
 
 Price            8.88
 Without Promo    8.88

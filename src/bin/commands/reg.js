@@ -197,7 +197,12 @@ export default async function register(nc, {
   sandbox,
   years = 1,
 }) {
-  const INFO = (await nc.domains.check(domain))[0]
+  const INFO = /** @type {!_namecheap.DomainCheck} */ (await loading(
+    `Confirming availability of ${domain}`,
+    async () => {
+      const [res] = await nc.domains.check(domain)
+      return res
+    }))
   const { Available, EapFee, PremiumRegistrationPrice, Domain, IsPremiumName,
   } = INFO
   // LOG_OBJ(INFO)
@@ -316,4 +321,8 @@ const printAddress = ({
 /**
  * @suppress {nonStandardJsDocs}
  * @typedef {import('@rqt/namecheap/types/typedefs/domains').Create} _namecheap.Create
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('@rqt/namecheap/types/typedefs/domains').DomainCheck} _namecheap.DomainCheck
  */
