@@ -14,7 +14,7 @@
 ]
 ```
 
-![demo.gif][Expensive Demo Of Registering A Domain Name In CLI]
+![Expensive Demo Of Registering A Domain Name In CLI](demo.gif)
 
 ## Table Of Contents
 

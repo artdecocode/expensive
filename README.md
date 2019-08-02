@@ -11,7 +11,7 @@
 | Yarn            | yarn global add expensive |
 | Npm             | npm i -g expensive        |
 
-![demo.gif][Expensive Demo Of Registering A Domain Name In CLI]
+![Expensive Demo Of Registering A Domain Name In CLI](demo.gif)
 
 ## Table Of Contents
 
