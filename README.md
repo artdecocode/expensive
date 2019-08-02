@@ -1,10 +1,10 @@
-[![namecheap](https://raw.githubusercontent.com/artdecocode/expensive/HEAD/images/nc.gif)](https://nameexpensive.com)
+[![namecheap](https://raw.githubusercontent.com/artdecocode/expensive/HEAD/images/nc.gif)](https://bit.ly/31boSJg)
 
 # expensive
 
 [![npm version](https://badge.fury.io/js/expensive.svg)](https://npmjs.org/package/expensive)
 
-`expensive` is a [namecheap.com](https://nameexpensive.com) client to check domain availability, obtain WHOIS information, register domains, update DNS hosts and control domains' name servers via the CLI. It allows to login using 2-factor authentication and white-list IP addresses without having to use the web interface. The package uses the [API](https://github.com/rqt/namecheap) and [Web API](https://github.com/rqt/namecheap-web) libraries to make requests.
+`expensive` is a [namecheap.com](https://bit.ly/31boSJg) client to check domain availability, obtain WHOIS information, register domains, update DNS hosts and control domains' name servers via the CLI. It allows to login using 2-factor authentication and white-list IP addresses without having to use the web interface. The package uses the [API](https://github.com/rqt/namecheap) and [Web API](https://github.com/rqt/namecheap-web) libraries to make requests.
 
 | Package Manager |          Command          |
 | --------------- | ------------------------- |
