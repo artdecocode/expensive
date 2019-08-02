@@ -73,9 +73,6 @@ A CLI application to access namecheap.com domain name registrar API.
 	                 	the API key and ip address.
 	--info, -i       	Show the information for the domain.
 	--register, -r   	Register the domain.
-	--github, -g     	Setup GitHub pages for the apex domain as per docs
-	                 	https://git.io/fjyr7 Also removes the parking page
-	                 	and URL redirect. All other hosts are kept itact.
 	--whois, -w      	Display brief WHOIS data.
 	--Whois          	Display full WHOIS data.
 	--coupon         	Find this month's coupon.
@@ -96,6 +93,27 @@ Print the list of domains belonging to the account.
 	--filter, -F  	Filter by this word.
 	--pageSize, -P	The page size.
 	--type, -T    	Domain type (ALL, EXPIRING, EXPIRED).
+
+expensive domain.com [--TXT|CNAME|address 10.10.10.10] ...
+Manipulate DNS Records.
+
+	--record    	The record type. Can be one of the following:
+	            	A, AAAA, ALIAS, CAA, CNAME, MX, MXE,
+	            	NS, TXT, URL, URL301, FRAME.
+	--TXT       	Add a TXT record with this address to the domain.
+	            	Alias for --type TXT --address <TXT>.
+	--CNAME     	Add a CNAME record with this address to the domain.
+	            	--type CNAME --address <CNAME>.
+	--ttl       	When adding host records, sets the _TTL_.
+	            	By default, namecheap sets 1800.
+	--host      	The host name for adding dns records.
+	            	Default: @.
+	--address   	The address of the new host record.
+	--mxpref    	MX preference for hosts. Applicable to MX records only.
+	--github, -g	Setup GitHub pages for the apex domain as per docs
+	            	https://git.io/fjyr7 Also removes the parking page
+	            	and URL redirect. All other hosts are kept itact.
+	--delete    	Remove the specified host record.
 
 expensive domain.com -r [-p PROMO]
 Register the domain name. Expensive will attempt to find the promo

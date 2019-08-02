@@ -1,10 +1,18 @@
 import usually from 'usually'
 import { reduceUsage } from 'argufy'
-import { c } from 'erte'
-import { argsConfig, argsConfigCheck, argsConfigRegister, argsConfigInfo } from './get-args'
+import { c, b } from 'erte'
+import { argsConfig, argsConfigCheck, argsConfigRegister, argsConfigInfo, argsConfigDns } from './get-args'
 import { allZones } from '../lib'
 
 const l = allZones.join(', ')
+
+const ticks = (usage) => {
+  return Object.entries(usage).reduce((acc, [key, val]) => {
+    const v = val.replace(/`(.+?)`/g, (m, vl) => `\x1b[1m${vl}\x1b[0m`)
+    acc[key] = v
+    return acc
+  }, {})
+}
 
 export default () => {
   const def = usually({
@@ -23,6 +31,11 @@ Also displays DNS hosts if using Namecheap's DNS.`,
 Print the list of domains belonging to the account.`,
     usage: reduceUsage(argsConfigInfo),
   })
+  const dns = usually({
+    description: c('expensive domain.com [--TXT|CNAME|address 10.10.10.10] ...', 'cyan') + `
+Manipulate DNS Records.`,
+    usage: ticks(reduceUsage(argsConfigDns)),
+  })
   const reg = usually({
     description: c('expensive domain.com -r [-p PROMO]', 'green') + `
 Register the domain name. Expensive will attempt to find the promo
@@ -36,7 +49,7 @@ ${l} are checked.`,
     usage: reduceUsage(argsConfigCheck),
   })
 
-  const u = [def, info, list, reg, check].join('\n')
+  const u = [def, info, list, dns, reg, check].join('\n')
 
   return u
 }
