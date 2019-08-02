@@ -45,7 +45,7 @@ export default async function (client, domain) {
     return acc
   }, {})
 
-  const y = inspect(host, { colors: true })
+  const y = inspect(host, { colors: true, breakLength: 50, compact: false })
 
   if (_delete) {
     const prevLength = newhosts.length

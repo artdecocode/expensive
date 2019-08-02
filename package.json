@@ -15,7 +15,7 @@
     "e": "alanode",
     "man": "man man/doc.1",
     "doc": "NODE_DEBUG=doc doc -o README.md",
-    "wiki": "NODE_DEBUG=doc doc wiki -W ../expensive.wiki",
+    "wiki": "SANDBOX=1 NODE_DEBUG=doc doc wiki -W ../expensive.wiki",
     "example/": "yarn e example/simple.js",
     "externs": "typal types/externs.js",
     "d": "typal types/index.js -c",
