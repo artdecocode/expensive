@@ -36,17 +36,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Expensive1",
+      "name": "Launch Dev",
       "program": "${workspaceFolder}/src/bin/index.js",
       "env": {
         "NODE_DEBUG": "expensive,aqt",
         "SANDBOX": "1",
-        "DEBUG": "1",
       },
       "args": [
-        // "aasdfasdfasd123123hjkasdyu.com",
-        // "-r",
-        "expensive-test-info", "-z", "bz,org", "-f"
+        "expensive-demo.com",
+        "--TXT",
+        "google-site-verification=YtZVj7zCv0Xf4rPmon2wB0bxWXshKmgKq8dL8WgRXV4",
+        "--delete"
       ],
       "console": "integratedTerminal",
       "skipFiles": [

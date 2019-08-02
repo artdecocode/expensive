@@ -21,11 +21,6 @@ export const argsConfig = {
     boolean: true,
     short: 'r',
   },
-  'github': {
-    description: 'Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.',
-    boolean: true,
-    short: 'g',
-  },
   'whois': {
     description: 'Display brief WHOIS data.',
     boolean: true,
@@ -85,13 +80,6 @@ export const _info = /** @type {boolean} */ (args['info'])
 export const _register = /** @type {boolean} */ (args['register'])
 
 /**
- * Setup GitHub pages for the apex domain as per docs
-    https://git.io/fjyr7 Also removes the parking page
-    and URL redirect. All other hosts are kept itact.
- */
-export const _github = /** @type {boolean} */ (args['github'])
-
-/**
  * Display brief WHOIS data.
  */
 export const _whois = /** @type {boolean} */ (args['whois'])
@@ -149,6 +137,93 @@ export const _free = /** @type {boolean} */ (argsCheck['free'])
  */
 export const _zones = /** @type {string} */ (argsCheck['zones'])
 
+export const argsConfigDns = {
+  'record': {
+    description: 'The record type. Can be one of the following:\n`A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,\n`NS`, `TXT`, `URL`, `URL301`, `FRAME`.',
+  },
+  'TXT': {
+    description: 'Add a TXT record with this address to the domain.\nAlias for `--type TXT --address <TXT>`.',
+  },
+  'CNAME': {
+    description: 'Add a CNAME record with this address to the domain.\n`--type CNAME --address <CNAME>`.',
+  },
+  'ttl': {
+    description: 'When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800.',
+  },
+  'host': {
+    description: 'The host name for adding dns records.',
+    default: '@',
+  },
+  'address': {
+    description: 'The address of the new host record.',
+  },
+  'mxpref': {
+    description: 'MX preference for hosts. Applicable to MX records only.',
+  },
+  'github': {
+    description: 'Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.',
+    boolean: true,
+    short: 'g',
+  },
+  'delete': {
+    description: 'Remove the specified host record.',
+    boolean: true,
+  },
+}
+const argsDns = argufy(argsConfigDns, [process.argv[0], process.argv[1], ...argsCheck._argv])
+
+/**
+ * The record type. Can be one of the following:
+    `A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,
+    `NS`, `TXT`, `URL`, `URL301`, `FRAME`.
+ */
+export const _record = /** @type {string} */ (argsDns['record'])
+
+/**
+ * Add a TXT record with this address to the domain.
+    Alias for `--type TXT --address <TXT>`.
+ */
+export const _TXT = /** @type {string} */ (argsDns['TXT'])
+
+/**
+ * Add a CNAME record with this address to the domain.
+    `--type CNAME --address <CNAME>`.
+ */
+export const _CNAME = /** @type {string} */ (argsDns['CNAME'])
+
+/**
+ * When adding host records, sets the _TTL_.
+    By default, namecheap sets 1800.
+ */
+export const _ttl = /** @type {string} */ (argsDns['ttl'])
+
+/**
+ * The host name for adding dns records. Default `@`.
+ */
+export const _host = /** @type {string} */ (argsDns['host'] || '@')
+
+/**
+ * The address of the new host record.
+ */
+export const _address = /** @type {string} */ (argsDns['address'])
+
+/**
+ * MX preference for hosts. Applicable to MX records only.
+ */
+export const _mxpref = /** @type {string} */ (argsDns['mxpref'])
+
+/**
+ * Setup GitHub pages for the apex domain as per docs
+    https://git.io/fjyr7 Also removes the parking page
+    and URL redirect. All other hosts are kept itact.
+ */
+export const _github = /** @type {boolean} */ (argsDns['github'])
+
+/**
+ * Remove the specified host record.
+ */
+export const _delete = /** @type {boolean} */ (argsDns['delete'])
+
 export const argsConfigInfo = {
   'sort': {
     description: 'Sort by this field (name, expire, create).',
@@ -172,7 +247,7 @@ export const argsConfigInfo = {
     short: 'T',
   },
 }
-const argsInfo = argufy(argsConfigInfo, [process.argv[0], process.argv[1], ...argsCheck._argv])
+const argsInfo = argufy(argsConfigInfo, [process.argv[0], process.argv[1], ...argsDns._argv])
 
 /**
  * Sort by this field (name, expire, create).

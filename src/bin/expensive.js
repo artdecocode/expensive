@@ -13,11 +13,14 @@ import Errors from './errors'
 import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
   _info, _register, _promo, _coupon,
   _whois, _Whois, _free, _zones, _github, _years,
-  _sort, _desc, _filter, _type, _pageSize } from './get-args'
+  _sort, _desc, _filter, _type, _pageSize,
+  _record, _CNAME, _TXT,
+} from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
 import Info from './commands/info'
 import coupon from './commands/coupon'
+import DNS from './commands/dns'
 
 const version = require('../../package.json')['version']
 
@@ -60,6 +63,8 @@ const run = async (settings, sandbox = false) => {
     })
 
     const [domain] = _domains
+    if (_record || _CNAME || _TXT)
+      return await DNS(nc, domain)
     if (_github) return await GitHub(nc, domain)
     if (_info) return await Info(nc, domain)
     if (_register) return await Register(nc, {

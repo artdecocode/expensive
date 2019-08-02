@@ -16,12 +16,6 @@
     Register the domain.
   </arg>
 
-  <arg boolean name="github" short="g">
-    Setup GitHub pages for the apex domain as per docs
-    https://git.io/fjyr7 Also removes the parking page
-    and URL redirect. All other hosts are kept itact.
-  </arg>
-
   <arg boolean name="whois" short="w">
     Display brief WHOIS data.
   </arg>

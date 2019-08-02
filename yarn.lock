@@ -227,10 +227,10 @@ frame-of-mind@^1.2.3:
   dependencies:
     paddys "^1.2.0"
 
-indicatrix@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/indicatrix/-/indicatrix-1.2.0.tgz#4aad22b659dc3d84cded9e7c1914546cea4ce1d3"
-  integrity sha512-6FYw+MQjxAqz2mMnmtcMcMjpCRwdJRSVng0xG9unLH/CqYVbr2Xjf/9HXIFgA9JLmNpi1l+WzsmKRDMECcw+KA==
+indicatrix@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/indicatrix/-/indicatrix-1.3.0.tgz#afa0a148f2dc260da56b8ace36d213ab7ddfb254"
+  integrity sha512-Z54tO3QPXVAVvJZkCYhHIoB8DI+eGLHEQSseN3M0QGmyv0QLDjhKLDTj7PTS/sAB3MfOPVNxa659b3fyM9dRlQ==
 
 makepromise@^3.0.3, makepromise@^3.1.0:
   version "3.1.0"

@@ -197,12 +197,11 @@ export default async function register(nc, {
   sandbox,
   years = 1,
 }) {
-  const INFO = /** @type {!_namecheap.DomainCheck} */ (await loading(
-    `Confirming availability of ${domain}`,
+  const INFO = await loading(`Confirming availability of ${domain}`,
     async () => {
       const [res] = await nc.domains.check(domain)
       return res
-    }))
+    })
   const { Available, EapFee, PremiumRegistrationPrice, Domain, IsPremiumName,
   } = INFO
   // LOG_OBJ(INFO)

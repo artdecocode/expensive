@@ -1,12 +1,6 @@
 {
   "extends": [
-    "a",
-    "r",
-    "t",
-    "d",
-    "e",
-    "c",
-    "o",
+    "artdeco",
     "plugin:react/recommended"
   ],
   "rules": {

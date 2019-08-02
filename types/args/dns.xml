@@ -1,0 +1,40 @@
+<arguments name="Dns">
+  <arg name="record">
+    The record type. Can be one of the following:
+    `A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,
+    `NS`, `TXT`, `URL`, `URL301`, `FRAME`.
+  </arg>
+
+  <arg name="TXT">
+    Add a TXT record with this address to the domain.
+    Alias for `--type TXT --address <TXT>`.
+  </arg>
+  <arg name="CNAME">
+    Add a CNAME record with this address to the domain.
+    `--type CNAME --address <CNAME>`.
+  </arg>
+
+  <arg name="ttl">
+    When adding host records, sets the _TTL_.
+    By default, namecheap sets 1800.
+  </arg>
+  <arg name="host" default="@">
+    The host name for adding dns records.
+  </arg>
+  <arg name="address">
+    The address of the new host record.
+  </arg>
+  <arg name="mxpref">
+    MX preference for hosts. Applicable to MX records only.
+  </arg>
+
+  <arg boolean name="github" short="g">
+    Setup GitHub pages for the apex domain as per docs
+    https://git.io/fjyr7 Also removes the parking page
+    and URL redirect. All other hosts are kept itact.
+  </arg>
+
+  <arg boolean name="delete">
+    Remove the specified host record.
+  </arg>
+</arguments>
