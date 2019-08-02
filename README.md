@@ -20,7 +20,9 @@
 - [Result Log](#result-log)
 - [Copyright](#copyright)
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/0.svg?sanitize=true">
+</a></p>
 
 ## Configuration
 
@@ -39,13 +41,17 @@ Client IP is required for requests, but if not given, it will be acquired automa
 
 The last 3 digits will be used to during the second-stage of the 2-factor web auth required to white-list unknown IP addresses.
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/1.svg?sanitize=true">
+</a></p>
 
 ## Sandbox
 
 To use the `sandbox` version of the app for testing, either the `SANDBOX` environmental variable needs to be set, or `--sandbox` or `-s` flags should be passed.
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/2.svg?sanitize=true">
+</a></p>
 
 ## CLI
 
@@ -117,7 +123,9 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 | `expensive --version`               | Print version.                                                  | <kbd>[Version](../../wiki/Version)</kbd>                                           |
 | `expensive --help`                  | Show help.                                                      | <kbd>[Usage](../../wiki/Usage)</kbd>                                               |
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/3.svg?sanitize=true">
+</a></p>
 
 
 
@@ -138,7 +146,9 @@ com, net, org, biz, co, cc, io, bz, nu, app, page are checked.
 
 A log of search queries and found free domains is written to `HOMEDIR/.expensive.log`.
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/4.svg?sanitize=true">
+</a></p>
 
 ## Copyright
 
@@ -161,4 +171,6 @@ A log of search queries and found free domains is written to `HOMEDIR/.expensive
   </tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/-1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/-1.svg?sanitize=true">
+</a></p>
