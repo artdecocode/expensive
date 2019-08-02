@@ -19,17 +19,15 @@
     "example/": "yarn e example/simple.js",
     "externs": "typal types/externs.js",
     "d": "typal types/index.js -c",
-    "b": "alamode src -o build -s -i bin/index.js,bin/.eslintrc,lib/print/.eslintrc",
     "build": "yarn-s b doc",
     "args": "argufy types/args/* -o src/bin/get-args.js"
   },
   "files": [
-    "build"
+    "compile"
   ],
   "bin": {
-    "expensive": "build/bin/expensive.js"
+    "expensive": "compile/bin/expensive.js"
   },
-  "man": "./man/doc.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/artdecocode/expensive.git"

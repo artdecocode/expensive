@@ -1,3 +1,9 @@
+## 2 August 2019
+
+### [2.0.0](https://github.com/artdecocode/expensive/compare/v1.7.0...v2.0.0)
+
+- [package] Compile with [_Depack_](https://compiler.page).
+
 ## 28 July 2019
 
 ### [1.7.0](https://github.com/artdecocode/expensive/compare/v1.6.0...v1.7.0)
