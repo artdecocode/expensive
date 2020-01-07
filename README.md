@@ -97,25 +97,25 @@ Print the list of domains belonging to the account.
 expensive domain.com [--record A] [--TXT|A|CNAME|address 10.10.10.10] [--host "*"]...
 Manipulate DNS Records.
 
-	--record    	The record type. Can be one of the following:
-	            	A, AAAA, ALIAS, CAA, CNAME, MX, MXE,
-	            	NS, TXT, URL, URL301, FRAME.
-	--TXT       	Add a TXT record with this address to the domain.
-	            	Alias for --type TXT --address <TXT>.
-	--A         	Add an A record with this address to the domain.
-	            	Alias for --type A --address <A>.
-	--CNAME     	Add a CNAME record with this address to the domain.
-	            	--type CNAME --address <CNAME>.
-	--ttl       	When adding host records, sets the _TTL_.
-	            	By default, namecheap sets 1800.
-	--host      	The host name for adding dns records.
-	            	Default: @.
-	--address   	The address of the new host record.
-	--mxpref    	MX preference for hosts. Applicable to MX records only.
-	--github, -g	Setup GitHub pages for the apex domain as per docs
-	            	https://git.io/fjyr7 Also removes the parking page
-	            	and URL redirect. All other hosts are kept itact.
-	--delete, -d	Remove the specified host record.
+	--record       	The record type. Can be one of the following:
+	               	A, AAAA, ALIAS, CAA, CNAME, MX, MXE,
+	               	NS, TXT, URL, URL301, FRAME.
+	--TXT, -TXT    	Add a TXT record with this address to the domain.
+	               	Alias for --record TXT --address <TXT>.
+	--A, -A        	Add an A record with this address to the domain.
+	               	Alias for --record A --address <A>.
+	--CNAME, -CNAME	Add a CNAME record with this address to the domain.
+	               	--record CNAME --address <CNAME>.
+	--ttl          	When adding host records, sets the _TTL_.
+	               	By default, namecheap sets 1800.
+	--host         	The host name for adding dns records.
+	               	Default: @.
+	--address      	The address of the new host record.
+	--mxpref       	MX preference for hosts. Applicable to MX records only.
+	--github, -g   	Setup GitHub pages for the apex domain as per docs
+	               	https://git.io/fjyr7 Also removes the parking page
+	               	and URL redirect. All other hosts are kept itact.
+	--delete, -d   	Remove the specified host record.
 
 expensive domain.com -r [-p PROMO]
 Register the domain name. Expensive will attempt to find the promo
