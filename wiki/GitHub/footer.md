@@ -1,1 +1,1 @@
-%FORK-fs src/bin expensive-github.com -s -i%
+%FORK-fs src/bin expensive-github.com -i%

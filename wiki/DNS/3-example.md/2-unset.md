@@ -1,4 +1,4 @@
-_Unsetting the record is performed in the same way, but by adding `-d` options _
+_Unsetting the record is performed in the same way, but by adding the `-d` option:_
 
 ```console
 wiki:~$ expensive expensive-demo.com --record AAAA --address 10.10.10.10 --ttl 3600 -d
