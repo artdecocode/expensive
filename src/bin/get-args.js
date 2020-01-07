@@ -74,12 +74,15 @@ export const argsConfigDns = {
   },
   'TXT': {
     description: 'Add a TXT record with this address to the domain.\nAlias for `--record TXT --address <TXT>`.',
+    short: 'TXT',
   },
   'A': {
     description: 'Add an `A` record with this address to the domain.\nAlias for `--record A --address <A>`.',
+    short: 'A',
   },
   'CNAME': {
     description: 'Add a CNAME record with this address to the domain.\n`--record CNAME --address <CNAME>`.',
+    short: 'CNAME',
   },
   'ttl': {
     description: 'When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800.',

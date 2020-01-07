@@ -55,35 +55,35 @@ test.page     no
 /**/
 
 ## --info
-expensive-test-info.bz --info
+expensive-test-info-1.bz --info
 
 /* stdout */
-Created:        10/06/2018
-Expires on:     10/07/2019
+Created:        01/07/2020
+Expires on:     01/07/2021
 Whois enabled:  True
 Whois email:    zoidberg@futurama.bz
 DNS:            FREE
 Nameservers:    dns1.registrar-servers.com, dns2.registrar-servers.com
-Created:        10/06/2018
+Created:        01/07/2020
 
 Name  Type   Address
 www   CNAME  parkingpage.namecheap.com.
-@     URL    http://www.expensive-test-info.bz?from=@
+@     URL    http://www.expensive-test-info-1.bz?from=@
 /**/
 
 ## -i
-expensive-test-info.bz -i
+expensive-test-info-1.bz -i
 
 /* stdout */
-Created:        10/06/2018
-Expires on:     10/07/2019
+Created:        01/07/2020
+Expires on:     01/07/2021
 Whois enabled:  True
 Whois email:    zoidberg@futurama.bz
 DNS:            FREE
 Nameservers:    dns1.registrar-servers.com, dns2.registrar-servers.com
-Created:        10/06/2018
+Created:        01/07/2020
 
 Name  Type   Address
 www   CNAME  parkingpage.namecheap.com.
-@     URL    http://www.expensive-test-info.bz?from=@
+@     URL    http://www.expensive-test-info-1.bz?from=@
 /**/

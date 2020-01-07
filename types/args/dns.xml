@@ -5,15 +5,15 @@
     `NS`, `TXT`, `URL`, `URL301`, `FRAME`.
   </arg>
 
-  <arg name="TXT">
+  <arg name="TXT" short="TXT">
     Add a TXT record with this address to the domain.
     Alias for `--record TXT --address <TXT>`.
   </arg>
-  <arg name="A">
+  <arg name="A" short="A">
     Add an `A` record with this address to the domain.
     Alias for `--record A --address <A>`.
   </arg>
-  <arg name="CNAME">
+  <arg name="CNAME" short="CNAME">
     Add a CNAME record with this address to the domain.
     `--record CNAME --address <CNAME>`.
   </arg>

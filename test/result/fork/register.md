@@ -7,7 +7,7 @@ OK: y
 /**/
 
 /* stdout */
-Apply coupon STEAMYDEALZ (y/n)? [y] n
+Apply coupon TLDEALZ01 (y/n)? [y] n
 
 Price            8.88
 Additional Cost  0.18

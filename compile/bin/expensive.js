@@ -12,7 +12,7 @@ const fs = require('fs');
 const assert = require('assert');
 const readline = require('readline');
 const path = require('path');             
-const {debuglog:q, inspect:aa} = util;
+const p = util.debuglog, aa = util.inspect;
 const ba = (a, b = 0, c = !1) => {
   if (0 === b && !c) {
     return a;
@@ -23,8 +23,8 @@ const ba = (a, b = 0, c = !1) => {
   ({callee:{caller:a}} = a);
   return a;
 };
-const {homedir:w} = os;
-const ea = /\s+at.*(?:\(|\s)(.*)\)?/, fa = /^(?:(?:(?:node|(?:internal\/[\w/]*|.*node_modules\/(?:IGNORED_MODULES)\/.*)?\w+)\.js:\d+:\d+)|native)/, ha = w(), ia = a => {
+const v = os.homedir;
+const ea = /\s+at.*(?:\(|\s)(.*)\)?/, fa = /^(?:(?:(?:node|(?:internal\/[\w/]*|.*node_modules\/(?:IGNORED_MODULES)\/.*)?\w+)\.js:\d+:\d+)|native)/, ha = v(), ia = a => {
   const {pretty:b = !1, ignoredModules:c = ["pirates"]} = {}, d = c.join("|"), e = new RegExp(fa.source.replace("IGNORED_MODULES", d));
   return a.replace(/\\/g, "/").split("\n").filter(f => {
     f = f.match(ea);
@@ -44,16 +44,16 @@ function ja(a, b, c = !1) {
     return Object.assign(f ? d : Error(), {message:h, stack:e});
   };
 }
-;function y(a) {
+;function w(a) {
   var {stack:b} = Error();
   const c = da(arguments);
   b = ca(b, a);
   return ja(c, b, a);
 }
-;const {request:ka} = https;
-const {request:la} = http;
-const {parse:ma} = url;
-const {Writable:na} = stream;
+;const ka = https.request;
+const la = http.request;
+const ma = url.parse;
+const na = stream.Writable;
 const oa = (a, b) => {
   b.once("error", c => {
     a.emit("error", c);
@@ -62,10 +62,10 @@ const oa = (a, b) => {
 };
 class pa extends na {
   constructor(a) {
-    const {binary:b = !1, rs:c = null, ...d} = a || {}, {i:e = y(!0), proxyError:f} = a || {}, g = (h, k) => e(k);
+    const {binary:b = !1, rs:c = null, ...d} = a || {}, {g:e = w(!0), proxyError:f} = a || {}, g = (h, k) => e(k);
     super(d);
     this.b = [];
-    this.B = new Promise((h, k) => {
+    this.w = new Promise((h, k) => {
       this.on("finish", () => {
         let l;
         b ? l = Buffer.concat(this.b) : l = this.b.join("");
@@ -76,8 +76,8 @@ class pa extends na {
         if (-1 == l.stack.indexOf("\n")) {
           g`${l}`;
         } else {
-          const m = ia(l.stack);
-          l.stack = m;
+          const n = ia(l.stack);
+          l.stack = n;
           f && g`${l}`;
         }
         k(l);
@@ -89,57 +89,52 @@ class pa extends na {
     this.b.push(a);
     c();
   }
-  get j() {
-    return this.B;
+  get h() {
+    return this.w;
   }
 }
-const qa = async(a, b = {}) => {
-  ({j:a} = new pa({rs:a, ...b, i:y(!0)}));
+const ta = async(a, b = {}) => {
+  ({h:a} = new pa({rs:a, ...b, g:w(!0)}));
   return await a;
 };
-const {createGunzip:ra} = zlib;
-const sa = a => {
-  ({"content-encoding":a} = a.headers);
-  return "gzip" == a;
-}, ta = (a, b, c = {}) => {
-  const {justHeaders:d, binary:e, i:f = y(!0)} = c;
-  let g, h, k, l, m = 0, n = 0;
-  c = (new Promise((p, t) => {
-    g = a(b, async r => {
-      ({headers:h} = r);
-      const {statusMessage:u, statusCode:x} = r;
-      k = {statusMessage:u, statusCode:x};
+const ua = zlib.createGunzip;
+const va = (a, b, c = {}) => {
+  const {justHeaders:d, binary:e, g:f = w(!0)} = c;
+  let g, h, k, l, n = 0, m = 0;
+  c = (new Promise((r, u) => {
+    g = a(b, async q => {
+      ({headers:h} = q);
+      k = {statusMessage:q.statusMessage, statusCode:q.statusCode};
       if (d) {
-        r.destroy();
+        q.destroy();
       } else {
-        var v = sa(r);
-        r.on("data", K => m += K.byteLength);
-        r = v ? r.pipe(ra()) : r;
-        l = await qa(r, {binary:e});
-        n = l.length;
+        var t = "gzip" == q.headers["content-encoding"];
+        q.on("data", x => n += x.byteLength);
+        q = t ? q.pipe(ua()) : q;
+        l = await ta(q, {binary:e});
+        m = l.length;
       }
-      p();
-    }).on("error", r => {
-      r = f(r);
-      t(r);
+      r();
+    }).on("error", q => {
+      q = f(q);
+      u(q);
     }).on("timeout", () => {
       g.abort();
     });
-  })).then(() => ({body:l, headers:h, ...k, G:m, byteLength:n, w:null}));
-  return {H:g, j:c};
+  })).then(() => ({body:l, headers:h, ...k, F:n, byteLength:m, u:null}));
+  return {G:g, h:c};
 };
-const ua = (a = {}) => Object.keys(a).reduce((b, c) => {
+const wa = (a = {}) => Object.keys(a).reduce((b, c) => {
   const d = a[c];
   c = `${encodeURIComponent(c)}=${encodeURIComponent(d)}`;
   return [...b, c];
-}, []).join("&").replace(/%20/g, "+"), ya = async(a, b, {data:c, justHeaders:d, binary:e, i:f = y(!0)}) => {
-  const {H:g, j:h} = ta(a, b, {justHeaders:d, binary:e, i:f});
+}, []).join("&").replace(/%20/g, "+"), xa = async(a, b, {data:c, justHeaders:d, binary:e, g:f = w(!0)}) => {
+  const {G:g, h} = va(a, b, {justHeaders:d, binary:e, g:f});
   g.end(c);
   a = await h;
-  ({"content-type":b = ""} = a.headers);
-  if ((b = b.startsWith("application/json")) && a.body) {
+  if ((a.headers["content-type"] || "").startsWith("application/json") && a.body) {
     try {
-      a.w = JSON.parse(a.body);
+      a.u = JSON.parse(a.body);
     } catch (k) {
       throw f = f(k), f.response = a.body, f;
     }
@@ -153,34 +148,34 @@ try {
 } catch (a) {
   z = "@aqt/rqt";
 }
-const za = q("aqt"), A = async(a, b = {}) => {
+const ya = p("aqt"), A = async(a, b = {}) => {
   const {data:c, type:d = "json", headers:e = {"User-Agent":`Mozilla/5.0 (Node.JS) ${z}`}, compress:f = !0, binary:g = !1, justHeaders:h = !1, method:k, timeout:l} = b;
-  b = y(!0);
-  const {hostname:m, protocol:n, port:p, path:t} = ma(a), r = "https:" === n ? ka : la, u = {hostname:m, port:p, path:t, headers:{...e}, timeout:l, method:k};
+  b = w(!0);
+  const {hostname:n, protocol:m, port:r, path:u} = ma(a), q = "https:" === m ? ka : la, t = {hostname:n, port:r, path:u, headers:{...e}, timeout:l, method:k};
   if (c) {
     var x = d;
-    var v = c;
+    var y = c;
     switch(x) {
       case "json":
-        v = JSON.stringify(v);
+        y = JSON.stringify(y);
         x = "application/json";
         break;
       case "form":
-        v = ua(v), x = "application/x-www-form-urlencoded";
+        y = wa(y), x = "application/x-www-form-urlencoded";
     }
-    v = {data:v, contentType:x};
-    ({data:x} = v);
-    ({contentType:v} = v);
-    u.method = k || "POST";
-    "Content-Type" in u.headers || (u.headers["Content-Type"] = v);
-    "Content-Length" in u.headers || (u.headers["Content-Length"] = Buffer.byteLength(x));
+    y = {data:y, contentType:x};
+    ({data:x} = y);
+    y = y.contentType;
+    t.method = k || "POST";
+    "Content-Type" in t.headers || (t.headers["Content-Type"] = y);
+    "Content-Length" in t.headers || (t.headers["Content-Length"] = Buffer.byteLength(x));
   }
-  !f || "Accept-Encoding" in u.headers || (u.headers["Accept-Encoding"] = "gzip, deflate");
-  const {body:K, headers:G, byteLength:va, statusCode:yb, statusMessage:zb, G:wa, w:xa} = await ya(r, u, {data:x, justHeaders:h, binary:g, i:b});
-  za("%s %s B%s", a, va, `${va != wa ? ` (raw ${wa} B)` : ""}`);
-  return {body:xa ? xa : K, headers:G, statusCode:yb, statusMessage:zb};
+  !f || "Accept-Encoding" in t.headers || (t.headers["Accept-Encoding"] = "gzip, deflate");
+  const {body:sb, headers:tb, byteLength:qa, statusCode:ub, statusMessage:vb, F:ra, u:sa} = await xa(q, t, {data:x, justHeaders:h, binary:g, g:b});
+  ya("%s %s B%s", a, qa, `${qa != ra ? ` (raw ${ra} B)` : ""}`);
+  return {body:sa ? sa : sb, headers:tb, statusCode:ub, statusMessage:vb};
 };
-const {stringify:Aa} = querystring;
+const za = querystring.stringify;
 function B(a, b, c) {
   const d = [];
   b.replace(a, (e, ...f) => {
@@ -196,38 +191,41 @@ function B(a, b, c) {
   });
   return d;
 }
-;const Ba = new RegExp(`${/([^\s>=/]+)/.source}(?:\\s*=\\s*${/(?:"([\s\S]*?)"|'([\s\S]*?)')/.source})?`, "g"), Ca = new RegExp(`\\s*((?:${Ba.source}\\s*)*)`);
-const C = (a, b) => B(new RegExp(`<${a}${Ca.source}?(?:${/\s*\/>/.source}|${(new RegExp(`>([\\s\\S]+?)?</${a}>`)).source})`, "g"), b, ["a", "v", "v1", "v2", "c"]).map(({a:c = "", c:d = ""}) => {
-  c = c.replace(/\/$/, "").trim();
-  c = Da(c);
-  return {content:d, f:c};
-}), Da = a => B(Ba, a, ["key", "val", "def", "f"]).reduce((b, {key:c, val:d}) => {
+;const Aa = new RegExp(`${/([^\s>=/]+)/.source}(?:\\s*=\\s*${/(?:"([\s\S]*?)"|'([\s\S]*?)')/.source})?`, "g"), Ba = new RegExp(`(?:\\s+((?:${Aa.source}\\s*)*))`);
+const C = (a, b) => {
+  a = (Array.isArray(a) ? a : [a]).join("|");
+  return B(new RegExp(`<(${a})${Ba.source}?(?:${/\s*\/>/.source}|${/>([\s\S]+?)?<\/\1>/.source})`, "g"), b, "t a v v1 v2 c".split(" ")).map(({t:c, a:d = "", c:e = ""}) => {
+    d = d.replace(/\/$/, "").trim();
+    d = Ca(d);
+    return {content:e, props:d, tag:c};
+  });
+}, Ca = a => B(Aa, a, ["key", "val", "def", "f"]).reduce((b, {key:c, val:d}) => {
   if (void 0 === d) {
     return b[c] = !0, b;
   }
   b[c] = "true" == d ? !0 : "false" == d ? !1 : /^\d+$/.test(d) ? parseInt(d, 10) : d;
   return b;
 }, {});
-const Ea = a => Object.keys(a).reduce((b, c) => {
+const Da = a => Object.keys(a).reduce((b, c) => {
   const d = a[c];
   if (void 0 === d) {
     return b;
   }
   b[c] = d;
   return b;
-}, {}), Fa = a => a.reduce((b, c) => b && "string" == typeof c, !0);
-async function Ga({ApiUser:a, ApiKey:b, ClientIp:c, host:d}, e, f = {}, g = "GET") {
+}, {}), Ea = a => a.reduce((b, c) => b && "string" == typeof c, !0);
+async function Fa({ApiUser:a, ApiKey:b, ClientIp:c, host:d}, e, f = {}, g = "GET") {
   if (!e) {
     throw Error("Command must be passed.");
   }
-  f = Ea(f);
+  f = Da(f);
   b = {ApiUser:a, ApiKey:b, UserName:a, ClientIp:c, Command:e};
   a = {"User-Agent":"Mozilla/5.0 (Node.JS; @rqt/namecheap v2.4.0) https://github.com/rqt/namecheap"};
   if ("GET" == g) {
-    g = Aa({...b, ...f}), d = await A(`${d}/xml.response?${g}`, {headers:a});
+    g = za({...b, ...f}), d = await A(`${d}/xml.response?${g}`, {headers:a});
   } else {
     if ("POST" == g) {
-      g = Aa(b), d = await A(`${d}/xml.response?${g}`, {data:f, headers:a, type:"form"});
+      g = za(b), d = await A(`${d}/xml.response?${g}`, {data:f, headers:a, type:"form"});
     } else {
       throw Error("Unknown method.");
     }
@@ -236,53 +234,54 @@ async function Ga({ApiUser:a, ApiKey:b, ClientIp:c, host:d}, e, f = {}, g = "GET
   if (!d.startsWith('<?xml version="1.0" encoding="utf-8"?>')) {
     throw Error("non-xml response");
   }
-  if (g = Ha(d)) {
+  if (g = Ga(d)) {
     throw g;
   }
   [{content:d}] = C("CommandResponse", d);
   return d.trim();
 }
-const Ha = a => {
+const Ga = a => {
   [{content:a}] = C("Errors", a);
   if (a.length) {
     var b = C("Error", a);
     if (1 == b.length) {
-      const [{content:c, f:d}] = b;
+      const [{content:c, props:d}] = b;
       a = c;
       b = d;
     } else {
-      a = b.map(({content:c}) => c).join("; "), b = b.map(({f:c}) => c);
+      a = b.map(({content:c}) => c).join("; "), b = b.map(({props:c}) => c);
     }
-    a = new Ia(a);
+    a = new Ha(a);
     a.props = b;
     return a;
   }
 };
-class Ia extends Error {
+class Ha extends Error {
 }
-;const Ja = {name:"name", expire:"expiredate", create:"createdate"}, Ka = (a, b) => {
+;const Ia = {name:"name", expire:"expiredate", create:"createdate"}, Ja = (a, b) => {
   if (!["name", "expire", "create"].includes(a.toLowerCase())) {
     throw Error(`Unknown sort by option: ${a}.`);
   }
-  a = Ja[a].toUpperCase();
+  a = Ia[a].toUpperCase();
   return b ? `${a}_DESC` : a;
 };
-async function La(a, b = {}) {
-  const {page:c, sort:d, desc:e, filter:f, type:g, pageSize:h} = b;
-  b = {Page:c, PageSize:h, SortBy:d ? Ka(d, e) : Ka("create", "desc"), SearchTerm:f, ListType:g};
+async function Ka(a, b = {}) {
+  var c = b.sort, d = b.desc;
+  const e = b.filter, f = b.type;
+  b = {Page:b.page, PageSize:b.pageSize, SortBy:c ? Ja(c, d) : Ja("create", "desc"), SearchTerm:e, ListType:f};
   b = await a("namecheap.domains.getList", b);
-  a = C("Domain", b).map(({f:m}) => m);
-  var [{content:k}] = C("Paging", b);
-  [{content:b}] = C("TotalItems", k);
-  const [{content:l}] = C("CurrentPage", k);
-  [{content:k}] = C("PageSize", k);
-  return {domains:a, TotalItems:parseInt(b, 10), CurrentPage:parseInt(l, 10), PageSize:parseInt(k, 10)};
+  a = C("Domain", b).map(({props:g}) => g);
+  [{content:d}] = C("Paging", b);
+  [{content:b}] = C("TotalItems", d);
+  [{content:c}] = C("CurrentPage", d);
+  [{content:d}] = C("PageSize", d);
+  return {domains:a, TotalItems:parseInt(b, 10), CurrentPage:parseInt(c, 10), PageSize:parseInt(d, 10)};
 }
-;const Ma = a => {
+;const La = a => {
   let b, c, d;
   [{content:b}] = C("ID", a);
   try {
-    [{f:d}] = C("EmailDetails", a);
+    [{props:d}] = C("EmailDetails", a);
   } catch (e) {
   }
   try {
@@ -290,38 +289,35 @@ async function La(a, b = {}) {
   } catch (e) {
   }
   return {ID:parseInt(b, 10), ...c ? {ExpiredDate:c} : {}, ...d ? {EmailDetails:d} : {}};
-}, Na = a => {
+}, Ma = a => {
   const [{content:b}] = C("UseAutoRenew", a), [{content:c}] = C("SubscriptionId", a), [{content:d}] = C("CreatedDate", a), [{content:e}] = C("ExpirationDate", a);
   [{content:a}] = C("IsActive", a);
   return {UseAutoRenew:"true" == b, SubscriptionId:parseInt(c, 10), CreatedDate:new Date(Date.parse(d)), ExpirationDate:new Date(Date.parse(e)), IsActive:1 == a};
-}, Oa = a => {
-  const [{content:b, f:c}] = C("DomainGetInfoResult", a);
+}, Na = a => {
+  const [{content:b, props:c}] = C("DomainGetInfoResult", a);
   var [{content:d}] = C("DomainDetails", b);
   [{content:a}] = C("CreatedDate", d);
   const [{content:e}] = C("ExpiredDate", d);
   [{content:d}] = C("NumYears", d);
-  const [{content:f, f:g}] = C("Whoisguard", b), h = Ma(f);
+  const [{content:f, props:g}] = C("Whoisguard", b), h = La(f);
   var [{content:k}] = C("PremiumDnsSubscription", b);
-  k = Na(k);
-  const [{content:l, f:m}] = C("DnsDetails", b), n = C("Nameserver", l).map(({content:u}) => u), [{content:p, f:t}] = C("Modificationrights", b);
-  let r = {};
-  p && (r = C("Rights", p).reduce((u, {f:x}) => {
-    ({Type:x} = x);
-    return {...u, [x]:!0};
-  }, {}));
-  return {...c, DomainDetails:{CreatedDate:a, ExpiredDate:e, NumYears:parseInt(d, 10)}, Whoisguard:{...g, ...h}, PremiumDnsSubscription:k, DnsDetails:{...m, Nameserver:n}, Modificationrights:{...t, ...r}};
+  k = Ma(k);
+  const [{content:l, props:n}] = C("DnsDetails", b), m = C("Nameserver", l).map(({content:t}) => t), [{content:r, props:u}] = C("Modificationrights", b);
+  let q = {};
+  r && (q = C("Rights", r).reduce((t, {props:x}) => ({...t, [x.Type]:!0}), {}));
+  return {...c, DomainDetails:{CreatedDate:a, ExpiredDate:e, NumYears:parseInt(d, 10)}, Whoisguard:{...g, ...h}, PremiumDnsSubscription:k, DnsDetails:{...n, Nameserver:m}, Modificationrights:{...u, ...q}};
 };
-async function Pa(a, b) {
-  const {domain:c, host:d} = "string" == typeof b ? {domain:b} : b;
-  a = await a("namecheap.domains.getinfo", {DomainName:c, HostName:d});
-  return Oa(a);
+async function Oa(a, b) {
+  b = "string" == typeof b ? {domain:b} : b;
+  a = await a("namecheap.domains.getinfo", {DomainName:b.domain, HostName:b.host});
+  return Na(a);
 }
-;async function Qa(a, b) {
+;async function Pa(a, b) {
   const {domains:c = [], domain:d} = "string" == typeof b ? {domain:b} : b;
   if (!Array.isArray(c)) {
     throw Error("Domains must be a list.");
   }
-  if (!Fa(c)) {
+  if (!Ea(c)) {
     throw Error("All domains must be strings.");
   }
   if (d && "string" != typeof d) {
@@ -329,28 +325,28 @@ async function Pa(a, b) {
   }
   b = [...c, ...d ? [d] : []];
   a = await a("namecheap.domains.check", {DomainList:b.join(",")});
-  return C("DomainCheckResult", a).map(({f:e}) => e);
+  return C("DomainCheckResult", a).map(({props:e}) => e);
 }
-;async function Ra(a, b) {
-  const {domain:c, years:d = 1, promo:e, address:f, registrantAddress:g = f, techAddress:h = f, adminAddress:k = f, billingAddress:l = f, nameservers:m = [], whois:n = !0, premium:p = {}} = b;
+;async function Qa(a, b) {
+  const {domain:c, years:d = 1, promo:e, address:f, registrantAddress:g = f, techAddress:h = f, adminAddress:k = f, billingAddress:l = f, nameservers:n = [], whois:m = !0, premium:r = {}} = b;
   b = D(g, "Registrant");
-  const t = D(h, "Tech"), r = D(k, "Admin"), u = D(l, "AuxBilling");
-  a = await a("namecheap.domains.create", {DomainName:c, Years:d, PromotionCode:e, ...b, ...t, ...r, ...u, Nameservers:m.join(","), AddFreeWhoisguard:n ? "yes" : "no", WGEnabled:n ? "yes" : "no", ...p}, "POST");
-  [{f:a}] = C("DomainCreateResult", a);
+  const u = D(h, "Tech"), q = D(k, "Admin"), t = D(l, "AuxBilling");
+  a = await a("namecheap.domains.create", {DomainName:c, Years:d, PromotionCode:e, ...b, ...u, ...q, ...t, Nameservers:n.join(","), AddFreeWhoisguard:m ? "yes" : "no", WGEnabled:m ? "yes" : "no", ...r}, "POST");
+  [{props:a}] = C("DomainCreateResult", a);
   return a;
 }
-const Sa = "JobTitle FirstName LastName Address1 Address2 City StateProvince StateProvinceChoice Country Phone PhoneExt Fax EmailAddress".split(" "), D = (a, b) => Sa.reduce((c, d) => ({...c, [`${b}${d}`]:"StateProvince" != d || a[d] ? a[d] : "NA"}), {[`${b}OrganizationName`]:a.Organization, [`${b}PostalCode`]:a.Zip});
-async function Ta(a, {I:b, J:c}) {
+const Ra = "JobTitle FirstName LastName Address1 Address2 City StateProvince StateProvinceChoice Country Phone PhoneExt Fax EmailAddress".split(" "), D = (a, b) => Ra.reduce((c, d) => ({...c, [`${b}${d}`]:"StateProvince" != d || a[d] ? a[d] : "NA"}), {[`${b}OrganizationName`]:a.Organization, [`${b}PostalCode`]:a.Zip});
+async function Sa(a, {H:b, I:c}) {
   a = await a("namecheap.domains.dns.getHosts", {SLD:b, TLD:c});
-  const [{content:d, f:e}] = C("DomainDNSGetHostsResult", a);
-  a = Ua(d, "Host");
-  b = Ua(d, "host");
-  c = Ua(d, "HOST");
+  const [{content:d, props:e}] = C("DomainDNSGetHostsResult", a);
+  a = E(d, "Host");
+  b = E(d, "host");
+  c = E(d, "HOST");
   a = [...a, ...b, ...c];
   return {...e, hosts:a};
 }
-const Ua = (a, b) => C(b, a).map(({f:c}) => c);
-async function Va(a, b, c) {
+const E = (a, b) => C(b, a).map(({props:c}) => c);
+async function Ta(a, b, c) {
   b = c.reduce((d, e, f) => {
     Object.entries(e).forEach(([g, h]) => {
       ["HostName", "RecordType", "Address", "MXPref", "TTL"].includes(g) && (d[`${g}${f + 1}`] = h);
@@ -358,104 +354,103 @@ async function Va(a, b, c) {
     return d;
   }, b);
   a = await a("namecheap.domains.dns.setHosts", b, "POST");
-  [{f:a}] = C("DomainDNSSetHostsResult", a);
+  [{props:a}] = C("DomainDNSSetHostsResult", a);
   return a;
 }
-;async function Wa(a) {
+;async function Ua(a) {
   a = await a("namecheap.users.address.getList");
   [{content:a}] = C("AddressGetListResult", a);
-  return C("List", a).map(({f:b}) => b);
+  return C("List", a).map(({props:b}) => b);
 }
-;const Xa = q("expensive");
-async function Ya(a, b) {
+;const Va = p("expensive");
+async function Wa(a, b) {
   a = await a("namecheap.users.address.getInfo", {AddressId:b});
   [{content:a}] = C("GetAddressInfoResult", a);
-  return Za(a);
+  return Xa(a);
 }
-const $a = "AddressId UserName AddressName Default_YN FirstName LastName JobTitle Organization Address1 Address2 City StateProvince StateProvinceChoice Zip Country Phone PhoneExt EmailAddress".split(" "), Za = a => $a.reduce((b, c) => {
+const Ya = "AddressId UserName AddressName Default_YN FirstName LastName JobTitle Organization Address1 Address2 City StateProvince StateProvinceChoice Zip Country Phone PhoneExt EmailAddress".split(" "), Xa = a => Ya.reduce((b, c) => {
   try {
     let [{content:d}] = C(c, a);
     "Default_YN" == c ? d = "true" == d : "AddressId" == c && (d = parseInt(d, 10));
     return {...b, [c]:d};
   } catch (d) {
-    return Xa(`Could not extract tag ${c}`), b;
+    return Va(`Could not extract tag ${c}`), b;
   }
 }, {});
-const bb = async(a, b) => {
-  const {type:c, category:d, promoCode:e, action:f, product:g} = b;
-  a = await a("namecheap.users.getPricing", {ProductType:c, ProductCategory:d, PromotionCode:e, ActionName:f, ProductName:g});
-  return C("ProductType", a).reduce((h, {content:k, f:{Name:l}}) => {
-    k = ab(k);
-    h[l] = k;
-    return h;
+const $a = async(a, b) => {
+  a = await a("namecheap.users.getPricing", {ProductType:b.type, ProductCategory:b.category, PromotionCode:b.promoCode, ActionName:b.action, ProductName:b.product});
+  return C("ProductType", a).reduce((c, {content:d, props:{Name:e}}) => {
+    d = Za(d);
+    c[e] = d;
+    return c;
   }, {});
-}, ab = a => C("ProductCategory", a).reduce((b, {content:c, f:{Name:d}}) => {
-  c = cb(c);
+}, Za = a => C("ProductCategory", a).reduce((b, {content:c, props:{Name:d}}) => {
+  c = ab(c);
   b[d] = c;
   return b;
-}, {}), cb = a => C("Product", a).reduce((b, {content:c, f:{Name:d}}) => {
-  c = C("Price", c).map(({f:e}) => e);
+}, {}), ab = a => C("Product", a).reduce((b, {content:c, props:{Name:d}}) => {
+  c = C("Price", c).map(({props:e}) => e);
   d = d.replace(/-(.)/g, (e, f) => f.toUpperCase());
   b[d] = c;
   return b;
 }, {});
-class db {
+class bb {
   constructor(a) {
     const {user:b, key:c, sandbox:d = !1, ip:e} = a;
-    this.u = b;
-    this.o = c;
+    this.o = b;
+    this.l = c;
     this.b = `https://api.${d ? "sandbox." : ""}namecheap.com`;
-    this.g = e;
-    const f = this.s.bind(this);
+    this.f = e;
+    const f = this.m.bind(this);
     this.users = {async getPricing(g) {
-      return await bb(f, g);
+      return await $a(f, g);
     }};
     this.domains = {async getList(g = {}) {
-      return await La(f, g);
+      return await Ka(f, g);
     }, async getInfo(g) {
-      return await Pa(f, g);
+      return await Oa(f, g);
     }, async check(g) {
-      return await Qa(f, g);
+      return await Pa(f, g);
     }, async create(g) {
-      return await Ra(f, g);
+      return await Qa(f, g);
     }};
     this.address = {async getList() {
-      return await Wa(f);
+      return await Ua(f);
     }, async getInfo(g) {
-      return await Ya(f, g);
+      return await Wa(f, g);
     }};
     this.dns = {async getHosts(g) {
       const [h, ...k] = g.split(".");
       g = k.join(".");
-      return await Ta(f, {I:h, J:g});
+      return await Sa(f, {H:h, I:g});
     }, async setHosts(g, h, k = {}) {
-      const [l, ...m] = g.split(".");
-      g = m.join(".");
-      return await Va(f, {SLD:l, TLD:g, ...k}, h);
+      const [l, ...n] = g.split(".");
+      g = n.join(".");
+      return await Ta(f, {SLD:l, TLD:g, ...k}, h);
     }};
   }
-  async s(a, b, c) {
-    const d = y(!0);
+  async m(a, b, c) {
+    const d = w(!0);
     try {
-      return await Ga({ApiKey:this.o, ApiUser:this.u, host:this.b, ClientIp:this.g}, a, b, c);
+      return await Fa({ApiKey:this.l, ApiUser:this.o, host:this.b, ClientIp:this.f}, a, b, c);
     } catch (e) {
-      if (e instanceof Ia) {
+      if (e instanceof Ha) {
         throw d(e);
       }
       throw e;
     }
   }
 }
-;const {createReadStream:eb, createWriteStream:fb, existsSync:gb, stat:hb} = fs;
-async function ib(a) {
-  a = eb(a);
-  return await qa(a);
+;const cb = fs.createReadStream, db = fs.createWriteStream, eb = fs.existsSync, fb = fs.stat;
+async function gb(a) {
+  a = cb(a);
+  return await ta(a);
 }
-;async function jb(a, b) {
+;async function hb(a, b) {
   if (!a) {
     throw Error("No path is given.");
   }
-  const c = y(!0), d = fb(a);
+  const c = w(!0), d = db(a);
   await new Promise((e, f) => {
     d.on("error", g => {
       g = c(g);
@@ -463,33 +458,32 @@ async function ib(a) {
     }).on("close", e).end(b);
   });
 }
-;const kb = q("bosom"), lb = async(a, b, c) => {
+;const ib = p("bosom"), jb = async(a, b, c) => {
   const {replacer:d = null, space:e = null} = c;
   b = JSON.stringify(b, d, e);
-  await jb(a, b);
-}, E = async(a, b, c = {}) => {
+  await hb(a, b);
+}, F = async(a, b, c = {}) => {
   if (b) {
-    return await lb(a, b, c);
+    return await jb(a, b, c);
   }
-  kb("Reading %s", a);
-  a = await ib(a);
+  ib("Reading %s", a);
+  a = await gb(a);
   return JSON.parse(a);
 };
-const mb = async(a, b = {}) => {
+const kb = async(a, b = {}) => {
   ({body:a} = await A(a, b));
   return a;
 };
-async function F(a, b, c = {}) {
+async function G(a, b, c = {}) {
   {
     const {headers:d = {}, ...e} = c;
     c = {...e, headers:{...a.headers, ...d, Cookie:a.Cookie}};
   }
   b = await A(a.host ? `${a.host}${b}` : b, c);
-  ({headers:c} = b);
-  a.cookies = nb(a.cookies, c);
+  a.cookies = lb(a.cookies, b.headers);
   return b;
 }
-class ob {
+class H {
   constructor(a = {}) {
     const {host:b, headers:c = {}} = a;
     this.host = b;
@@ -497,35 +491,35 @@ class ob {
     this.cookies = {};
   }
   async rqt(a, b = {}) {
-    ({body:a} = await F(this, a, b));
+    ({body:a} = await G(this, a, b));
     return a;
   }
   async bqt(a, b = {}) {
-    ({body:a} = await F(this, a, {...b, binary:!0}));
+    ({body:a} = await G(this, a, {...b, binary:!0}));
     return a;
   }
   async jqt(a, b = {}) {
-    ({body:a} = await F(this, a, b));
+    ({body:a} = await G(this, a, b));
     return a;
   }
   async aqt(a, b = {}) {
-    return await F(this, a, b);
+    return await G(this, a, b);
   }
   get Cookie() {
-    return pb(this.cookies);
+    return mb(this.cookies);
   }
 }
-const pb = a => Object.keys(a).reduce((b, c) => {
+const mb = a => Object.keys(a).reduce((b, c) => {
   c = `${c}=${a[c]}`;
   return [...b, c];
-}, []).join("; "), nb = (a, b) => {
-  b = qb(b);
+}, []).join("; "), lb = (a, b) => {
+  b = nb(b);
   const c = {...a, ...b};
   return Object.keys(c).reduce((d, e) => {
     const f = c[e];
     return f ? {...d, [e]:f} : d;
   }, {});
-}, qb = ({"set-cookie":a = []} = {}) => a.reduce((b, c) => {
+}, nb = ({"set-cookie":a = []} = {}) => a.reduce((b, c) => {
   {
     const d = /^(.+?)=(.*?);/.exec(c);
     if (!d) {
@@ -536,27 +530,27 @@ const pb = a => Object.keys(a).reduce((b, c) => {
   }
   return {...b, ...c};
 }, {});
-async function rb() {
+async function ob() {
   const {host:a = "https://api.ipify.org"} = {};
-  return await mb(a);
+  return await kb(a);
 }
-;const {ok:H} = assert;
-const {createInterface:sb} = readline;
-function tb(a, b, c) {
+;const I = assert.ok;
+const pb = readline.createInterface;
+function qb(a, b, c) {
   return setTimeout(() => {
     const d = Error(`${a ? a : "Promise"} has timed out after ${b}ms`);
     d.stack = `Error: ${d.message}`;
     c(d);
   }, b);
 }
-function ub(a, b) {
+function rb(a, b) {
   let c;
   const d = new Promise((e, f) => {
-    c = tb(a, b, f);
+    c = qb(a, b, f);
   });
-  return {timeout:c, j:d};
+  return {timeout:c, h:d};
 }
-async function vb(a, b, c) {
+async function wb(a, b, c) {
   if (!(a instanceof Promise)) {
     throw Error("Promise expected");
   }
@@ -566,16 +560,16 @@ async function vb(a, b, c) {
   if (0 > b) {
     throw Error("Timeout cannot be negative");
   }
-  const {j:d, timeout:e} = ub(c, b);
+  const {h:d, timeout:e} = rb(c, b);
   try {
     return await Promise.race([a, d]);
   } finally {
     clearTimeout(e);
   }
 }
-;function wb(a, b = {}) {
+;function xb(a, b = {}) {
   const {timeout:c, password:d = !1, output:e = process.stdout, input:f = process.stdin, ...g} = b;
-  b = sb({input:f, output:e, ...g});
+  b = pb({input:f, output:e, ...g});
   if (d) {
     const k = b.output;
     b._writeToOutput = l => {
@@ -587,18 +581,18 @@ async function vb(a, b, c) {
     };
   }
   var h = new Promise(b.question.bind(b, a));
-  h = c ? vb(h, c, `reloquent: ${a}`) : h;
-  b.promise = xb(h, b);
+  h = c ? wb(h, c, `reloquent: ${a}`) : h;
+  b.promise = yb(h, b);
   return b;
 }
-const xb = async(a, b) => {
+const yb = async(a, b) => {
   try {
     return await a;
   } finally {
     b.close();
   }
 };
-async function Ab(a, b) {
+async function J(a, b) {
   if ("object" != typeof a) {
     throw Error("Please give an object with questions");
   }
@@ -624,24 +618,24 @@ async function Ab(a, b) {
     let h = g || "";
     g && f && g != f ? h = `\x1b[90m${g}\x1b[0m` : g && g == f && (h = "");
     g = f || "";
-    ({promise:g} = wb(`${e.text}${h ? `[${h}] ` : ""}${g ? `[${g}] ` : ""}`, {timeout:b, password:e.password}));
+    ({promise:g} = xb(`${e.text}${h ? `[${h}] ` : ""}${g ? `[${g}] ` : ""}`, {timeout:b, password:e.password}));
     f = await g || f || e.defaultValue;
     "function" == typeof e.validation && e.validation(f);
     "function" == typeof e.postProcess && (f = await e.postProcess(f));
     return {...c, [d]:f};
   }, {});
 }
-;async function Bb(a, b) {
-  return await Ab(a, b);
+;async function zb(a, b) {
+  return await J(a, b);
 }
-async function Cb(a) {
-  ({question:a} = await Ab({question:a}, void 0));
+async function K(a) {
+  ({question:a} = await J({question:a}, void 0));
   return a;
 }
-async function I(a, b = {}) {
+async function L(a, b = {}) {
   const {defaultYes:c = !0, timeout:d} = b;
   b = a.endsWith("?");
-  ({question:a} = await Ab({question:{text:`${b ? a.replace(/\?$/, "") : a} (y/n)${b ? "?" : ""}`, defaultValue:c ? "y" : "n"}}, d));
+  ({question:a} = await J({question:{text:`${b ? a.replace(/\?$/, "") : a} (y/n)${b ? "?" : ""}`, defaultValue:c ? "y" : "n"}}, d));
   return "y" == a;
 }
 ;/*
@@ -649,26 +643,26 @@ async function I(a, b = {}) {
  BSD License
  Copyright (c) 2009-2015, Kevin Decker <kpdecker@gmail.com>
 */
-const Db = {black:30, red:31, green:32, yellow:33, blue:34, magenta:35, cyan:36, white:37, grey:90}, Eb = {black:40, red:41, green:42, yellow:43, blue:44, magenta:45, cyan:46, white:47};
-function J(a, b) {
-  return (b = Db[b]) ? `\x1b[${b}m${a}\x1b[0m` : a;
+const Ab = {black:30, red:31, green:32, yellow:33, blue:34, magenta:35, cyan:36, white:37, grey:90}, Bb = {black:40, red:41, green:42, yellow:43, blue:44, magenta:45, cyan:46, white:47};
+function M(a, b) {
+  return (b = Ab[b]) ? `\x1b[${b}m${a}\x1b[0m` : a;
 }
-function Fb(a) {
-  const b = Eb.green;
+function Cb(a) {
+  const b = Bb.green;
   return b ? `\x1b[${b}m${a}\x1b[0m` : a;
 }
-;const Gb = a => B(/<input type="hidden" name="(.+?)" id="__\w+" value="(.*?)" \/>/g, a, ["name", "value"]).reduce((b, {name:c, value:d}) => ({...b, [c]:d}), {}), Hb = a => {
+;const Db = a => B(/<input type="hidden" name="(.+?)" id="__\w+" value="(.*?)" \/>/g, a, ["name", "value"]).reduce((b, {name:c, value:d}) => ({...b, [c]:d}), {}), Eb = a => {
   const b = /(.+?)(\d\d\d)$/.exec(a);
   if (!b) {
     return a;
   }
   const [, c, d] = b;
-  return `${J(c, "grey")}${d}`;
-}, Ib = a => a.map(({title:b}) => ` ${b}`).map(Hb).join("\n"), Jb = async(a, b) => {
+  return `${M(c, "grey")}${d}`;
+}, Fb = a => a.map(({title:b}) => ` ${b}`).map(Eb).join("\n"), Gb = async(a, b) => {
   var c = `Which phone number to use for 2 factor auth
-${Ib(a)}
+${Fb(a)}
 enter last 3 digits`;
-  const d = await Cb({text:c, async getDefault() {
+  const d = await K({text:c, async getDefault() {
     return b || a[0].last;
   }, validation(e) {
     if (!a.some(({last:f}) => f == e)) {
@@ -677,15 +671,15 @@ enter last 3 digits`;
   }});
   ({value:c} = a.find(({last:e}) => e == d));
   return c;
-}, Kb = (a, b) => {
+}, Hb = (a, b) => {
   var c = Object.keys(a).reduce((d, e) => {
     var f = a[e];
     const g = b[e];
-    return e in b ? f !== g ? (f = J(`${`-  ${e}`}: ${f}`, "red"), e = J(`${`+  ${e}`}: ${g}`, "green"), [...d, f, e]) : d : (e = J(`${`-  ${e}`}: ${f}`, "red"), [...d, e]);
+    return e in b ? f !== g ? (f = M(`${`-  ${e}`}: ${f}`, "red"), e = M(`${`+  ${e}`}: ${g}`, "green"), [...d, f, e]) : d : (e = M(`${`-  ${e}`}: ${f}`, "red"), [...d, e]);
   }, []);
   c = Object.keys(b).reduce((d, e) => {
     const f = a[e];
-    return e in a ? d : (e = J(`${`+  ${e}`}: ${f}`, "green"), [...d, e]);
+    return e in a ? d : (e = M(`${`+  ${e}`}: ${f}`, "green"), [...d, e]);
   }, c);
   if (c.length) {
     throw c = `
@@ -694,37 +688,38 @@ ${c.join("\n")}
 }`.trim(), Error(c);
   }
 };
-const Lb = q("@rqt/namecheap-web");
-async function Mb(a) {
+const Ib = p("@rqt/namecheap-web");
+async function Jb(a) {
   const {SessionKey:b} = await a.session.jqt("/cart/ajax/SessionHandler.ashx");
   if (!b) {
     throw Error(`Could not acquire the session key from ${a.session.host}${"/cart/ajax/SessionHandler.ashx"}.`);
   }
-  Lb("Obtained a session key %s", b);
+  Ib("Obtained a session key %s", b);
   a.b = b;
 }
-async function Nb(a, b = !1) {
-  var c = await a.session.rqt(L.b);
-  H(/Select Phone Contact Number/.test(c), 'Could not find the "Select Phone" section.');
+async function Kb(a, b = !1) {
+  var c = await a.session.rqt(N.b);
+  I(/Select Phone Contact Number/.test(c), 'Could not find the "Select Phone" section.');
   var d = B(/<option value="(\d+-phone)">(.+?(\d\d\d))<\/option>/g, c, ["value", "title", "last"]);
-  H(d.length, "Could not find any numbers.");
-  d = await Jb(d, a.s);
-  c = await a.session.rqt(L.b, {data:{...Gb(c), ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$ddlAuthorizeList:d, ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnSendVerification:"Proceed with Login"}, type:"form"});
+  I(d.length, "Could not find any numbers.");
+  d = await Gb(d, a.m);
+  c = {...Db(c), ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$ddlAuthorizeList:d, ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnSendVerification:"Proceed with Login"};
+  c = await a.session.rqt(N.b, {data:c, type:"form"});
   if (/You have reached the limit on the number.+/m.test(c)) {
     throw Error(c.match(/You have reached the limit on the number.+/m)[0]);
   }
   d = /Error occured during Two-Factor authentication provider call./m.test(c);
   if (!b && d) {
-    return console.log("Received an error message: Error occured during Two-Factor authentication provider call."), console.log("Retrying to get the code, if you get 2 messages, dismiss the first one."), await Nb(a, !0);
+    return console.log("Received an error message: Error occured during Two-Factor authentication provider call."), console.log("Retrying to get the code, if you get 2 messages, dismiss the first one."), await Kb(a, !0);
   }
   if (b && d) {
     throw Error("Error occured during Two-Factor authentication provider call.");
   }
-  H(/We sent a message with the verification code/.test(c), "Could not find the code entry section.");
-  await Ob(a, c);
+  I(/We sent a message with the verification code/.test(c), "Could not find the code entry section.");
+  await Lb(a, c);
 }
-async function Pb(a) {
-  const {body:b, statusCode:c, headers:{location:d}} = await a.session.aqt(L.g, {data:{hidden_LoginPassword:"", LoginUserName:a.u, LoginPassword:a.o, sessionEncryptValue:a.b}, type:"form"});
+async function Mb(a) {
+  const {body:b, statusCode:c, headers:{location:d}} = await a.session.aqt(N.f, {data:{hidden_LoginPassword:"", LoginUserName:a.o, LoginPassword:a.l, sessionEncryptValue:a.b}, type:"form"});
   if (200 == c) {
     {
       const [, e] = /<strong class="title">Validation Error<\/strong>\s+<div>(.+?)<\/div>/.exec(b) || [];
@@ -737,47 +732,47 @@ async function Pb(a) {
       return a.session.cookies;
     }
   }
-  if (302 == c && d.includes(L.b)) {
-    await Nb(a);
+  if (302 == c && d.includes(N.b)) {
+    await Kb(a);
   } else {
     throw Error(`Unknown result (status code ${c})`);
   }
-  ({cookies:a} = a.session);
-  return a;
+  return a.session.cookies;
 }
-async function Ob(a, b) {
+async function Lb(a, b) {
   var [, c] = /Your 6-digit code begins with (\d)./.exec(b) || [];
   if (!c) {
     throw Error("Could not send the code.");
   }
-  c = await Cb({text:`Security code (begins with ${c})`});
-  const {body:d, headers:{location:e}} = await a.session.aqt(L.b, {data:{...Gb(b), ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$txtAuthVerification:c, ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnVerify:"Submit Security Code"}, type:"form"});
+  c = await K({text:`Security code (begins with ${c})`});
+  b = {...Db(b), ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$txtAuthVerification:c, ctl00$ctl00$ctl00$ctl00$base_content$web_base_content$home_content$page_content_left$CntrlAuthorization$btnVerify:"Submit Security Code"};
+  const {body:d, headers:{location:e}} = await a.session.aqt(N.b, {data:b, type:"form"});
   if (/Oops, you entered an invalid code.+/m.test(d)) {
-    return console.log("Incorrect code, try again."), await Ob(a, d);
+    return console.log("Incorrect code, try again."), await Lb(a, d);
   }
-  H(/Object moved/.test(d), "Expected to have been redirected after sign-in.");
+  I(/Object moved/.test(d), "Expected to have been redirected after sign-in.");
   return e;
 }
-class L {
+class N {
   constructor({username:a, password:b, phone:c, host:d, userAgent:e} = {}) {
-    d = new ob({host:d, headers:{"User-Agent":e}});
-    this.u = a;
-    this.o = b;
-    this.g = d;
-    this.s = c;
+    d = new H({host:d, headers:{"User-Agent":e}});
+    this.o = a;
+    this.l = b;
+    this.f = d;
+    this.m = c;
     this.b = null;
   }
-  static get g() {
+  static get f() {
     return "/myaccount/login-signup/";
   }
   static get b() {
     return "/myaccount/twofa/secondauth.aspx";
   }
   get session() {
-    return this.g;
+    return this.f;
   }
 }
-;const Qb = a => {
+;const Nb = a => {
   if (a.__isError) {
     var b = Error(a.Message);
     Object.assign(b, a);
@@ -787,15 +782,15 @@ class L {
     throw b = a.Errors.map(({Message:c}) => c).join(", "), b = Error(b), b.__type = a.__type, b;
   }
 };
-function Rb(a) {
+function O(a) {
   return `/api/v1/ncpl/apiaccess/ui/${a}`;
 }
-async function Sb(a) {
+async function Ob(a) {
   ({statusCode:a} = await a.session.aqt("/", {justHeaders:!0}));
   return 200 == a;
 }
-async function Tb(a) {
-  a = await a.session.rqt(Ub.b);
+async function Pb(a) {
+  a = await a.session.rqt(Qb.b);
   a = /<input type="hidden" id="x-ncpl-csrfvalue" value="(.+?)"/.exec(a);
   if (!a) {
     throw Error("Could not find the x-ncpl-csrfvalue token on the page.");
@@ -803,22 +798,22 @@ async function Tb(a) {
   [, a] = a;
   return a;
 }
-async function Vb(a, b, c = `@rqt ${(new Date).toLocaleString()}`.replace(/:/g, "-")) {
-  const d = await Tb(a);
-  await a.request(Rb("AddIpAddress"), d, {accountPassword:a.password, ipAddress:b, name:c});
+async function Rb(a, b, c = `@rqt ${(new Date).toLocaleString()}`.replace(/:/g, "-")) {
+  const d = await Pb(a);
+  await a.request(O("AddIpAddress"), d, {accountPassword:a.password, ipAddress:b, name:c});
 }
-async function Wb(a, b) {
-  const c = await Tb(a);
-  await a.request(Rb("RemoveIpAddresses"), c, {accountPassword:a.password, names:[b]});
+async function Sb(a, b) {
+  const c = await Pb(a);
+  await a.request(O("RemoveIpAddresses"), c, {accountPassword:a.password, names:[b]});
 }
-async function Xb(a) {
-  const b = await Tb(a);
-  ({IpAddresses:a} = await a.request(Rb("GetWhitelistedIpAddresses"), b));
+async function Tb(a) {
+  const b = await Pb(a);
+  ({IpAddresses:a} = await a.request(O("GetWhitelistedIpAddresses"), b));
   return a.map(({Name:c, IpAddress:d, ModifyDate:e}) => ({Name:c, IpAddress:d, ModifyDate:new Date(`${e}Z`)}));
 }
-class Ub {
+class Qb {
   constructor({cookies:a, host:b, userAgent:c, password:d}) {
-    b = new ob({host:b, headers:{"User-Agent":c}});
+    b = new H({host:b, headers:{"User-Agent":c}});
     b.cookies = a;
     this.b = b;
     this.password = d;
@@ -831,121 +826,110 @@ class Ub {
   }
   async request(a, b, c) {
     a = await this.session.jqt(a, {data:c, headers:{"x-ncpl-rcsrf":b}});
-    Qb(a);
-    ({Data:a} = a);
-    return a;
+    Nb(a);
+    return a.Data;
   }
 }
-;const Yb = async a => {
-  var b = new ob({host:"https://www.namecheap.com/domains/whois", headers:{"User-Agent":"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}});
-  a = await b.rqt(`/results.aspx?domain=${a}`);
-  a = /var url = "\/domains\/whois\/whois-ajax\.aspx\?(.+?)"/.exec(a);
+;const Ub = async a => {
   if (!a) {
-    throw Error("Could not find the AJAX request URL.");
+    throw Error("Please specify the domain.");
   }
-  [, a] = a;
-  b = await b.rqt(`/whois-ajax.aspx?${a}`);
-  b = /<pre id=".+?_whoisResultText" class="wrapped whois">([\s\S]+)<\/pre>/.exec(b);
-  if (!b) {
-    throw Error("Could not extract data.");
-  }
-  [, b] = b;
-  return b;
+  return await (new H({host:"https://www.namecheap.com", headers:{"User-Agent":"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}})).rqt(`/domains/whoislookup-api/${a}`);
 };
-const Zb = async(a = !1) => {
-  a = await mb(`https://www.${a ? "sandbox." : ""}namecheap.com/promos/coupons/`, {headers:{"User-Agent":"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}});
-  a = /<small>Coupon Code<\/small>\s+.+couponCode">(.+)<\/span>/.exec(a);
+const Vb = async(a = !1) => {
+  a = await kb(`https://www.${a ? "sandbox." : ""}namecheap.com/promos/coupons/`, {headers:{"User-Agent":"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}});
+  a = /"couponCode":"(.+?)"/.exec(a);
   if (!a) {
     throw Error("Could not find the coupon code.");
   }
   return a[1];
 };
-const $b = q("@rqt/namecheap-web"), ac = (a = !1) => `https://www.${a ? "sandbox." : ""}namecheap.com`, bc = (a = !1) => `https://ap.www.${a ? "sandbox." : ""}namecheap.com`;
-async function cc(a, b) {
-  a.g.readSession && await dc(b, a.g.sessionFile);
+const Wb = p("@rqt/namecheap-web"), Xb = (a = !1) => `https://www.${a ? "sandbox." : ""}namecheap.com`, Yb = (a = !1) => `https://ap.www.${a ? "sandbox." : ""}namecheap.com`;
+async function Zb(a, b) {
+  a.f.readSession && await $b(b, a.f.sessionFile);
 }
-async function M(a, b) {
-  const c = ec(a.b.session.cookies);
+async function P(a, b) {
+  const c = ac(a.b.session.cookies);
   b = await b;
-  const d = ec(a.b.session.cookies);
+  const d = ac(a.b.session.cookies);
   try {
-    Kb(c, d);
+    Hb(c, d);
   } catch ({message:e}) {
-    $b(e), await cc(a, d);
+    Wb(e), await Zb(a, d);
   }
   return b;
 }
-class N {
+class Q {
   constructor(a = {}) {
     const {sandbox:b, readSession:c, sessionFile:d = ".namecheap-web.json"} = a;
-    this.g = {sandbox:b, readSession:c, sessionFile:d};
+    this.f = {sandbox:b, readSession:c, sessionFile:d};
     this.b = null;
   }
   static async["LOOKUP_IP"]() {
-    return await rb();
+    return await ob();
   }
   static async["WHOIS"](a) {
-    return Yb(a);
+    return Ub(a);
   }
   static async["COUPON"]() {
-    return Zb();
+    return Vb();
   }
   static async["SANDBOX_COUPON"]() {
-    return Zb(!0);
+    return Vb(!0);
   }
   async auth(a, b, c, d = !1) {
     var e;
-    this.g.readSession && !d && (e = await fc(this.g.sessionFile));
-    e || (e = new L({username:a, password:b, host:ac(this.g.sandbox), phone:c, userAgent:"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}), await Mb(e), e = await Pb(e), await cc(this, e));
-    this.b = new Ub({cookies:e, password:b, host:bc(this.g.sandbox), userAgent:"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"});
-    e = await M(this, Sb(this.b));
+    this.f.readSession && !d && (e = await bc(this.f.sessionFile));
+    e || (e = new N({username:a, password:b, host:Xb(this.f.sandbox), phone:c, userAgent:"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"}), await Jb(e), e = await Mb(e), await Zb(this, e));
+    this.b = new Qb({cookies:e, password:b, host:Yb(this.f.sandbox), userAgent:"Mozilla/5.0 (Node.js; @rqt/namecheap-web) https://github.com/rqt/namecheap-web"});
+    e = await P(this, Ob(this.b));
     if (!e && d) {
       throw Error("Could not authenticate.");
     }
     e || await this.auth(a, b, c, !0);
   }
   async whitelistIP(a, b) {
-    await M(this, Vb(this.b, a, b));
+    await P(this, Rb(this.b, a, b));
   }
   async getWhitelistedIPList() {
-    return await M(this, Xb(this.b));
+    return await P(this, Tb(this.b));
   }
   async removeWhitelistedIP(a) {
-    await M(this, Wb(this.b, a));
+    await P(this, Sb(this.b, a));
   }
 }
-const ec = a => {
+const ac = a => {
   const b = ["x-ncpl-auth", ".ncauth", "SessionId", "U"];
   return Object.keys(a).reduce((c, d) => b.includes(d) ? {...c, [d]:a[d]} : c, {});
-}, fc = async a => {
+}, bc = async a => {
   try {
-    return await E(a);
+    return await F(a);
   } catch (b) {
     return null;
   }
-}, dc = async(a, b) => {
-  await E(b, a);
+}, $b = async(a, b) => {
+  await F(b, a);
 };
-function O(a = {usage:{}}) {
+function R(a = {usage:{}}) {
   const {usage:b = {}, description:c, line:d, example:e} = a;
   a = Object.keys(b);
-  const f = Object.values(b), [g] = a.reduce(([l = 0, m = 0], n) => {
-    const p = b[n].split("\n").reduce((t, r) => r.length > t ? r.length : t, 0);
-    p > m && (m = p);
-    n.length > l && (l = n.length);
-    return [l, m];
-  }, []), h = (l, m) => {
-    m = " ".repeat(m - l.length);
-    return `${l}${m}`;
+  const f = Object.values(b), [g] = a.reduce(([l = 0, n = 0], m) => {
+    const r = b[m].split("\n").reduce((u, q) => q.length > u ? q.length : u, 0);
+    r > n && (n = r);
+    m.length > l && (l = m.length);
+    return [l, n];
+  }, []), h = (l, n) => {
+    n = " ".repeat(n - l.length);
+    return `${l}${n}`;
   };
-  a = a.reduce((l, m, n) => {
-    n = f[n].split("\n");
-    m = h(m, g);
-    const [p, ...t] = n;
-    m = `${m}\t${p}`;
-    const r = h("", g);
-    n = t.map(u => `${r}\t${u}`);
-    return [...l, m, ...n];
+  a = a.reduce((l, n, m) => {
+    m = f[m].split("\n");
+    n = h(n, g);
+    const [r, ...u] = m;
+    n = `${n}\t${r}`;
+    const q = h("", g);
+    m = u.map(t => `${q}\t${t}`);
+    return [...l, n, ...m];
   }, []).map(l => `\t${l}`);
   const k = [c, `  ${d || ""}`].filter(l => l ? l.trim() : l).join("\n\n");
   a = `${k ? `${k}\n` : ""}
@@ -957,48 +941,22 @@ ${a.join("\n")}
     ${e}
 ` : a;
 }
-;const gc = (a, b, c, d = !1, e = !1) => {
-  const f = c ? new RegExp(`^-(${c}|-${b})`) : new RegExp(`^--${b}`);
+;const cc = (a, b, c, d = !1, e = !1) => {
+  const f = c ? new RegExp(`^-(${c}|-${b})$`) : new RegExp(`^--${b}$`);
   b = a.findIndex(g => f.test(g));
   if (-1 == b) {
     return {argv:a};
   }
   if (d) {
-    return {value:!0, argv:[...a.slice(0, b), ...a.slice(b + 1)]};
+    return {value:!0, index:b, length:1};
   }
-  d = b + 1;
-  c = a[d];
-  if (!c || "string" == typeof c && c.startsWith("--")) {
+  d = a[b + 1];
+  if (!d || "string" == typeof d && d.startsWith("--")) {
     return {argv:a};
   }
-  e && (c = parseInt(c, 10));
-  return {value:c, argv:[...a.slice(0, b), ...a.slice(d + 1)]};
-};
-function P(a = {}, b = process.argv) {
-  [, , ...b] = b;
-  const c = hc(b);
-  b = b.slice(c.length);
-  let d = !c.length;
-  return Object.keys(a).reduce(({h:e, ...f}, g) => {
-    if (0 == e.length && d) {
-      return {h:e, ...f};
-    }
-    const h = a[g];
-    let k;
-    if ("string" == typeof h) {
-      ({value:k, argv:e} = gc(e, g, h));
-    } else {
-      try {
-        const {short:l, boolean:m, number:n, command:p, multiple:t} = h;
-        p && t && c.length ? (k = c, d = !0) : p && c.length ? (k = c[0], d = !0) : {value:k, argv:e} = gc(e, g, l, m, n);
-      } catch (l) {
-        return {h:e, ...f};
-      }
-    }
-    return void 0 === k ? {h:e, ...f} : {h:e, ...f, [g]:k};
-  }, {h:b});
-}
-const hc = a => {
+  e && (d = parseInt(d, 10));
+  return {value:d, index:b, length:2};
+}, dc = a => {
   const b = [];
   for (let c = 0; c < a.length; c++) {
     const d = a[c];
@@ -1008,7 +966,7 @@ const hc = a => {
     b.push(d);
   }
   return b;
-}, Q = a => Object.keys(a).reduce((b, c) => {
+}, S = a => Object.keys(a).reduce((b, c) => {
   const d = a[c];
   if ("string" == typeof d) {
     return b[`-${d}`] = "", b;
@@ -1020,41 +978,90 @@ const hc = a => {
   b[c] = e;
   return b;
 }, {});
-const ic = {domains:{description:"The domain name for operations, or multiple domain names\nfor checking availability.", command:!0, multiple:!0}, init:{description:"Initialise package configuration interactively, i.e.,\nthe API key and ip address.", boolean:!0, short:"I"}, info:{description:"Show the information for the domain.", boolean:!0, short:"i"}, register:{description:"Register the domain.", boolean:!0, short:"r"}, whois:{description:"Display brief WHOIS data.", boolean:!0, short:"w"}, Whois:{description:"Display full WHOIS data.", 
-boolean:!0}, coupon:{description:"Find this month's coupon.", boolean:!0}, sandbox:{description:"Use the sandbox API.", boolean:!0, short:"s"}, whitelistIP:{description:"Add current IP address to the list of white-listed ones.", boolean:!0, short:"W"}, version:{description:"Display the current version number.", boolean:!0, short:"v"}, help:{description:"Show help information.", boolean:!0, short:"h"}}, R = P(ic), S = R.domains, jc = R.init, kc = R.info, lc = R.register, mc = R.whois, nc = R.Whois, 
-oc = R.coupon, pc = R.sandbox, qc = R.whitelistIP, rc = R.version, sc = R.help, tc = {free:{description:"Display only free domains.", boolean:!0, short:"f"}, zones:{description:"Check in these zones only.", short:"z"}}, uc = P(tc, [process.argv[0], process.argv[1], ...R.h]), vc = uc.free, wc = uc.zones, T = P({record:{description:"The record type. Can be one of the following:\n`A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,\n`NS`, `TXT`, `URL`, `URL301`, `FRAME`."}, TXT:{description:"Add a TXT record with this address to the domain.\nAlias for `--type TXT --address <TXT>`."}, 
-CNAME:{description:"Add a CNAME record with this address to the domain.\n`--type CNAME --address <CNAME>`."}, ttl:{description:"When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800."}, host:{description:"The host name for adding dns records.", default:"@"}, address:{description:"The address of the new host record."}, mxpref:{description:"MX preference for hosts. Applicable to MX records only."}, github:{description:"Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.", 
-boolean:!0, short:"g"}, "delete":{description:"Remove the specified host record.", boolean:!0}}, [process.argv[0], process.argv[1], ...uc.h]), xc = T.record, yc = T.TXT, zc = T.CNAME, Ac = T.ttl, Bc = T.host || "@", Cc = T.address, Dc = T.mxpref, Ec = T.github, Fc = T["delete"], Gc = {sort:{description:"Sort by this field (name, expire, create).", short:"S"}, desc:{description:"Sort in descending order.", boolean:!0, short:"D"}, filter:{description:"Filter by this word.", short:"F"}, pageSize:{description:"The page size.", 
-short:"P"}, type:{description:"Domain type (ALL, EXPIRING, EXPIRED).", short:"T"}}, U = P(Gc, [process.argv[0], process.argv[1], ...T.h]), Hc = U.sort, Ic = U.desc, Jc = U.filter, Kc = U.pageSize, Lc = U.type, Mc = {promo:{description:"Use this promo code on registration.", short:"p"}, years:{description:"The number of years that the domain should be registered for.", short:"y"}}, Nc = P(Mc, [process.argv[0], process.argv[1], ...U.h]), Oc = Nc.promo, Pc = Nc.years;
-const Qc = "com net org biz co cc io bz nu app page".split(" "), Rc = (a, b) => (b.length ? Qc.filter(c => b.includes(c)) : Qc).map(c => `${a}.${c}`), Sc = J("\u2713", "green"), Tc = J("-", "grey"), Uc = a => a.map(b => {
-  const {Created:c, Expires:d, IsOurDNS:e} = b, f = Date.parse(c), g = Date.parse(d), h = (new Date).getTime();
-  return {...b, Since:Math.round(Math.abs((h - f) / 864E5)), Expiry:Math.round(Math.abs((g - h) / 864E5)), Years:Math.abs((new Date(h - (new Date(f)).getTime())).getUTCFullYear() - 1970), DNS:e};
-}), Vc = a => "ENABLED" == a ? {value:Sc, length:1} : "NOTPRESENT" == a ? {value:Tc, length:1} : {value:a, length:a.length}, Wc = a => a ? "expensive-sandbox" : "expensive";
-const Xc = Qc.join(", ");
-const Yc = a => ({value:`\x1b[1m${a}\x1b[0m`, length:a.length}), Zc = a => a.reduce((b, c) => ({...b, [c]:!0}), {});
+const ec = {domains:{description:"The domain name for operations, or multiple domain names\nfor checking availability.", command:!0, multiple:!0}, init:{description:"Initialise package configuration interactively, i.e.,\nthe API key and ip address.", boolean:!0, short:"I"}, info:{description:"Show the information for the domain.", boolean:!0, short:"i"}, register:{description:"Register the domain.", boolean:!0, short:"r"}, whois:{description:"Display brief WHOIS data.", boolean:!0, short:"w"}, Whois:{description:"Display full WHOIS data.", 
+boolean:!0}, coupon:{description:"Find this month's coupon.", boolean:!0}, sandbox:{description:"Use the sandbox API.", boolean:!0, short:"s"}, whitelistIP:{description:"Add current IP address to the list of white-listed ones.", boolean:!0, short:"W"}, version:{description:"Display the current version number.", boolean:!0, short:"v"}, help:{description:"Show help information.", boolean:!0, short:"h"}}, fc = {free:{description:"Display only free domains.", boolean:!0, short:"f"}, zones:{description:"Check in these zones only.", 
+short:"z"}}, gc = {record:{description:"The record type. Can be one of the following:\n`A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,\n`NS`, `TXT`, `URL`, `URL301`, `FRAME`."}, TXT:{description:"Add a TXT record with this address to the domain.\nAlias for `--record TXT --address <TXT>`.", short:"TXT"}, A:{description:"Add an `A` record with this address to the domain.\nAlias for `--record A --address <A>`.", short:"A"}, CNAME:{description:"Add a CNAME record with this address to the domain.\n`--record CNAME --address <CNAME>`.", 
+short:"CNAME"}, ttl:{description:"When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800."}, host:{description:"The host name for adding dns records.", default:"@"}, address:{description:"The address of the new host record."}, mxpref:{description:"MX preference for hosts. Applicable to MX records only."}, github:{description:"Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.", 
+boolean:!0, short:"g"}, "delete":{description:"Remove the specified host record.", boolean:!0, short:"d"}}, hc = {sort:{description:"Sort by this field (name, expire, create).", short:"S"}, desc:{description:"Sort in descending order.", boolean:!0, short:"D"}, filter:{description:"Filter by this word.", short:"F"}, pageSize:{description:"The page size.", short:"P"}, type:{description:"Domain type (ALL, EXPIRING, EXPIRED).", short:"T"}}, ic = {promo:{description:"Use this promo code on registration.", 
+short:"p"}, years:{description:"The number of years that the domain should be registered for.", short:"y"}}, T = function(a = {}, b = process.argv) {
+  let [, , ...c] = b;
+  const d = dc(c);
+  c = c.slice(d.length);
+  a = Object.entries(a).reduce((g, [h, k]) => {
+    g[h] = "string" == typeof k ? {short:k} : k;
+    return g;
+  }, {});
+  const e = [];
+  a = Object.entries(a).reduce((g, [h, k]) => {
+    let l;
+    try {
+      const n = k.short, m = k.boolean, r = k.number, u = k.command, q = k.multiple;
+      if (u && q && d.length) {
+        l = d;
+      } else {
+        if (u && d.length) {
+          l = d[0];
+        } else {
+          const t = cc(c, h, n, m, r);
+          ({value:l} = t);
+          const x = t.index, y = t.length;
+          void 0 !== x && y && e.push({index:x, length:y});
+        }
+      }
+    } catch (n) {
+      return g;
+    }
+    return void 0 === l ? g : {...g, [h]:l};
+  }, {});
+  let f = c;
+  e.forEach(({index:g, length:h}) => {
+    Array.from({length:h}).forEach((k, l) => {
+      f[g + l] = null;
+    });
+  });
+  f = f.filter(g => null !== g);
+  Object.assign(a, {S:f});
+  return a;
+}({...ec, ...fc, ...gc, ...hc, ...ic}), U = T.domains, jc = T.init, kc = T.info, lc = T.register, mc = T.whois, nc = T.Whois, oc = T.coupon, pc = T.sandbox, qc = T.whitelistIP, rc = T.version, sc = T.help, tc = T.free, uc = T.zones, vc = T.record, wc = T.TXT, xc = T.A, yc = T.CNAME, zc = T.ttl, Ac = T.host || "@", Bc = T.address, Cc = T.mxpref, Dc = T.github, Ec = T["delete"], Fc = T.sort, Gc = T.desc, Hc = T.filter, Ic = T.pageSize, Jc = T.type, Kc = T.promo, Lc = T.years;
+const Mc = "com net org biz co cc io bz nu app page".split(" "), Nc = (a, b) => (b.length ? Mc.filter(c => b.includes(c)) : Mc).map(c => `${a}.${c}`), Oc = M("\u2713", "green"), Pc = M("-", "grey"), Qc = a => a.map(b => {
+  var c = b.Expires;
+  const d = b.IsOurDNS, e = Date.parse(b.Created);
+  c = Date.parse(c);
+  const f = (new Date).getTime();
+  return {...b, Since:Math.round(Math.abs((f - e) / 864E5)), Expiry:Math.round(Math.abs((c - f) / 864E5)), Years:Math.abs((new Date(f - (new Date(e)).getTime())).getUTCFullYear() - 1970), DNS:d};
+}), Rc = a => "ENABLED" == a ? {value:Oc, length:1} : "NOTPRESENT" == a ? {value:Pc, length:1} : {value:a, length:a.length}, Sc = a => a ? "expensive-sandbox" : "expensive";
+const Tc = Mc.join(", "), Uc = () => {
+  var a = S(gc);
+  return Object.entries(a).reduce((b, [c, d]) => {
+    d = d.replace(/`(.+?)`/g, (e, f) => `\x1b[1m${f}\x1b[0m`);
+    b[c] = d;
+    return b;
+  }, {});
+};
+const Vc = a => ({value:`\x1b[1m${a}\x1b[0m`, length:a.length}), Wc = a => a.reduce((b, c) => ({...b, [c]:!0}), {});
 function V(a) {
   const {keys:b = [], data:c = [], headings:d = {}, replacements:e = {}, centerValues:f = [], centerHeadings:g = []} = a;
   var [h] = c;
   if (!h) {
     return "";
   }
-  const k = Zc(f);
-  a = Zc(g);
-  h = Object.keys(h).reduce((n, p) => {
-    const t = d[p];
-    return {...n, [p]:t ? t.length : p.length};
+  const k = Wc(f);
+  a = Wc(g);
+  h = Object.keys(h).reduce((m, r) => {
+    const u = d[r];
+    return {...m, [r]:u ? u.length : r.length};
   }, {});
-  const l = c.reduce((n, p) => Object.keys(p).reduce((t, r) => {
-    const u = n[r], {length:x} = $c(e, r)(p[r]);
-    return {...t, [r]:Math.max(x, u)};
+  const l = c.reduce((m, r) => Object.keys(r).reduce((u, q) => {
+    const t = m[q], {length:x} = Xc(e, q)(r[q]);
+    return {...u, [q]:Math.max(x, t)};
   }, {}), h);
-  h = b.reduce((n, p) => ({...n, [p]:d[p] || p}), {});
-  const m = b.reduce((n, p) => ({...n, [p]:Yc}), {});
-  a = ad(b, h, l, m, a);
-  h = c.map(n => ad(b, n, l, e, k));
+  h = b.reduce((m, r) => ({...m, [r]:d[r] || r}), {});
+  const n = b.reduce((m, r) => ({...m, [r]:Vc}), {});
+  a = Yc(b, h, l, n, a);
+  h = c.map(m => Yc(b, m, l, e, k));
   return [a, ...h].join("\n");
 }
-const bd = (a, b, c, d) => {
+const Zc = (a, b, c, d) => {
   if (void 0 === a) {
     return " ".repeat(b);
   }
@@ -1072,7 +1079,7 @@ const bd = (a, b, c, d) => {
   }
   d = " ".repeat(b);
   return `${e}${d}`;
-}, $c = (a, b) => (a = a[b]) ? a : c => ({value:c, length:`${c}`.replace(/\033\[.*?m/g, "").length}), ad = (a, b, c, d = {}, e = {}) => {
+}, Xc = (a, b) => (a = a[b]) ? a : c => ({value:c, length:`${c}`.replace(/\033\[.*?m/g, "").length}), Yc = (a, b, c, d = {}, e = {}) => {
   let f = 0;
   return a.map(g => {
     const h = c[g];
@@ -1080,39 +1087,39 @@ const bd = (a, b, c, d) => {
       throw Error(`Unknown field ${g}`);
     }
     var k = b[g];
-    const l = $c(d, g), m = e[g], [n, ...p] = `${k}`.split("\n");
-    g = bd(n, h, l, m);
+    const l = Xc(d, g), n = e[g], [m, ...r] = `${k}`.split("\n");
+    g = Zc(m, h, l, n);
     k = "";
-    p.length && (k = "\n" + p.map(t => {
-      const r = " ".repeat(f);
-      t = bd(t, h, l, m);
-      return `${r}${t}`;
+    r.length && (k = "\n" + r.map(u => {
+      const q = " ".repeat(f);
+      u = Zc(u, h, l, n);
+      return `${q}${u}`;
     }).join("\n"));
     f += h + 2;
     return `${g}${k}`;
   }).join("  ");
 };
-function cd(a = []) {
-  a.length ? (a = Uc(a), a = V({keys:["Name", "Expiry", "Years", "WhoisGuard", "DNS"], data:a, headings:{WhoisGuard:"Whois"}, replacements:{WhoisGuard:Vc, ["DNS"](b) {
+function $c(a = []) {
+  a.length ? (a = Qc(a), a = V({keys:["Name", "Expiry", "Years", "WhoisGuard", "DNS"], data:a, headings:{WhoisGuard:"Whois"}, replacements:{WhoisGuard:Rc, ["DNS"](b) {
     return b ? {value:"yes", length:3} : {value:"", length:0};
   }, ["Years"](b) {
     return b ? {value:b, length:`${b}`.length} : {value:"", length:0};
   }}, centerValues:["WhoisGuard"]}), console.log(a)) : console.log("No domains");
 }
-;async function dd(a, {sort:b, desc:c, page:d, filter:e, type:f, pageSize:g} = {}) {
+;async function ad(a, {sort:b, desc:c, page:d, filter:e, type:f, pageSize:g} = {}) {
   const {domains:h, ...k} = await a.domains.getList({page:d, sort:b, desc:c, filter:e, type:f, pageSize:g});
-  cd(h);
-  (d = ed(k)) && await I(`Page ${fd(k)}. Display more`) && await dd(a, {page:d, sort:b, desc:c, filter:e, type:f, pageSize:g});
+  $c(h);
+  (d = bd(k)) && await L(`Page ${cd(k)}. Display more`) && await ad(a, {page:d, sort:b, desc:c, filter:e, type:f, pageSize:g});
 }
-const ed = ({CurrentPage:a, TotalItems:b, PageSize:c}) => {
+const bd = ({CurrentPage:a, TotalItems:b, PageSize:c}) => {
   if (a * c < b) {
     return a + 1;
   }
-}, fd = ({CurrentPage:a, TotalItems:b, PageSize:c}) => `${a}/${Math.ceil(b / c)}`;
-const {join:gd, resolve:hd} = path;
-const W = hd(w(), ".expensive.log");
-async function id(a) {
-  var {domains:b, D:c, M:d = ""} = {domains:S, M:wc, D:vc}, e = b.reduce((h, k) => /\./.test(k) ? [...h, k] : (k = Rc(k, d ? d.split(",") : []), [...h, ...k]), []);
+}, cd = ({CurrentPage:a, TotalItems:b, PageSize:c}) => `${a}/${Math.ceil(b / c)}`;
+const dd = path.join, ed = path.resolve;
+const W = ed(v(), ".expensive.log");
+async function fd(a) {
+  var {domains:b, B:c, K:d = ""} = {domains:U, K:uc, B:tc}, e = b.reduce((h, k) => /\./.test(k) ? [...h, k] : (k = Nc(k, d ? d.split(",") : []), [...h, ...k]), []);
   console.log("Checking domain%s %s", 1 < e.length ? "s" : "", e.join(", "));
   const f = await a.domains.check({domains:e});
   a = e.map(h => {
@@ -1123,200 +1130,206 @@ async function id(a) {
   a = c ? a.filter(({Available:h}) => h) : a;
   e = a.some(({IsPremiumName:h}) => h);
   const g = a.some(({PremiumRegistrationPrice:h}) => h);
-  e = V({keys:["Domain", "Available", ...e ? ["IsPremiumName"] : [], ...g ? ["PremiumRegistrationPrice"] : []], data:a.map(h => ({...h, Available:h.Available ? J("yes", "green") : J("no", "red"), IsPremiumName:h.IsPremiumName ? J("\u2713", "green") : "", PremiumRegistrationPrice:h.PremiumRegistrationPrice ? parseFloat(h.PremiumRegistrationPrice).toFixed(2) : ""})), headings:{IsPremiumName:"Premium", PremiumRegistrationPrice:"Price"}, centerValues:["Available", "IsPremiumName"]});
+  e = V({keys:["Domain", "Available", ...e ? ["IsPremiumName"] : [], ...g ? ["PremiumRegistrationPrice"] : []], data:a.map(h => ({...h, Available:h.Available ? M("yes", "green") : M("no", "red"), IsPremiumName:h.IsPremiumName ? M("\u2713", "green") : "", PremiumRegistrationPrice:h.PremiumRegistrationPrice ? parseFloat(h.PremiumRegistrationPrice).toFixed(2) : ""})), headings:{IsPremiumName:"Premium", PremiumRegistrationPrice:"Price"}, centerValues:["Available", "IsPremiumName"]});
   console.log(e);
-  await jd(b.join(","), a);
+  await gd(b.join(","), a);
 }
-const jd = async(a, b) => {
-  gb(W) || await E(W, []);
-  a = [...await E(W), {[a]:b.filter(({Available:c}) => c).map(({Domain:c}) => c)}];
-  await E(W, a, {space:2});
+const gd = async(a, b) => {
+  eb(W) || await F(W, []);
+  a = [...await F(W), {[a]:b.filter(({Available:c}) => c).map(({Domain:c}) => c)}];
+  await F(W, a, {space:2});
 };
-const kd = (a, b) => {
+const hd = (a, b) => {
   a = " ".repeat(Math.max(a - b.length, 0));
   return `${b}${a}`;
-}, ld = a => {
-  var {width:b} = {};
+}, id = a => {
   a = a.split("\n");
-  b = b || a.reduce((c, {length:d}) => d > c ? d : c, 0);
-  return a.map(kd.bind(null, b)).join("\n");
+  const b = {}.width || a.reduce((c, {length:d}) => d > c ? d : c, 0);
+  return a.map(hd.bind(null, b)).join("\n");
 };
-function md(a) {
+function jd(a) {
   const {padding:b = 1} = {};
   var c = a.split("\n").reduce((f, {length:g}) => g > f ? g : f, 0) + 2 * b;
   const d = `\u250c${"\u2500".repeat(c)}\u2510`;
   c = `\u2514${"\u2500".repeat(c)}\u2518`;
   const e = " ".repeat(b);
-  a = ld(a).split("\n").map(f => `\u2502${e}${f}${e}\u2502`).join("\n");
+  a = id(a).split("\n").map(f => `\u2502${e}${f}${e}\u2502`).join("\n");
   return `${d}\n${a}\n${c}`;
 }
 ;async function X(a, b) {
   const {interval:c = 250, writable:d = process.stdout} = {};
   b = "function" == typeof b ? b() : b;
   const e = d.write.bind(d);
-  let f = 1, g = `${a}${".".repeat(f)}`;
-  e(g);
-  const h = setInterval(() => {
-    f = (f + 1) % 4;
-    g = `${a}${".".repeat(f)}`;
+  var f = process.env.b;
+  if (f && "0" != f) {
+    return e(`${a}<INDICATRIX_PLACEHOLDER>`), await b;
+  }
+  let g = 1, h = `${a}${".".repeat(g)}`;
+  e(h);
+  f = setInterval(() => {
+    g = (g + 1) % 4;
+    h = `${a}${".".repeat(g)}`;
     e(`\r${" ".repeat(a.length + 3)}\r`);
-    e(g);
+    e(h);
   }, c);
   try {
     return await b;
   } finally {
-    clearInterval(h), e(`\r${" ".repeat(a.length + 3)}\r`);
+    clearInterval(f), e(`\r${" ".repeat(a.length + 3)}\r`);
   }
 }
-;q("expensive");
-const nd = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, od = async a => await (a ? N.SANDBOX_COUPON() : N.COUPON()), pd = a => {
+;p("expensive");
+const kd = a => (a = a.find(({IsDefault:b}) => b)) ? a.AddressId : null, ld = async a => await (a ? Q.SANDBOX_COUPON() : Q.COUPON()), md = a => {
   a = a.split(".");
   return a[a.length - 1];
-}, qd = (a, b, c) => a.domains.register[b].find(({Duration:d}) => d == c), rd = async(a, b, c, d) => {
+}, nd = (a, b, c) => a.domains.register[b].find(({Duration:d}) => d == c), od = async(a, b, c, d) => {
   const e = await a.users.getPricing({type:"DOMAIN", promoCode:d, action:"REGISTER", product:b});
   if (d) {
     var f = await a.users.getPricing({type:"DOMAIN", action:"REGISTER", product:b});
-    ({YourPrice:f} = qd(f, b, c));
+    ({YourPrice:f} = nd(f, b, c));
   }
-  b = qd(e, b, c);
-  return {m:d, AdditionalCost:b.YourAdditonalCost, Price:b.YourPrice, S:b.YourPriceType, N:b.YourAdditonalCostType, Currency:b.Currency, v:f};
-}, sd = async(a, b, c) => {
+  b = nd(e, b, c);
+  return {j:d, AdditionalCost:b.YourAdditonalCost, Price:b.YourPrice, R:b.YourPriceType, M:b.YourAdditonalCostType, Currency:b.Currency, s:f};
+}, pd = async(a, b, c) => {
   if (a) {
     return console.log("Using promo %s", a), a;
   }
   if (["com", "net", "org", "info", "biz"].includes(c)) {
     try {
-      const d = await X("Checking coupon online", od(b));
-      if (await I(`\rApply coupon ${d}?`)) {
+      const d = await X("Checking coupon online", ld(b));
+      if (await L(`\rApply coupon ${d}?`)) {
         return d;
       }
     } catch (d) {
       console.log("Could not retrieve promo");
     }
   }
-}, td = async({IsPremiumName:a, PremiumRegistrationPrice:b, EapFee:c}) => {
+}, qd = async({IsPremiumName:a, PremiumRegistrationPrice:b, EapFee:c}) => {
   let d = !0;
-  a && (d = await I(`Continue with the premium registration price of ${b}?`, {defaultYes:!1}));
-  parseFloat(c) && (d = d && await I(`Continue with the early access fee of ${c}?`, {defaultYes:!1}));
+  a && (d = await L(`Continue with the premium registration price of ${b}?`, {defaultYes:!1}));
+  parseFloat(c) && (d = d && await L(`Continue with the early access fee of ${c}?`, {defaultYes:!1}));
   if (!d) {
     throw Error("No confirmation.");
   }
-}, ud = a => a.map(b => ({...b, value:`SKIP-${b.value}`})), vd = async(a, {F:b, years:c, promo:d, K:e}) => {
-  const {IcannFee:f, PremiumRenewalPrice:g, PremiumTransferPrice:h, PremiumRegistrationPrice:k, IsPremiumName:l, EapFee:m} = a;
-  a = await rd(b, e, c, d);
-  b = [{name:"Premium Registration Price", value:k, l:k}, ...ud([{name:"Premium Renewal Price", value:g}, {name:"Premium Transfer Price", value:h}])];
-  c = 0 != parseFloat(m);
-  d = [{name:"Eap Fee", value:m, l:m}];
-  c = [...l ? b : [], ...c ? d : []];
-  d = [{name:"Price", value:a.Price, l:a.Price}, ...ud(a.m ? [{name:"Without Promo", value:a.v}] : []), ...f ? [{name:"Icann Fee", value:f}] : [], ...a.AdditionalCost ? [{name:"Additional Cost", value:`${a.AdditionalCost}`, l:a.AdditionalCost}] : []];
-  b = (e = c.length) ? [...c, ...ud(d)] : d;
-  c = (e ? c : d).reduce((n, {l:p = 0}) => n + parseFloat(p), 0);
-  c = `${Number(c).toFixed(2)} ${a.Currency}`;
-  c = [{name:"-----", value:"-".repeat(c.length)}, {name:"Total", value:c}];
-  b = V({keys:["name", "value"], data:[...b, ...c], headings:["Price", "Value"], replacements:{value(n) {
-    const [, p] = `${n}`.split("SKIP-");
-    return p ? {value:J(p, "grey"), length:p.length} : {value:n, length:n.length};
+}, rd = a => a.map(b => ({...b, value:`SKIP-${b.value}`})), sd = async(a, {D:b, years:c, promo:d, J:e}) => {
+  var f = a.IcannFee, g = a.PremiumRenewalPrice, h = a.PremiumTransferPrice;
+  const k = a.PremiumRegistrationPrice;
+  var l = a.IsPremiumName;
+  a = a.EapFee;
+  b = await od(b, e, c, d);
+  g = [{name:"Premium Registration Price", value:k, i:k}, ...rd([{name:"Premium Renewal Price", value:g}, {name:"Premium Transfer Price", value:h}])];
+  h = 0 != parseFloat(a);
+  a = [{name:"Eap Fee", value:a, i:a}];
+  l = [...l ? g : [], ...h ? a : []];
+  a = [{name:"Price", value:b.Price, i:b.Price}, ...rd(b.j ? [{name:"Without Promo", value:b.s}] : []), ...f ? [{name:"Icann Fee", value:f}] : [], ...b.AdditionalCost ? [{name:"Additional Cost", value:`${b.AdditionalCost}`, i:b.AdditionalCost}] : []];
+  f = (g = l.length) ? [...l, ...rd(a)] : a;
+  l = (g ? l : a).reduce((n, {i:m = 0}) => n + parseFloat(m), 0);
+  l = `${Number(l).toFixed(2)} ${b.Currency}`;
+  l = [{name:"-----", value:"-".repeat(l.length)}, {name:"Total", value:l}];
+  f = V({keys:["name", "value"], data:[...f, ...l], headings:["Price", "Value"], replacements:{value(n) {
+    const [, m] = `${n}`.split("SKIP-");
+    return m ? {value:M(m, "grey"), length:m.length} : {value:n, length:n.length};
   }}}).replace(/.+\n/, "");
-  return {A:a, table:b};
+  return {v:b, table:f};
 };
-async function wd(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
+async function td(a, {domain:b, promo:c, sandbox:d, years:e = 1}) {
   const f = await X(`Confirming availability of ${b}`, async() => {
-    const [v] = await a.domains.check(b);
-    return v;
-  }), {Available:g, EapFee:h, PremiumRegistrationPrice:k, Domain:l, IsPremiumName:m} = f;
-  if (!g) {
-    throw Error(`Domain ${l} is not available.`);
+    const [t] = await a.domains.check(b);
+    return t;
+  }), g = f.EapFee, h = f.PremiumRegistrationPrice;
+  var k = f.Domain;
+  const l = f.IsPremiumName;
+  if (!f.Available) {
+    throw Error(`Domain ${k} is not available.`);
   }
-  const n = pd(b), p = await sd(c, d, n), {A:t, table:r} = await X(`Getting ${e}-year price`, vd(f, {F:a, promo:p, years:e, K:n}));
+  k = md(b);
+  const n = await pd(c, d, k), {v:m, table:r} = await X(`Getting ${e}-year price`, sd(f, {D:a, promo:n, years:e, J:k}));
   console.log("\n%s", r);
-  t.m && parseFloat(t.Price) > parseFloat(t.v) && console.log("[!] Warning: you will pay more with coupon %s than without it.", t.m);
+  m.j && parseFloat(m.Price) > parseFloat(m.s) && console.log("[!] Warning: you will pay more with coupon %s than without it.", m.j);
   console.log("");
-  m && await td({IsPremiumName:m, PremiumRegistrationPrice:k, EapFee:h});
+  l && await qd({IsPremiumName:l, PremiumRegistrationPrice:h, EapFee:g});
   const u = await X("Finding default address", async() => {
-    var v = await a.address.getList();
-    v = nd(v);
-    if (!v) {
+    var t = await a.address.getList();
+    t = kd(t);
+    if (!t) {
       throw Error("Could not find the default address.");
     }
-    return await a.address.getInfo(v);
+    return await a.address.getInfo(t);
   });
-  console.log("\rRegistering %s using:", Fb(b));
-  xd(u);
-  if (await I("OK?", {defaultYes:!1})) {
-    var x;
+  console.log("\rRegistering %s using:", Cb(b));
+  ud(u);
+  if (await L("OK?", {defaultYes:!1})) {
+    var q;
     try {
-      ({ChargedAmount:x} = await X("Registering the domain", async() => a.domains.create({address:u, domain:b, years:e, promo:p, ...m ? {premium:{P:!0, R:parseFloat(k), EapFee:parseFloat(h)}} : {}})));
-    } catch (v) {
-      const {f:K = {}, message:G} = v;
-      ({Number:c} = K);
-      2515610 == c ? (console.warn("[!] Bug: cannot register a premium with Eap."), console.warn(" -  Response when requesting w/out EapFee:"), console.log("    %s", G)) : /No free connections to registry./.test(G) ? (console.log("    %s", G), console.log("Please try again.")) : 3028166 == c && (console.warn("[!] Possible Bug (e.g., after sending without Eap)"), console.log("    %s", G));
-      throw v;
+      ({ChargedAmount:q} = await X("Registering the domain", async() => a.domains.create({address:u, domain:b, years:e, promo:n, ...l ? {premium:{N:!0, P:parseFloat(h), EapFee:parseFloat(g)}} : {}})));
+    } catch (t) {
+      const {props:x = {}, message:y} = t;
+      c = x.Number;
+      2515610 == c ? (console.warn("[!] Bug: cannot register a premium with Eap."), console.warn(" -  Response when requesting w/out EapFee:"), console.log("    %s", y)) : /No free connections to registry./.test(y) ? (console.log("    %s", y), console.log("Please try again.")) : 3028166 == c && (console.warn("[!] Possible Bug (e.g., after sending without Eap)"), console.log("    %s", y));
+      throw t;
     }
-    console.log("Successfully registered %s! Charged amount: $%s.", J(b, "green"), Number(x).toFixed(2));
+    console.log("Successfully registered %s! Charged amount: $%s.", M(b, "green"), Number(q).toFixed(2));
   }
 }
-const xd = ({FirstName:a, LastName:b, Address1:c, Address2:d, City:e, Zip:f, Country:g, EmailAddress:h}) => {
-  a = md(`${a} ${b}, ${h}
+const ud = ({FirstName:a, LastName:b, Address1:c, Address2:d, City:e, Zip:f, Country:g, EmailAddress:h}) => {
+  a = jd(`${a} ${b}, ${h}
  ${c}${d ? `\n ${d}` : ""}
  ${e}
  ${f}, ${g}`);
   console.log(a);
 };
-async function yd(a, b) {
+async function vd(a, b) {
   let {hosts:c, IsUsingOurDNS:d} = await a.dns.getHosts(b);
   if (!d) {
     throw Error(`Namecheap DNS is not being used for ${b}`);
   }
   c.reduce(async(f, {Type:g, Name:h, Address:k}) => {
     await f;
-    "A" == g && "@" == h && (await I(`An A record at @ (${k}) already exists. Continue?`) || process.exit());
+    "A" == g && "@" == h && (await L(`An A record at @ (${k}) already exists. Continue?`) || process.exit());
   }, {});
   c = c.filter(({Type:f, Name:g, Address:h}) => "www" == g && "CNAME" == f && "parkingpage.namecheap.com." == h || "@" == g && "URL" == f ? !1 : !0);
-  const e = c.map(f => {
-    const {TTL:g, Type:h, Address:k, Name:l, MXPref:m} = f;
-    return {TTL:g, RecordType:h, Address:k, HostName:l, MXPref:m};
-  });
+  const e = c.map(f => ({TTL:f.TTL, RecordType:f.Type, Address:f.Address, HostName:f.Name, MXPref:f.MXPref}));
   e.push({Address:"185.199.108.153", RecordType:"A", HostName:"@"}, {Address:"185.199.109.153", RecordType:"A", HostName:"@"}, {Address:"185.199.110.153", RecordType:"A", HostName:"@"}, {Address:"185.199.111.153", RecordType:"A", HostName:"@"});
-  if (!(await X(`Setting ${J(`${e.length}`, "yellow")} host records`, async() => await a.dns.setHosts(b, e))).IsSuccess) {
+  if (!(await X(`Setting ${M(`${e.length}`, "yellow")} host records`, async() => await a.dns.setHosts(b, e))).IsSuccess) {
     throw Error("Operation wasn't successful.");
   }
 }
-;const zd = async a => await new Promise((b, c) => {
-  hb(a, d => {
+;const wd = async a => await new Promise((b, c) => {
+  fb(a, d => {
     d && "ENOENT" == d.code ? b(!1) : d ? c(d) : b(!0);
   });
 });
-async function Ad(a, b, c) {
-  a = await Bb(a, c);
-  await E(b, a, {space:2});
+async function xd(a, b, c) {
+  a = await zb(a, c);
+  await F(b, a, {space:2});
   return a;
 }
-;async function Bd(a, b = {}, c = {}) {
+;async function yd(a, b = {}, c = {}) {
   if ("string" != typeof a) {
     throw Error("Package name is required.");
   }
-  const {homedir:d = w(), rcNameFunction:e = l => `.${l}rc`, force:f = !1, local:g = !1, questionsTimeout:h} = c;
+  const {homedir:d = v(), rcNameFunction:e = l => `.${l}rc`, force:f = !1, local:g = !1, questionsTimeout:h} = c;
   var k = e(a);
-  a = hd(d, k);
-  c = await zd(a);
+  a = ed(d, k);
+  c = await wd(a);
   if (g) {
-    k = hd(k);
-    const l = await zd(k);
-    return await Cd(c, l, a, k, b, h, f);
+    k = ed(k);
+    const l = await wd(k);
+    return await zd(c, l, a, k, b, h, f);
   }
-  return await Dd(c, a, b, h, f);
+  return await Ad(c, a, b, h, f);
 }
-const Dd = async(a, b, c, d, e) => a ? await Ed(b, c, e, d) : await Ad(c, b, d), Ed = async(a, b, c, d) => {
-  const e = await E(a);
-  return c ? await Fd(b, a, e, d) : e;
-}, Cd = async(a, b, c, d, e, f, g) => b ? await Ed(d, e, g, f) : (a = a ? await E(c) : {}, await Fd(e, d, a, f)), Fd = async(a, b, c, d) => {
-  a = Gd(a, c);
-  return await Ad(a, b, d);
-}, Gd = (a, b) => Object.keys(a).reduce((c, d) => {
+const Ad = async(a, b, c, d, e) => a ? await Bd(b, c, e, d) : await xd(c, b, d), Bd = async(a, b, c, d) => {
+  const e = await F(a);
+  return c ? await Cd(b, a, e, d) : e;
+}, zd = async(a, b, c, d, e, f, g) => b ? await Bd(d, e, g, f) : (a = a ? await F(c) : {}, await Cd(e, d, a, f)), Cd = async(a, b, c, d) => {
+  a = Dd(a, c);
+  return await xd(a, b, d);
+}, Dd = (a, b) => Object.keys(a).reduce((c, d) => {
   const e = b[d];
   return {...c, [d]:{...a[d], ...e ? {defaultValue:e} : {}}};
 }, {});
-var Hd = {ApiUser:{text:"Username", validation:a => {
+var Ed = {ApiUser:{text:"Username", validation:a => {
   if (!a) {
     throw Error("Please enter the namecheap username.");
   }
@@ -1324,11 +1337,11 @@ var Hd = {ApiUser:{text:"Username", validation:a => {
   if (!a) {
     throw Error("Please provide the namecheap api key.");
   }
-}}, ClientIp:{text:"Client ip", getDefault:N.LOOKUP_IP}, phone:{text:"Last 3 digit of phone to use for 2 factor auth"}};
-const Id = q("expensive"), Jd = async() => {
-  const a = Wc(Y);
-  Id("Reading %s rc", a);
-  const {ApiUser:b, ApiKey:c, ClientIp:d, phone:e} = await Bd(a, Hd);
+}}, ClientIp:{text:"Client ip", getDefault:Q.LOOKUP_IP}, phone:{text:"Last 3 digit of phone to use for 2 factor auth"}};
+const Fd = p("expensive"), Gd = async() => {
+  const a = Sc(Y);
+  Fd("Reading %s rc", a);
+  const {ApiUser:b, ApiKey:c, ClientIp:d, phone:e} = await yd(a, Ed);
   if (!b) {
     throw Error("Api User is missing");
   }
@@ -1337,55 +1350,57 @@ const Id = q("expensive"), Jd = async() => {
   }
   return {ApiUser:b, ApiKey:c, ClientIp:d, phone:e};
 };
-const Kd = q("expensive"), Ld = async(a, b, c) => {
-  c = c || await N.LOOKUP_IP();
-  const d = await Cb({text:`Enter the password to white-list ${c}`, validation(f) {
+const Hd = p("expensive"), Id = async(a, b, c) => {
+  c = c || await Q.LOOKUP_IP();
+  const d = await K({text:`Enter the password to white-list ${c}`, validation(f) {
     if (!f) {
       throw Error("Please enter the password.");
     }
-  }, password:!0}), e = new N({sandbox:b});
+  }, password:!0}), e = new Q({sandbox:b});
   await e.auth(a.ApiUser, d, a.phone);
   await e.whitelistIP(c);
-  b = Wc(b);
-  b = gd(w(), `.${b}rc`);
-  Kd("Writing to %s", b);
-  await E(b, {...a, ClientIp:c});
+  b = Sc(b);
+  b = dd(v(), `.${b}rc`);
+  Hd("Writing to %s", b);
+  await F(b, {...a, ClientIp:c});
 };
-var Md = {1:"Requesting white-listing of the IP address.", 1011150:"Parameter RequestIP is invalid", 2030166:"Domain is invalid", 2011170:"PromotionCode is invalid"};
-const Nd = a => [["Domain Name", "name", "string", (b, c) => `${b}: ${c}`], ["Registrar URL", "url", "string", (b, c) => `${b}: ${c}`], ["Updated Date", "updated", "date", (b, c, d) => `${b}: ${c} (${d} ${1 == d ? "day" : "days"} ago)`], ["Creation Date", "created", "date", (b, c, d) => `${b}: ${c} (${d} ${1 == d ? "day" : "days"} ago)`], ["Registry Expiry Date", "expire", "date", (b, c, d) => `${b}: ${c} (in ${-d} ${1 == -d ? "day" : "days"})`], ["Name Server", "ns", "array", (b, c) => `${b}: ${c}`]].reduce((b, 
+var Jd = {1:"Requesting white-listing of the IP address.", 1011150:"Parameter RequestIP is invalid", 2030166:"Domain is invalid", 2011170:"PromotionCode is invalid"};
+const Kd = a => [["Domain Name", "name", "string", (b, c) => `${b}: ${c}`], ["Registrar URL", "url", "string", (b, c) => `${b}: ${c}`], ["Updated Date", "updated", "date", (b, c, d) => `${b}: ${c} (${d} ${1 == d ? "day" : "days"} ago)`], ["Creation Date", "created", "date", (b, c, d) => `${b}: ${c} (${d} ${1 == d ? "day" : "days"} ago)`], ["Registry Expiry Date", "expire", "date", (b, c, d) => `${b}: ${c} (in ${-d} ${1 == -d ? "day" : "days"})`], ["Name Server", "ns", "array", (b, c) => `${b}: ${c}`]].reduce((b, 
 [c, d, e, f]) => {
   try {
     const h = "date" == e;
     e = "array" == e;
     const k = new RegExp(`^${c}: (.+)`, "mg"), l = [];
-    let m;
-    for (; null !== (m = k.exec(a));) {
-      const [, t] = m;
-      l.push(h ? new Date(t) : t);
+    let n;
+    for (; null !== (n = k.exec(a));) {
+      const [, u] = n;
+      l.push(h ? new Date(u) : u);
     }
-    const n = e ? l.join("\n ") : l[0], p = f(c, h ? n.toLocaleString() : n, h ? Math.round(((new Date).getTime() - n.getTime()) / 864E5) : null);
-    var g = {[d]:p};
+    const m = e ? l.join("\n ") : l[0], r = f(c, h ? m.toLocaleString() : m, h ? Math.round(((new Date).getTime() - m.getTime()) / 864E5) : null);
+    var g = {[d]:r};
   } catch (h) {
     g = {};
   }
   return {...b, ...g};
 }, {});
-var Od = async() => {
-  var a = await N.WHOIS(S);
+var Ld = async() => {
+  var a = await Q.WHOIS(U);
   if (nc) {
     return console.log(a);
   }
-  a = Nd(a);
+  a = Kd(a);
   Object.values(a).forEach(b => console.log(b));
 };
-const Pd = async() => {
-  await Bd(Wc(Y), Hd, {force:!0});
+const Md = async() => {
+  await yd(Sc(Y), Ed, {force:!0});
 };
-async function Qd(a, b) {
-  const [c, d] = await Promise.all([a.domains.getInfo(b), a.dns.getHosts(b)]);
+async function Nd(a, b) {
+  const [c, d] = await X(`Fetching info and DNS data for ${M(b, "yellow")}`, Promise.all([a.domains.getInfo(b), a.dns.getHosts(b)]));
   {
-    const {DomainDetails:e, Whoisguard:f, DnsDetails:g} = c;
-    a = [{name:"Created:", value:e.CreatedDate}, {name:"Expires on:", value:e.ExpiredDate}, {name:"Whois enabled:", value:f.Enabled}, ...f.EmailDetails ? [{name:"Whois email:", value:f.EmailDetails.ForwardedTo}] : [], {name:"DNS:", value:"FREE" == c.DnsDetails.ProviderType ? J(g.ProviderType, "green") : g.ProviderType}, {name:"Nameservers:", value:g.Nameserver.join(", ")}, {name:"Created:", value:e.CreatedDate}];
+    a = c.DomainDetails;
+    b = c.Whoisguard;
+    const e = c.DnsDetails;
+    a = [{name:"Created:", value:a.CreatedDate}, {name:"Expires on:", value:a.ExpiredDate}, {name:"Whois enabled:", value:b.Enabled}, ...b.EmailDetails ? [{name:"Whois email:", value:b.EmailDetails.ForwardedTo}] : [], {name:"DNS:", value:"FREE" == c.DnsDetails.ProviderType ? M(e.ProviderType, "green") : e.ProviderType}, {name:"Nameservers:", value:e.Nameserver.join(", ")}, {name:"Created:", value:a.CreatedDate}];
     a = V({data:a, keys:["name", "value"]});
     [, ...a] = a.split("\n");
     a = a.join("\n");
@@ -1393,129 +1408,143 @@ async function Qd(a, b) {
   }
   d.IsUsingOurDNS && (console.log(), console.log(V({headings:["Name", "Type", "Address"], data:d.hosts, keys:["Name", "Type", "Address"]})));
 }
-;async function Rd() {
-  const a = await (Y ? N.SANDBOX_COUPON() : N.COUPON());
+;async function Od() {
+  const a = await (Y ? Q.SANDBOX_COUPON() : Q.COUPON());
   console.log(a);
 }
-;async function Sd(a, b) {
-  let c = (await X("Getting current hosts", async() => {
+;const Pd = a => a.map(b => ({TTL:b.TTL, RecordType:b.Type, Address:b.Address, HostName:b.Name, MXPref:b.MXPref}));
+async function Qd(a, b) {
+  var c = await X("Getting current hosts", async() => {
     const {hosts:g, IsUsingOurDNS:h} = await a.dns.getHosts(b);
     if (!h) {
       throw Error(`Namecheap DNS is not being used for ${b}`);
     }
     return g;
-  })).map(g => {
-    const {TTL:h, Type:k, Address:l, Name:m, MXPref:n} = g;
-    return {TTL:h, RecordType:k, Address:l, HostName:m, MXPref:n};
   });
-  var d = Cc, e = xc;
-  zc ? (e = "CNAME", d = zc) : yc && (e = "TXT", d = yc);
-  const f = Object.entries({RecordType:e, Address:d, HostName:Bc, TTL:Ac, MXPref:Dc}).reduce((g, [h, k]) => {
+  let d = Pd(c);
+  c = Bc;
+  var e = vc;
+  yc ? (e = "CNAME", c = yc) : wc ? (e = "TXT", c = wc) : xc && (e = "A", c = xc);
+  const f = Object.entries({RecordType:e, Address:c, HostName:Ac, TTL:zc, MXPref:Cc}).reduce((g, [h, k]) => {
     k && (g[h] = k);
     return g;
   }, {});
-  d = aa(f, {colors:!0});
-  if (Fc) {
-    e = c.length;
-    c = c.filter(g => Object.entries(f).some(([h, k]) => k != g[h]));
-    if (c.length == e) {
-      console.log("Host %s not found. Existing hosts:", d);
+  c = aa(f, {colors:!0, breakLength:50, compact:!1});
+  if (Ec) {
+    e = d.length;
+    d = d.filter(g => Object.entries(f).some(([h, k]) => k != g[h]));
+    if (d.length == e) {
+      console.log("Host %s not found. Existing hosts:", c);
       console.log();
-      Td(c);
+      Rd(d);
       return;
     }
-    if (!await I(`Are you sure you want to unset ${d}`)) {
+    if (!await L(`Are you sure you want to unset ${c}`)) {
       return;
     }
   } else {
-    c.push(f);
+    d.push(f);
   }
-  if (!(await X(`Setting ${J(`${c.length}`, "yellow")} host records`, async() => await a.dns.setHosts(b, c))).IsSuccess) {
+  if (!(await X(`Setting ${M(`${d.length}`, "yellow")} host records`, async() => await a.dns.setHosts(b, d))).IsSuccess) {
     throw Error("Operation wasn't successful.");
   }
-  console.log("Successfully %s %s on %s. New hosts:", Fc ? "deleted" : "set", d, b);
+  console.log("Successfully %s %s on %s.", Ec ? "deleted" : "set", c, M(b, "yellow"));
+  c = await X("Fetching updated hosts", async() => {
+    const {hosts:g, IsUsingOurDNS:h} = await a.dns.getHosts(b);
+    if (!h) {
+      throw Error(`Namecheap DNS is not being used for ${b}`);
+    }
+    return g;
+  });
   console.log();
-  Td(c);
+  Rd(Pd(c));
 }
-const Td = a => {
-  console.log(V({headings:{HostName:"Name", RecordType:"Type"}, data:a, keys:["HostName", "RecordType", "Address"]}));
+const Rd = a => {
+  console.log(V({headings:{HostName:"Name", RecordType:"Type"}, data:a.map(b => {
+    b.TTL || (b.TTL = "-");
+    return b;
+  }), centerHeadings:["Address", "TTL"], keys:["HostName", "RecordType", "Address", "TTL"], replacements:{Address(b) {
+    b = b.replace(/(.{37})/g, "$1\n").trim();
+    return {value:b, length:Math.min(b.length, 37)};
+  }}}));
 };
-const Ud = require("../../package.json").version, Y = pc || !!process.env.SANDBOX, Z = q("expensive"), Vd = /expensive/.test(process.env.NODE_DEBUG);
+const Sd = require("../../package.json").version, Y = pc || !!process.env.SANDBOX, Z = p("expensive"), Td = /expensive/.test(process.env.NODE_DEBUG);
 if (rc) {
-  console.log(Ud), process.exit();
+  console.log(Sd), process.exit();
 } else {
   if (sc) {
-    var Wd;
+    var Ud;
     {
-      const a = O({usage:Q(ic), description:J("expensive", "yellow") + "\nA CLI application to access namecheap.com domain name registrar API."}), b = O({usage:{}, description:J("expensive domain.com --info", "magenta") + "\nDisplay the information about the domain on the account.\nAlso displays DNS hosts if using Namecheap's DNS."}).trim() + "\n", c = O({description:J("expensive", "red") + "\nPrint the list of domains belonging to the account.", usage:Q(Gc)}), d = O({description:J("expensive domain.com -r [-p PROMO]", 
-      "green") + "\nRegister the domain name. Expensive will attempt to find the promo\ncode online, and compare its price to the normal price.", usage:Q(Mc)}), e = O({description:J("expensive domain|domain.com [domain.org] [-f] [-z app,page]", "blue") + `
+      const a = R({usage:S(ec), description:M("expensive", "yellow") + "\nA CLI application to access namecheap.com domain name registrar API."}), b = R({usage:{}, description:M("expensive domain.com --info", "magenta") + "\nDisplay the information about the domain on the account.\nAlso displays DNS hosts if using Namecheap's DNS."}).trim() + "\n", c = R({description:M("expensive", "red") + "\nPrint the list of domains belonging to the account.", usage:S(hc)}), d = R({description:M('expensive domain.com [--record A] [--TXT|A|CNAME|address 10.10.10.10] [--host "*"]...', 
+      "cyan") + "\nManipulate DNS Records.", usage:Uc()}), e = R({description:M("expensive domain.com -r [-p PROMO]", "green") + "\nRegister the domain name. Expensive will attempt to find the promo\ncode online, and compare its price to the normal price.", usage:S(ic)}), f = R({description:M("expensive domain|domain.com [domain.org] [-f] [-z app,page]", "blue") + `
 Check domains for availability. When no TLD is given,
-${Xc} are checked.`, usage:Q(tc)});
-      Wd = [a, b, c, d, e].join("\n");
+${Tc} are checked.`, usage:S(fc)});
+      Ud = [a, b, c, d, e, f].join("\n");
     }
-    console.log(Wd);
+    console.log(Ud);
     process.exit();
   }
 }
-const Yd = async(a, b = !1) => {
+const Wd = async(a, b = !1) => {
   try {
     if (qc) {
-      return await Ld(a, b);
+      return await Id(a, b);
     }
-    var c = a.ClientIp || await N.LOOKUP_IP();
-    const d = new db({user:a.ApiUser, key:a.ApiKey, ip:c, sandbox:b});
-    if (!S) {
-      return await dd(d, {sort:Hc, desc:Ic, filter:Jc, type:Lc, pageSize:Kc});
+    var c = a.ClientIp || await Q.LOOKUP_IP();
+    const d = new bb({user:a.ApiUser, key:a.ApiKey, ip:c, sandbox:b});
+    if (!U) {
+      return await ad(d, {sort:Fc, desc:Gc, filter:Hc, type:Jc, pageSize:Ic});
     }
-    [c] = S;
-    if (xc || zc || yc) {
-      return await Sd(d, c);
-    }
-    if (Ec) {
-      return await yd(d, c);
-    }
-    if (kc) {
+    [c] = U;
+    if (vc || yc || wc || xc) {
       return await Qd(d, c);
     }
-    if (lc) {
-      return await wd(d, {domain:c, promo:Oc, sandbox:b, years:Pc});
+    if (Dc) {
+      return await vd(d, c);
     }
-    await id(d);
+    if (kc) {
+      return await Nd(d, c);
+    }
+    if (lc) {
+      return await td(d, {domain:c, promo:Kc, sandbox:b, years:Lc});
+    }
+    await fd(d);
   } catch (d) {
-    await Xd(d, a, b);
+    await Vd(d, a, b);
   }
-}, Xd = async({stack:a, message:b, f:c}, d, e) => {
-  c && (Z(aa(c, {colors:!0})), Z(Md[c.Number]));
+}, Vd = async({stack:a, message:b, props:c}, d, e) => {
+  c && (Z(aa(c, {colors:!0})), Z(Jd[c.Number]));
   if (c && 1011150 == c.Number) {
     try {
       const [, f] = /Invalid request IP: (.+)/.exec(b) || [];
-      await Ld(d, e, f);
+      await Id(d, e, f);
     } catch ({message:f, stack:g}) {
-      console.log("Could not white-list IP."), Vd ? Z(g) : console.error(f), process.exit(1);
+      console.log("Could not white-list IP."), Td ? Z(g) : console.error(f), process.exit(1);
     }
-    return Yd(d, e);
+    return Wd(d, e);
   }
-  Vd ? Z(a) : console.error(b);
+  Td ? Z(a) : console.error(b);
   process.exit(1);
 };
 (async() => {
   try {
     if (oc) {
-      return await Rd();
-    }
-    if (mc || nc) {
       return await Od();
     }
+    if (mc || nc) {
+      return await Ld();
+    }
     if (jc) {
-      return await Pd();
+      return await Md();
     }
   } catch (b) {
-    const {stack:c, message:d} = b;
-    Vd ? Z(c) : console.error(d);
+    var a = b.stack;
+    const c = b.message;
+    Td ? Z(a) : console.error(c);
     return;
   }
-  const a = await Jd();
-  await Yd(a, Y);
+  a = await Gd();
+  await Wd(a, Y);
 })();
 
 
