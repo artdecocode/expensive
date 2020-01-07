@@ -2,7 +2,7 @@
 
 # expensive
 
-[![npm version](https://badge.fury.io/js/expensive.svg)](https://npmjs.org/package/expensive)
+[![npm version](https://badge.fury.io/js/expensive.svg)](https://www.npmjs.com/package/expensive)
 
 `expensive` is a [namecheap.com](https://bit.ly/31boSJg) client to check domain availability, obtain WHOIS information, register domains, update DNS hosts and control domains' name servers via the CLI. It allows to login using 2-factor authentication and white-list IP addresses without having to use the web interface. The package uses the [API](https://github.com/rqt/namecheap) and [Web API](https://github.com/rqt/namecheap-web) libraries to make requests.
 
@@ -94,7 +94,7 @@ Print the list of domains belonging to the account.
 	--pageSize, -P	The page size.
 	--type, -T    	Domain type (ALL, EXPIRING, EXPIRED).
 
-expensive domain.com [--TXT|CNAME|address 10.10.10.10] ...
+expensive domain.com [--record A] [--TXT|A|CNAME|address 10.10.10.10] [--host "*"]...
 Manipulate DNS Records.
 
 	--record    	The record type. Can be one of the following:
@@ -102,6 +102,8 @@ Manipulate DNS Records.
 	            	NS, TXT, URL, URL301, FRAME.
 	--TXT       	Add a TXT record with this address to the domain.
 	            	Alias for --type TXT --address <TXT>.
+	--A         	Add an A record with this address to the domain.
+	            	Alias for --type A --address <A>.
 	--CNAME     	Add a CNAME record with this address to the domain.
 	            	--type CNAME --address <CNAME>.
 	--ttl       	When adding host records, sets the _TTL_.
@@ -113,7 +115,7 @@ Manipulate DNS Records.
 	--github, -g	Setup GitHub pages for the apex domain as per docs
 	            	https://git.io/fjyr7 Also removes the parking page
 	            	and URL redirect. All other hosts are kept itact.
-	--delete    	Remove the specified host record.
+	--delete, -d	Remove the specified host record.
 
 expensive domain.com -r [-p PROMO]
 Register the domain name. Expensive will attempt to find the promo
@@ -180,7 +182,7 @@ A log of search queries and found free domains is written to `HOMEDIR/.expensive
           alt="Art Deco">
       </a>
     </th>
-    <th>© <a href="https://artd.eco">Art Deco</a>   2019</th>
+    <th>© <a href="https://artd.eco">Art Deco</a>   2020</th>
     <th>
       <a href="https://www.technation.sucks" title="Tech Nation Visa">
         <img width="100" src="https://raw.githubusercontent.com/idiocc/cookies/master/wiki/arch4.jpg"

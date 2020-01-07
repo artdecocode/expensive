@@ -1,4 +1,6 @@
 import t from 'tablature'
+import { c } from 'erte'
+import loading from 'indicatrix'
 import printInfo from '../../lib/print/info'
 
 /**
@@ -6,10 +8,11 @@ import printInfo from '../../lib/print/info'
  * @param {string} domain
  */
 export default async function info(client, domain) {
-  const [i, hosts] = await Promise.all([
+  const n = c(domain, 'yellow')
+  const [i, hosts] = await loading(`Fetching info and DNS data for ${n}`, Promise.all([
     client.domains.getInfo(domain),
     client.dns.getHosts(domain),
-  ])
+  ]))
   printInfo(i)
   if (hosts.IsUsingOurDNS) {
     console.log()

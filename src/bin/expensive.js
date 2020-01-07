@@ -14,7 +14,7 @@ import { _help, _version, _domains, _whitelistIP, _sandbox as __sandbox, _init,
   _info, _register, _promo, _coupon,
   _whois, _Whois, _free, _zones, _github, _years,
   _sort, _desc, _filter, _type, _pageSize,
-  _record, _CNAME, _TXT,
+  _record, _CNAME, _TXT, _A,
 } from './get-args'
 import whois from './commands/whois'
 import initConfig from './commands/init'
@@ -63,7 +63,7 @@ const run = async (settings, sandbox = false) => {
     })
 
     const [domain] = _domains
-    if (_record || _CNAME || _TXT)
+    if (_record || _CNAME || _TXT || _A)
       return await DNS(nc, domain)
     if (_github) return await GitHub(nc, domain)
     if (_info) return await Info(nc, domain)

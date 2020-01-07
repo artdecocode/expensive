@@ -7,11 +7,15 @@
 
   <arg name="TXT">
     Add a TXT record with this address to the domain.
-    Alias for `--type TXT --address <TXT>`.
+    Alias for `--record TXT --address <TXT>`.
+  </arg>
+  <arg name="A">
+    Add an `A` record with this address to the domain.
+    Alias for `--record A --address <A>`.
   </arg>
   <arg name="CNAME">
     Add a CNAME record with this address to the domain.
-    `--type CNAME --address <CNAME>`.
+    `--record CNAME --address <CNAME>`.
   </arg>
 
   <arg name="ttl">
@@ -34,7 +38,7 @@
     and URL redirect. All other hosts are kept itact.
   </arg>
 
-  <arg boolean name="delete">
+  <arg boolean name="delete" short="d">
     Remove the specified host record.
   </arg>
 </arguments>

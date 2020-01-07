@@ -32,7 +32,7 @@ Print the list of domains belonging to the account.`,
     usage: reduceUsage(argsConfigInfo),
   })
   const dns = usually({
-    description: c('expensive domain.com [--TXT|CNAME|address 10.10.10.10] ...', 'cyan') + `
+    description: c('expensive domain.com [--record A] [--TXT|A|CNAME|address 10.10.10.10] [--host "*"]...', 'cyan') + `
 Manipulate DNS Records.`,
     usage: ticks(reduceUsage(argsConfigDns)),
   })

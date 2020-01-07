@@ -10,3 +10,5 @@ expensive expensive-demo.com --TXT github-wiki --delete
   <answer regex="Are you sure you want to">y</answer>
   src/bin expensive-demo.com --TXT github-wiki --delete
 </fork>
+
+%~%

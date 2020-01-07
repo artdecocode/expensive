@@ -55,13 +55,99 @@ export const argsConfig = {
     short: 'h',
   },
 }
-const args = argufy(argsConfig)
+
+export const argsConfigCheck = {
+  'free': {
+    description: 'Display only free domains.',
+    boolean: true,
+    short: 'f',
+  },
+  'zones': {
+    description: 'Check in these zones only.',
+    short: 'z',
+  },
+}
+
+export const argsConfigDns = {
+  'record': {
+    description: 'The record type. Can be one of the following:\n`A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,\n`NS`, `TXT`, `URL`, `URL301`, `FRAME`.',
+  },
+  'TXT': {
+    description: 'Add a TXT record with this address to the domain.\nAlias for `--record TXT --address <TXT>`.',
+  },
+  'A': {
+    description: 'Add an `A` record with this address to the domain.\nAlias for `--record A --address <A>`.',
+  },
+  'CNAME': {
+    description: 'Add a CNAME record with this address to the domain.\n`--record CNAME --address <CNAME>`.',
+  },
+  'ttl': {
+    description: 'When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800.',
+  },
+  'host': {
+    description: 'The host name for adding dns records.',
+    default: '@',
+  },
+  'address': {
+    description: 'The address of the new host record.',
+  },
+  'mxpref': {
+    description: 'MX preference for hosts. Applicable to MX records only.',
+  },
+  'github': {
+    description: 'Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.',
+    boolean: true,
+    short: 'g',
+  },
+  'delete': {
+    description: 'Remove the specified host record.',
+    boolean: true,
+    short: 'd',
+  },
+}
+
+export const argsConfigInfo = {
+  'sort': {
+    description: 'Sort by this field (name, expire, create).',
+    short: 'S',
+  },
+  'desc': {
+    description: 'Sort in descending order.',
+    boolean: true,
+    short: 'D',
+  },
+  'filter': {
+    description: 'Filter by this word.',
+    short: 'F',
+  },
+  'pageSize': {
+    description: 'The page size.',
+    short: 'P',
+  },
+  'type': {
+    description: 'Domain type (ALL, EXPIRING, EXPIRED).',
+    short: 'T',
+  },
+}
+
+export const argsConfigRegister = {
+  'promo': {
+    description: 'Use this promo code on registration.',
+    short: 'p',
+  },
+  'years': {
+    description: 'The number of years that the domain should be registered for.',
+    short: 'y',
+  },
+}
+
+const args = argufy({ ...argsConfig, ...argsConfigCheck, ...argsConfigDns, ...argsConfigInfo, ...argsConfigRegister })
 
 /**
  * The domain name for operations, or multiple domain names
     for checking availability.
  */
-export const _domains = /** @type {(!Array<string>|string)} */ (args['domains'])
+export const _domains = /** @type {!Array<string>} */ (args['domains'])
 
 /**
  * Initialise package configuration interactively, i.e.,
@@ -114,189 +200,110 @@ export const _version = /** @type {boolean} */ (args['version'])
  */
 export const _help = /** @type {boolean} */ (args['help'])
 
-export const argsConfigCheck = {
-  'free': {
-    description: 'Display only free domains.',
-    boolean: true,
-    short: 'f',
-  },
-  'zones': {
-    description: 'Check in these zones only.',
-    short: 'z',
-  },
-}
-const argsCheck = argufy(argsConfigCheck, [process.argv[0], process.argv[1], ...args._argv])
-
 /**
  * Display only free domains.
  */
-export const _free = /** @type {boolean} */ (argsCheck['free'])
+export const _free = /** @type {boolean} */ (args['free'])
 
 /**
  * Check in these zones only.
  */
-export const _zones = /** @type {string} */ (argsCheck['zones'])
-
-export const argsConfigDns = {
-  'record': {
-    description: 'The record type. Can be one of the following:\n`A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,\n`NS`, `TXT`, `URL`, `URL301`, `FRAME`.',
-  },
-  'TXT': {
-    description: 'Add a TXT record with this address to the domain.\nAlias for `--type TXT --address <TXT>`.',
-  },
-  'CNAME': {
-    description: 'Add a CNAME record with this address to the domain.\n`--type CNAME --address <CNAME>`.',
-  },
-  'ttl': {
-    description: 'When adding host records, sets the _TTL_.\nBy default, namecheap sets 1800.',
-  },
-  'host': {
-    description: 'The host name for adding dns records.',
-    default: '@',
-  },
-  'address': {
-    description: 'The address of the new host record.',
-  },
-  'mxpref': {
-    description: 'MX preference for hosts. Applicable to MX records only.',
-  },
-  'github': {
-    description: 'Setup GitHub pages for the apex domain as per docs\nhttps://git.io/fjyr7 Also removes the parking page\nand URL redirect. All other hosts are kept itact.',
-    boolean: true,
-    short: 'g',
-  },
-  'delete': {
-    description: 'Remove the specified host record.',
-    boolean: true,
-  },
-}
-const argsDns = argufy(argsConfigDns, [process.argv[0], process.argv[1], ...argsCheck._argv])
+export const _zones = /** @type {string} */ (args['zones'])
 
 /**
  * The record type. Can be one of the following:
     `A`, `AAAA`, `ALIAS`, `CAA`, `CNAME`, `MX`, `MXE`,
     `NS`, `TXT`, `URL`, `URL301`, `FRAME`.
  */
-export const _record = /** @type {string} */ (argsDns['record'])
+export const _record = /** @type {string} */ (args['record'])
 
 /**
  * Add a TXT record with this address to the domain.
-    Alias for `--type TXT --address <TXT>`.
+    Alias for `--record TXT --address <TXT>`.
  */
-export const _TXT = /** @type {string} */ (argsDns['TXT'])
+export const _TXT = /** @type {string} */ (args['TXT'])
+
+/**
+ * Add an `A` record with this address to the domain.
+    Alias for `--record A --address <A>`.
+ */
+export const _A = /** @type {string} */ (args['A'])
 
 /**
  * Add a CNAME record with this address to the domain.
-    `--type CNAME --address <CNAME>`.
+    `--record CNAME --address <CNAME>`.
  */
-export const _CNAME = /** @type {string} */ (argsDns['CNAME'])
+export const _CNAME = /** @type {string} */ (args['CNAME'])
 
 /**
  * When adding host records, sets the _TTL_.
     By default, namecheap sets 1800.
  */
-export const _ttl = /** @type {string} */ (argsDns['ttl'])
+export const _ttl = /** @type {string} */ (args['ttl'])
 
 /**
  * The host name for adding dns records. Default `@`.
  */
-export const _host = /** @type {string} */ (argsDns['host'] || '@')
+export const _host = /** @type {string} */ (args['host'] || '@')
 
 /**
  * The address of the new host record.
  */
-export const _address = /** @type {string} */ (argsDns['address'])
+export const _address = /** @type {string} */ (args['address'])
 
 /**
  * MX preference for hosts. Applicable to MX records only.
  */
-export const _mxpref = /** @type {string} */ (argsDns['mxpref'])
+export const _mxpref = /** @type {string} */ (args['mxpref'])
 
 /**
  * Setup GitHub pages for the apex domain as per docs
     https://git.io/fjyr7 Also removes the parking page
     and URL redirect. All other hosts are kept itact.
  */
-export const _github = /** @type {boolean} */ (argsDns['github'])
+export const _github = /** @type {boolean} */ (args['github'])
 
 /**
  * Remove the specified host record.
  */
-export const _delete = /** @type {boolean} */ (argsDns['delete'])
-
-export const argsConfigInfo = {
-  'sort': {
-    description: 'Sort by this field (name, expire, create).',
-    short: 'S',
-  },
-  'desc': {
-    description: 'Sort in descending order.',
-    boolean: true,
-    short: 'D',
-  },
-  'filter': {
-    description: 'Filter by this word.',
-    short: 'F',
-  },
-  'pageSize': {
-    description: 'The page size.',
-    short: 'P',
-  },
-  'type': {
-    description: 'Domain type (ALL, EXPIRING, EXPIRED).',
-    short: 'T',
-  },
-}
-const argsInfo = argufy(argsConfigInfo, [process.argv[0], process.argv[1], ...argsDns._argv])
+export const _delete = /** @type {boolean} */ (args['delete'])
 
 /**
  * Sort by this field (name, expire, create).
  */
-export const _sort = /** @type {string} */ (argsInfo['sort'])
+export const _sort = /** @type {string} */ (args['sort'])
 
 /**
  * Sort in descending order.
  */
-export const _desc = /** @type {boolean} */ (argsInfo['desc'])
+export const _desc = /** @type {boolean} */ (args['desc'])
 
 /**
  * Filter by this word.
  */
-export const _filter = /** @type {string} */ (argsInfo['filter'])
+export const _filter = /** @type {string} */ (args['filter'])
 
 /**
  * The page size.
  */
-export const _pageSize = /** @type {string} */ (argsInfo['pageSize'])
+export const _pageSize = /** @type {string} */ (args['pageSize'])
 
 /**
  * Domain type (ALL, EXPIRING, EXPIRED).
  */
-export const _type = /** @type {string} */ (argsInfo['type'])
-
-export const argsConfigRegister = {
-  'promo': {
-    description: 'Use this promo code on registration.',
-    short: 'p',
-  },
-  'years': {
-    description: 'The number of years that the domain should be registered for.',
-    short: 'y',
-  },
-}
-const argsRegister = argufy(argsConfigRegister, [process.argv[0], process.argv[1], ...argsInfo._argv])
+export const _type = /** @type {string} */ (args['type'])
 
 /**
  * Use this promo code on registration.
  */
-export const _promo = /** @type {string} */ (argsRegister['promo'])
+export const _promo = /** @type {string} */ (args['promo'])
 
 /**
  * The number of years that the domain should be registered for.
  */
-export const _years = /** @type {string} */ (argsRegister['years'])
+export const _years = /** @type {string} */ (args['years'])
 
 /**
  * The additional arguments passed to the program.
  */
-export const _argv = /** @type {!Array<string>} */ (argsRegister._argv)
+export const _argv = /** @type {!Array<string>} */ (args._argv)

@@ -4,8 +4,21 @@ import t from 'tablature'
 import { confirm } from 'reloquent'
 import { inspect } from 'util'
 import {
-  _record, _address, _CNAME, _TXT, _ttl, _host, _mxpref, _delete,
+  _record, _address, _CNAME, _A, _TXT, _ttl, _host, _mxpref, _delete,
 } from '../get-args'
+
+/**
+ * @return {!Array<!_namecheap.HostParams>}
+ */
+const convert = (hosts) => {
+  let newhosts = hosts.map((h) => {
+    const { TTL, Type: RecordType, Address, Name: HostName, MXPref } = h
+    const ho = /** @type {!_namecheap.HostParams} */ ({
+      TTL, RecordType, Address, HostName, MXPref })
+    return ho
+  })
+  return newhosts
+}
 
 /**
  * @param {!_namecheap.NameCheap} client
@@ -18,12 +31,7 @@ export default async function (client, domain) {
       throw new Error(`Namecheap DNS is not being used for ${domain}`)
     return h
   })
-  let newhosts = hosts.map((h) => {
-    const { TTL, Type: RecordType, Address, Name: HostName, MXPref } = h
-    const ho = /** @type {!_namecheap.HostParams} */ ({
-      TTL, RecordType, Address, HostName, MXPref })
-    return ho
-  })
+  let newhosts = convert(hosts)
   let Address = _address, HostName = _host, RecordType = _record, TTL = _ttl
   // aliases
   if (_CNAME) {
@@ -32,6 +40,9 @@ export default async function (client, domain) {
   } else if (_TXT) {
     RecordType = 'TXT'
     Address = _TXT
+  } else if (_A) {
+    RecordType = 'A'
+    Address = _A
   }
   /** @type {!_namecheap.HostParams} */
   const host = Object.entries({
@@ -73,17 +84,34 @@ export default async function (client, domain) {
   if (!r.IsSuccess)
     throw new Error('Operation wasn\'t successful.')
 
-  console.log('Successfully %s %s on %s. New hosts:',
-    _delete ? 'deleted' : 'set', y, domain)
+  console.log('Successfully %s %s on %s.',
+    _delete ? 'deleted' : 'set', y, c(domain, 'yellow'))
+
+  const realNewHosts = await loading('Fetching updated hosts', async () => {
+    const { hosts: h, IsUsingOurDNS } = await client.dns.getHosts(domain)
+    if (!IsUsingOurDNS)
+      throw new Error(`Namecheap DNS is not being used for ${domain}`)
+    return h
+  })
   console.log()
-  print(newhosts)
+  print(convert(realNewHosts))
 }
 
 const print = (data) => {
   console.log(t({
     headings: { HostName: 'Name', RecordType: 'Type' },
-    data,
-    keys: ['HostName', 'RecordType', 'Address'],
+    data: data.map((d) => {
+      if (!d['TTL']) d['TTL'] = '-'
+      return d
+    }),
+    centerHeadings: ['Address', 'TTL'],
+    keys: ['HostName', 'RecordType', 'Address', 'TTL'],
+    replacements: {
+      Address(s) {
+        const value = s.replace(/(.{37})/g, '$1\n').trim()
+        return { value, length: Math.min(value.length, 37) }
+      },
+    },
   }))
 }
 

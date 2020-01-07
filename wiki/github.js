@@ -1,5 +1,5 @@
-import getConfig from '../src/lib/get-config'
 import NameCheap from '@rqt/namecheap'
+import getConfig from '../src/lib/get-config'
 
 (async () => {
   const Settings = await getConfig(true)
