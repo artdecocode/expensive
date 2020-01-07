@@ -1,3 +1,10 @@
+## 8 January 2020
+
+### [2.1.0](https://github.com/artdecocode/expensive/compare/v2.0.1...v2.1.0)
+
+- [feature] DNS fixes + wiki pages.
+- [api] Update working API.
+
 ## 2 August 2019
 
 ### [2.0.1](https://github.com/artdecocode/expensive/compare/v2.0.0...v2.0.1)
